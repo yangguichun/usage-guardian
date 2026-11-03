@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  全屏强制休息遮罩：
+  这里只用 android 原生控件，不要换成 Material 控件。
+  因为它是被 Service 的 LayoutInflater 加载的，Service 上下文没有 Material 主题，会崩。
+
+  注意：这块界面里的密码输入**不使用 EditText**，而是用 PinPad（自绘数字键盘）。
+  原因：遮罩是系统悬浮窗，弹在它里面的系统输入法会被遮罩层挤掉，
+  表现就是"键盘闪一下就没了"，家长根本输不进密码。
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/restRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_rest"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <!-- 套一层滚动容器：小屏设备上（露出数字键盘时内容会变高）也不会被裁掉 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingStart="24dp"
+            android:paddingTop="18dp"
+            android:paddingEnd="24dp"
+            android:paddingBottom="40dp">
+
+            <!-- 图标：「休息」是 😴，「停用时段」换成 🌙（由 RestUi 按模式切换） -->
+            <TextView
+                android:id="@+id/tvEmoji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="😴"
+                android:textSize="56sp" />
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/rest_title"
+                android:textColor="#FFFFFF"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvCountdown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:fontFamily="monospace"
+                android:text="05:00"
+                android:textColor="#6FE3B8"
+                android:textSize="76sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvRestCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:textColor="#B9C2D6"
+                android:textSize="15sp" />
+
+            <!-- 这一轮为什么休这么久：写清"违规惩罚 ×3，本次 15 分钟"之类的，
+                 否则家长配 5 分钟却看到 15 分钟，只会以为时长算错了 -->
+            <TextView
+                android:id="@+id/tvRestPlan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:textColor="#8FE0C0"
+                android:textSize="14sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvRestHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:gravity="center"
+                android:lineSpacingExtra="4dp"
+                android:text="@string/rest_hint"
+                android:textColor="#8C96AD"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btnParentAction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="#25304D"
+                android:backgroundTintMode="src_over"
+                android:paddingStart="22dp"
+                android:paddingEnd="22dp"
+                android:text="@string/parent_action"
+                android:textColor="#FFFFFF" />
+
+            <!-- ============ 家长密码面板（点「家长操作」后展开） ============ -->
+            <LinearLayout
+                android:id="@+id/pinPanel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tvPinDots"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:letterSpacing="0.25"
+                    android:textColor="#FFFFFF"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+                <!-- 数字键盘由 PinPad 动态填充 -->
+                <LinearLayout
+                    android:id="@+id/keypadHost"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical" />
+
+                <TextView
+                    android:id="@+id/tvPinTimer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#8C96AD"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
+
+                <!-- 密码通过后才出现 -->
+                <LinearLayout
+                    android:id="@+id/pinActions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <Button
+                        android:id="@+id/btnSkipRest"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#2E7D6B"
+                        android:backgroundTintMode="src_over"
+                        android:text="@string/skip_rest"
+                        android:textColor="#FFFFFF" />
+
+                    <Button
+                        android:id="@+id/btnPauseGuard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:backgroundTint="#4A4F63"
+                        android:backgroundTintMode="src_over"
+                        android:text="@string/pause_guard"
+                        android:textColor="#FFFFFF" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="22dp"
+        android:text="@string/parent_only_tag"
+        android:textColor="#59617C"
+        android:textSize="12sp" />
+
+</FrameLayout>

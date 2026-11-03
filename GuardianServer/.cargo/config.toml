@@ -1,0 +1,10 @@
+# 国内网络下直连 crates.io 经常超时，这里固定走 rsproxy 镜像。
+# 如果你在海外或者有更好的镜像，把下面的地址换掉即可（改完 `cargo clean` 一次）。
+[source.crates-io]
+replace-with = "rsproxy-sparse"
+
+[source.rsproxy-sparse]
+registry = "sparse+https://rsproxy.cn/index/"
+
+[net]
+retry = 5

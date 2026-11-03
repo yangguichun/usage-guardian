@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">使用守护</string>
+    <string name="app_slogan">帮孩子管住屏幕时间</string>
+
+    <!-- 状态 -->
+    <string name="status_off">守护已关闭。打开下面的开关后开始计时。</string>
+    <string name="status_starting">守护未在运行，正在自动重新启动…</string>
+    <string name="status_running">正在使用：本轮已连续使用 %1$s，距离强制休息还剩 %2$s</string>
+    <string name="status_idle">当前未在使用（屏幕已关或已锁屏），计时暂停</string>
+    <string name="status_resting">正在强制休息，剩余 %1$s</string>
+    <string name="status_rest_count">今日已强制休息 %1$d 次</string>
+    <string name="rest_finished">休息结束啦，可以继续使用了</string>
+    <string name="rest_skipped">已跳过本次休息</string>
+    <string name="guard_paused">已暂停守护，可以正常使用了</string>
+
+    <!-- 诊断 -->
+    <string name="sec_diag">诊断信息</string>
+    <string name="diag_overlay_perm">悬浮窗权限：%1$s</string>
+    <string name="diag_lock_layer">当前接管方式：%1$s</string>
+    <string name="diag_layer_overlay">系统悬浮窗（一级）</string>
+    <string name="diag_layer_activity">全屏界面兜底（二级）</string>
+    <string name="diag_layer_none">未接管</string>
+    <string name="diag_error">最近一次错误：%1$s</string>
+    <string name="diag_none">无</string>
+    <string name="diag_keepalive">后台守护：%1$s</string>
+    <string name="diag_keepalive_ok">运行正常</string>
+    <string name="diag_keepalive_killed">检测到被结束 %1$d 次</string>
+    <string name="diag_kill_reason">最近一次 %1$s · %2$s</string>
+    <string name="diag_admin">设备管理员：%1$s</string>
+    <string name="diag_channel">保活通道：%1$s</string>
+    <string name="diag_channel_ok">系统闹钟已挂载，每 15 秒自检一次</string>
+    <string name="diag_channel_missing">已失效，可能被系统清理过</string>
+    <string name="diag_battery">电池优化：%1$s</string>
+    <string name="diag_battery_ok">已在白名单（后台可自由运行）</string>
+    <string name="diag_battery_missing">未加入白名单！后台可能被系统冻结</string>
+    <string name="diag_stall">后台停滞：%1$d 次（最长 %2$s）→ 请关闭系统「应用速冻」</string>
+    <string name="diag_stall_none">后台停滞：未发现（计时节拍正常）</string>
+    <string name="diag_last_start">最近启动：%1$s · 来源 %2$s</string>
+    <string name="diag_start_none">尚未记录</string>
+    <string name="diag_downtime">上次中断时长：%1$s</string>
+    <string name="diag_downtime_first">首次记录</string>
+    <string name="diag_sec_fmt">%1$d 秒</string>
+    <string name="diag_min_sec_fmt">%1$d 分 %2$d 秒</string>
+    <string name="diag_task_removed">卡片被划掉：%1$d 次（最近 %2$s）</string>
+    <string name="diag_task_removed_none">卡片被划掉：无记录</string>
+    <string name="diag_force_stop_ok">强行停止：未发现</string>
+    <string name="diag_force_stop_hit">强行停止：检测到 %1$d 次（最近 %2$s）</string>
+    <string name="diag_force_stop_recent">强行停止记录：%1$s</string>
+    <string name="diag_harden">加固等级：%1$s</string>
+    <string name="diag_harden_owner">设备所有者（系统已禁用「强行停止」与卸载）</string>
+    <string name="diag_harden_admin">设备管理员（部分机型仍可强行停止）</string>
+    <string name="diag_harden_none">未加固（孩子在设置里随时能强行停止）</string>
+    <string name="diag_start_error">启动失败：%1$s</string>
+    <string name="warn_overlay_failed">系统悬浮窗被拦截，已自动改用全屏界面兜底。原因：%1$s</string>
+
+    <!-- 被强行结束的记录原因 -->
+    <string name="kill_reason_task_swiped">应用卡片被从「最近任务」划掉</string>
+    <string name="kill_reason_unclean">守护进程未正常退出就被结束（强行停止 / 被系统清理）</string>
+    <string name="kill_reason_heartbeat_gap">守护进程中断了 %1$d 分钟（被清理或强行停止）</string>
+    <string name="kill_reason_admin_removed">设备管理器被取消激活</string>
+    <string name="kill_reason_force_stop">应用被「强行停止」，系统清空了全部闹钟与任务</string>
+    <string name="rest_reason_tamper">被强行结束后触发惩罚休息</string>
+    <string name="rest_reason_usage_limit">使用时长达到上限</string>
+    <string name="rest_reason_remote">家长在后台远程锁定</string>
+
+    <!-- 防绕过 -->
+    <string name="sec_antitamper">防止孩子强制结束</string>
+    <string name="antitamper_hint">孩子最常用的两招是把应用从「最近任务」划掉，或者进系统设置点「强行停止」。下面三项配合起来可以堵住这两条路。</string>
+    <string name="admin_label">设备管理员</string>
+    <string name="admin_sub_on">已激活：卸载前必须先取消激活；多数机型「强行停止」按钮会变灰。但部分 ROM（含个别 HarmonyOS 版本）不认这一条，仍可强停 —— 请看下方诊断里的「强行停止」次数。</string>
+    <string name="admin_sub_off">未激活：孩子可以在系统设置里「强行停止」本应用，让守护彻底失效。</string>
+    <string name="btn_activate_admin">去激活</string>
+    <string name="btn_deactivate_admin">取消激活</string>
+    <string name="admin_state_on">已激活</string>
+    <string name="admin_state_off">未激活</string>
+    <string name="admin_activate_failed">没有找到设备管理员激活页面，请到「设置 → 安全 → 设备管理器」手动开启本应用</string>
+    <string name="admin_activate_title">激活设备管理员</string>
+    <string name="admin_activate_explain">激活后，卸载前必须先取消激活；多数机型「强行停止」按钮也会变灰。\n\n需要说明的是：这条不是绝对防御。部分 ROM 上按钮照样能点，孩子也仍可以自己去「设置 → 安全 → 设备管理器」取消激活（取消时系统会先弹我们的警告）。彻底锁死只能靠「设备所有者」模式，见说明区。\n\n本应用只申请了「锁屏」一项设备管理权限，不会读取任何个人数据。</string>
+    <string name="admin_enabled">设备管理员已激活（卸载前须先取消激活）</string>
+    <string name="admin_disabled">设备管理员已取消，守护不再受保护</string>
+    <string name="admin_disable_warning">本应用是家长用于管控使用时间的守护程序。取消激活后，「强行停止」和卸载将不再受保护，孩子可以轻易关闭它。确定要继续吗？</string>
+    <string name="admin_confirm_deactivate">确定要取消设备管理员吗？取消后孩子就能「强行停止」本应用，守护会彻底失效。</string>
+    <string name="tamper_switch_title">被强制结束后立即强制休息一次</string>
+    <string name="tamper_switch_sub">孩子把应用从最近任务划掉或强行结束进程后，记录一笔「惩罚欠账」，下次一打开应用立刻补上一次休息。次数越多补得越久（2 倍、3 倍）。家长自己划掉也会触发，按需开启。（开启前必须先设置家长密码）</string>
+    <string name="tamper_need_pin">请先设置「家长密码」再开启这项惩罚。否则一旦触发了休息，没有密码就无法从遮罩里出来。</string>
+    <string name="tamper_hint_none">违规记录：无</string>
+    <string name="tamper_hint_records">违规记录：%1$d 次（最近 %2$s）\n下次打开应用将补 %3$s 休息（第 %4$d 次，力度递增）</string>
+    <string name="tamper_hint_no_penalty">违规记录：%1$d 次（最近 %2$s）\n当前未开启惩罚，所以只记录、不补休息。</string>
+    <string name="btn_clear_tamper">清除违规记录（含未执行的惩罚）</string>
+    <string name="confirm_clear_tamper">清除后累计次数归零，惩罚力度也从「第 1 次」重新开始，同时撤销还没执行的惩罚。确定吗？</string>
+    <string name="msg_tamper_cleared">违规记录已清除</string>
+    <string name="recents_lock_hint">最后一步在系统里做：打开「最近任务」界面，找到本应用的卡片，向下滑动（OPPO／一加）或长按（华为／小米）选择「加锁／锁定」，这样系统就不允许把它划掉了。</string>
+
+    <!-- 主开关 -->
+    <string name="switch_title">开启守护</string>
+    <string name="switch_sub">关闭后不再限制使用时间</string>
+
+    <!-- 时长设置 -->
+    <string name="sec_duration">时长设置</string>
+    <string name="label_use">连续使用时长</string>
+    <string name="label_rest">每次强制休息</string>
+    <string name="label_gap">重新计时阈值</string>
+    <string name="hint_gap">熄屏或离开使用超过这个时间，连续使用时长就重新从零开始算（防止"玩一会儿歇一会儿"绕过限制）。</string>
+    <string name="reset_session">重置本轮计时</string>
+    <string name="msg_session_reset">本轮计时已归零</string>
+    <string name="unit_minute">分钟</string>
+    <string name="value_fmt">%1$d %2$s</string>
+
+    <!-- 家长密码 -->
+    <string name="sec_parent">家长密码</string>
+    <string name="pin_set">已设置密码。每次离开本应用后再打开、或想在休息时跳过，都必须重新输入。</string>
+    <string name="pin_unset">未设置密码，强烈建议设置一个，否则孩子可以自己关掉守护。</string>
+    <string name="btn_set_pin">设置 / 修改密码</string>
+    <string name="btn_clear_pin">清除密码</string>
+    <string name="pin_enter">请输入家长密码</string>
+    <string name="pin_new">设置 4~8 位数字密码</string>
+    <string name="pin_confirm">请再次输入以确认</string>
+    <string name="pin_wrong">密码不正确</string>
+    <string name="pin_wrong_tries">密码不正确，还可以试 %1$d 次</string>
+    <string name="pin_locked_fmt">试错次数过多，请 %1$d 秒后再试</string>
+    <string name="pin_mismatch">两次输入不一致</string>
+    <string name="pin_too_short">密码至少 4 位</string>
+    <string name="pin_saved">密码已保存</string>
+    <string name="pin_cleared">密码已清除</string>
+    <string name="pin_clear_confirm">确定要清除家长密码吗？清除后孩子可以自行关闭守护。</string>
+    <string name="parent_verify">家长验证</string>
+    <string name="exit_app">退出</string>
+
+    <!-- 权限 -->
+    <string name="sec_permission">权限自检</string>
+    <string name="perm_overlay">悬浮窗权限</string>
+    <string name="perm_notif">通知权限</string>
+    <string name="perm_battery">电池优化白名单</string>
+    <string name="perm_huawei">华为「应用启动管理」</string>
+    <string name="perm_huawei_sub">设为手动管理并全部允许</string>
+    <string name="state_granted">已开启</string>
+    <string name="state_missing">未开启</string>
+    <string name="btn_go">去设置</string>
+    <string name="warn_need_overlay">还没给「悬浮窗」权限，休息时无法全屏遮挡屏幕，请先开启这项权限。</string>
+    <string name="huawei_manual_hint">没找到华为启动管理页面，请手动在「手机管家 → 应用启动管理」里把「使用守护」设为手动管理并全部允许。</string>
+
+    <!-- 休息时让视频安静下来 -->
+    <string name="sec_silence">休息时让视频安静下来</string>
+    <string name="silence_hint">平时最常遇到的情况：孩子正在看视频，到点弹出遮罩，画面被挡住了，声音却还在放。下面几项会让后台播放一起停下来。</string>
+
+    <!-- 远程管理 -->
+    <string name="sec_remote">远程管理（可选）</string>
+    <string name="remote_hint">填上你自己搭的后台服务器地址，这台平板会每 20 秒上报一次状态（是否在休息、今天用了多久），并且可以从网页上远程锁定、解锁、改配置。\n\n不需要就不填，填了也可以随时解除绑定。数据只发到你自己填的那台服务器，不经过任何第三方。</string>
+    <string name="remote_state_off">未配对：不联网，也不会向任何服务器发送数据。</string>
+    <string name="remote_state_on">已连接 %1$s\n设备 ID：%2$s\n最近同步：%3$s</string>
+    <string name="remote_state_err">最近一次失败：%1$s</string>
+    <string name="remote_url_hint">服务器地址，例如 http://1.2.3.4:8000</string>
+    <string name="remote_code_hint">6 位配对码（后台「添加设备」里生成）</string>
+    <string name="remote_name_hint">设备名（显示在后台，例如「孩子平板」）</string>
+    <string name="btn_pair">配对 / 换一个配对码</string>
+    <string name="btn_remote_sync">立即同步一次</string>
+    <string name="btn_remote_unbind">解除绑定</string>
+    <string name="remote_need_url">请先填服务器地址</string>
+    <string name="remote_need_code">请填后台生成的 6 位配对码</string>
+    <string name="remote_pairing">正在连接服务器…</string>
+    <string name="remote_unbind_confirm">解除绑定后，后台将看不到这台平板，也不能再远程操作它。确定吗？</string>
+    <string name="remote_unbound">已解除绑定，不再联网</string>
+    <string name="remote_sync_hint">已发起同步，状态稍后刷新</string>
+    <string name="remote_never_synced">尚未成功同步</string>
+    <string name="remote_standby_note">已配对：守护暂停后仍会保持心跳，方便你在后台重新开启。</string>
+    <string name="pause_media_title">休息时暂停后台播放</string>
+    <string name="pause_media_sub">用系统的「音频焦点」让正在播放的应用自动暂停——和来电话时音乐自动停是同一套机制。B 站、腾讯视频、爱奇艺、优酷、抖音、浏览器网页播放器都支持，不需要额外权限。</string>
+    <string name="perm_media_access">「通知使用权」</string>
+    <string name="perm_media_access_sub">授权后可直接对播放器下发暂停</string>
+    <string name="media_access_manual">没找到「通知使用权」页面，请到系统设置里搜索「通知使用权」并允许本应用。不授权也能正常使用，只是少一层保险。</string>
+    <string name="mute_title">兜底：休息时把媒体音量静音</string>
+    <string name="mute_sub">只有前两项都压不住时才需要打开（个别小厂播放器、部分游戏的背景音）。它改动的是系统音量，休息结束会自动恢复；但若应用在休息中被强行结束，音量可能留在最低，需要手动调回来。</string>
+    <string name="diag_silence">休息静音：%1$s</string>
+    <string name="silence_idle">不在休息中</string>
+
+    <!-- 测试 -->
+    <string name="btn_test_rest">立即测试一次强制休息</string>
+    <string name="test_need_enable">请先打开「开启守护」开关</string>
+    <string name="test_started">已启动一次 %1$d 分钟的测试休息，屏幕会被全屏遮罩挡住</string>
+    <string name="btn_selftest_kill">自检：模拟进程被杀，看能否自动复活</string>
+    <string name="selftest_kill_confirm">将立即结束本应用的进程，模拟孩子"强行结束"的情况。\n\n约 1~3 秒后守护应当自动重新启动（通知栏会重新出现）。重新打开本应用后，「诊断信息」里会多出一条"被结束"记录——那就说明复活和识别都生效了。\n\n若开启了惩罚开关，重开后还会直接进入一次休息。\n\n要继续吗？</string>
+    <string name="selftest_kill_go">复活通道已布置，正在结束进程…</string>
+
+    <!-- 说明 -->
+    <string name="sec_notes">使用说明</string>
+    <string name="notes_body">1. 先开启「悬浮窗权限」，否则无法全屏强制休息。\n2. 在华为手机上，还需要到「手机管家 → 应用启动管理」把本应用设为「手动管理」并允许自启动、关联启动、后台活动，否则服务会被系统清掉。\n3. 强烈建议激活「设备管理员」，它会让系统把「强行停止」按钮变灰，这是防止孩子结束守护进程最有效的一步。\n4. 再到「最近任务」界面把本应用的卡片加锁，堵住"划掉卡片"这条路。\n5. 打开「开启守护」开关后，应用会常驻一个通知，这是保持后台运行所必需的，请勿手动清理。\n6. 计时规则：屏幕点亮且已解锁才开始累计；熄屏或锁屏超过「重新计时阈值」后，累计时长归零，重新开始计算。\n7. 达到使用上限后，整个屏幕会被遮罩挡住并开始倒计时，返回键和 Home 键都无法退出。要提前结束，点「家长操作」输入密码。\n8. 遮罩弹出的同时会申请系统「音频焦点」，正在播放的视频会被自动暂停、不再出声；若某个应用不理会焦点，可到「休息时让视频安静下来」里打开「兜底：静音」。</string>
+
+    <!-- 通知 -->
+    <string name="notif_channel_name">使用守护</string>
+    <string name="notif_channel_desc">常驻通知，用于保持守护进程在后台运行</string>
+    <string name="notif_using">本轮已使用 %1$s / 上限 %2$d 分钟</string>
+    <string name="notif_resting">强制休息中，剩余 %1$s</string>
+    <string name="notif_using_chrono">已使用时长 · 上限 %1$d 分钟</string>
+    <string name="notif_using_paused">本轮已使用 %1$s / 上限 %2$d 分钟（熄屏暂停）</string>
+    <string name="notif_resting_chrono">强制休息中 · 剩余</string>
+    <string name="notif_paused">守护已暂停</string>
+    <string name="notif_standby">守护已暂停 · 远程待命中</string>
+
+    <!-- 遮罩 -->
+    <string name="rest_title">该休息啦</string>
+    <string name="rest_hint">长时间盯着屏幕对眼睛和注意力都不好\n站起来走走，看看远处吧</string>
+    <string name="rest_count_fmt">今天是第 %1$d 次休息</string>
+    <string name="rest_plan_plain">%1$s · 本次 %2$d 分钟</string>
+    <string name="rest_plan_penalty">%1$s · 违规惩罚 ×%2$d，本次 %3$d 分钟</string>
+    <string name="parent_action">家长操作</string>
+    <string name="pin_hint">家长密码</string>
+    <string name="parent_action_window">请在 %1$d 秒内完成操作，超时需重新验证</string>
+    <string name="parent_action_timeout">操作超时，已重新上锁</string>
+    <string name="skip_rest">跳过本次休息</string>
+    <string name="pause_guard">暂停守护</string>
+    <string name="parent_only_tag">此界面仅家长可操作</string>
+
+    <!-- 停用时段（宵禁） -->
+    <string name="quiet_title">现在是停用时间</string>
+    <string name="quiet_hint">这个时段手机是锁着的\n到点会自动放开，先去睡觉或做点别的事吧</string>
+    <string name="quiet_plan">停用时段：%1$s</string>
+    <string name="quiet_count_fmt">这一轮停用还剩 %1$s</string>
+    <string name="quiet_notif">停用时段中 · 剩余</string>
+    <string name="quiet_started">已进入停用时段：%1$s</string>
+    <string name="quiet_ended">停用时段结束，可以继续用了</string>
+    <string name="quiet_skip">提前结束本次停用</string>
+    <string name="quiet_skipped">本轮停用已放行（明天照常锁）</string>
+
+    <!-- 上锁遮片：设置内容藏起来时，屏幕上要有一句明确的话，不能是一片空白 -->
+    <string name="lock_hint_title">🔒 已上锁</string>
+    <string name="lock_hint_sub">请输入家长密码解锁设置界面\n（密码框没弹出来的话，点一下返回键再进来一次）</string>
+
+    <!-- 崩溃日志：出问题时不用连电脑抓 logcat，直接在这里看/复制 -->
+    <string name="diag_crash">上次崩溃：%1$s</string>
+    <string name="btn_crash_log">查看上次崩溃日志</string>
+    <string name="crash_dialog_title">上次崩溃日志</string>
+    <string name="crash_none">没有记录到崩溃</string>
+    <string name="crash_copied">已复制到剪贴板</string>
+    <string name="crash_copy">复制全文</string>
+    <string name="crash_clear">清除记录</string>
+
+    <!-- 主界面精简 + 设置页入口 -->
+    <string name="entry_settings">⚙ 设置</string>
+    <string name="entry_remote">☁ 远程管理</string>
+    <string name="entry_diag">🩺 诊断与测试</string>
+    <string name="back_home">← 返回</string>
+    <string name="sec_settings">设置</string>
+    <string name="today_summary">今日已用 %1$s · 强制休息 %2$d 次</string>
+    <string name="today_summary_idle">今天还没有开始计时</string>
+
+    <!-- 时间线上报（需要「使用情况访问」权限） -->
+    <string name="sec_usage">应用使用记录（时间线）</string>
+    <string name="usage_access_ok">已授权，会在后台记录每个时段在用的应用</string>
+    <string name="usage_access_missing">未授权。授权后家长在后台能看到「几点几分用了什么应用」；不授权不影响守护本身</string>
+    <string name="btn_usage_access">去授权</string>
+    <string name="usage_access_opened">已打开系统设置，请找到「使用守护」并允许「使用情况访问」</string>
+    <string name="usage_access_no_settings">这台机器打不开该设置页，请到 设置 → 应用 → 特殊权限 → 使用情况访问 里手动授权</string>
+</resources>

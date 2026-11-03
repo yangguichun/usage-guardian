@@ -1,0 +1,22 @@
+[package]
+name = "guardian-server"
+version = "2.4.2"
+edition = "2021"
+description = "「使用守护」管理后台 —— 单文件静态二进制，零运行时依赖"
+
+[dependencies]
+axum = "0.8"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "net", "signal", "time"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rand = "0.8"
+# SQLite 用 bundled：把 sqlite3.c 一起编进二进制，目标机不需要装任何东西。
+# 交叉编译 C 代码靠 zig（见 build.sh 里的 CC 设置），不需要 Linux 的 gcc。
+rusqlite = { version = "0.31", features = ["bundled"] }
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

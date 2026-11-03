@@ -1,0 +1,54 @@
+# ======================================================================
+#  「使用守护」仓库忽略规则
+#  原则：只提交源码、文档与截图；构建产物、本地配置、密钥一律不进仓库。
+# ======================================================================
+
+# ---- 本机工具 / 会话数据 ----
+.workbuddy/
+.shots/
+.video/
+.tmp_zigtest/
+*.log
+
+# ---- Android / Gradle ----
+Guardian/.gradle/
+Guardian/build/
+Guardian/app/build/
+Guardian/local.properties
+Guardian/.idea/
+Guardian/*.iml
+Guardian/captures/
+Guardian/.cxx/
+
+# APK / 发布包统一走 GitHub Release，不进 git
+Guardian/dist/
+Guardian/守护/
+
+# ---- Rust ----
+GuardianServer/target/
+GuardianServer/data/
+GuardianServer/*.db
+GuardianServer/dist/
+GuardianServer/.venv/
+GuardianServer/venv/
+
+# ---- 前端预览 ----
+GuardianServer/preview/node_modules/
+GuardianServer/static/node_modules/
+
+# ---- 部署配置（含 SSH 口令，绝不提交）----
+GuardianServer/deploy/deploy.env
+*.pem
+*.key
+*.p12
+*.jks
+*.keystore
+
+# ---- 编辑器 / 系统 ----
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+*.orig
+*.rej

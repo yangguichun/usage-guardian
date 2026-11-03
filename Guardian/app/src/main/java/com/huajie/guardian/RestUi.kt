@@ -1,0 +1,209 @@
+package com.huajie.guardian
+
+import android.content.Context
+import android.os.Handler
+import android.os.Looper
+import android.view.View
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
+import java.util.Locale
+
+/**
+ * 「强制休息」界面的公共逻辑。
+ *
+ * 同一个布局 overlay_lock.xml 会被两处使用：
+ *  - GuardianService：以系统悬浮窗形式加载（首选，最防逃逸）
+ *  - LockActivity：  以全屏 Activity 形式加载（兜底，防国产 ROM 拦截悬浮窗）
+ * 所以绑定和渲染逻辑必须共用，避免两边不一致。
+ *
+ * 密码输入一律使用 [PinPad]（应用自绘的数字键盘），**不使用系统输入法**：
+ * 遮罩是铺满全屏的系统悬浮窗，弹在它里面的系统键盘会被遮罩挤掉，
+ * 表现就是"键盘闪一下就没了"。
+ */
+object RestUi {
+
+    /** 家长验过密码后，操作按钮的有效时间（秒）。超时重新验证，防止家长走开后孩子顺手点。 */
+    private const val ACTION_WINDOW_S = 60
+
+    /**
+     * 遮罩的两种形态。
+     *
+     * 共用同一个布局，只换文案 —— 多写一份布局，两边（悬浮窗 / LockActivity）
+     * 的绑定逻辑只好跟着复制一份，很快就不同步了。
+     */
+    enum class Mode { REST, QUIET }
+
+    fun fmt(ms: Long): String {
+        val s = ms.coerceAtLeast(0L) / 1000L
+        return String.format(Locale.US, "%02d:%02d", s / 60, s % 60)
+    }
+
+    /** 绑定遮罩上的全部交互 */
+    fun bind(
+        root: View,
+        prefs: Prefs,
+        onSkip: () -> Unit,
+        onPauseGuard: () -> Unit,
+        onMessage: (String) -> Unit
+    ) {
+        val ctx = root.context
+        val btnParent = root.findViewById<Button>(R.id.btnParentAction)
+        val tvHint = root.findViewById<TextView>(R.id.tvRestHint)
+        val pinPanel = root.findViewById<View>(R.id.pinPanel)
+        val tvDots = root.findViewById<TextView>(R.id.tvPinDots)
+        val keypadHost = root.findViewById<LinearLayout>(R.id.keypadHost)
+        val tvTimer = root.findViewById<TextView>(R.id.tvPinTimer)
+        val pinActions = root.findViewById<View>(R.id.pinActions)
+        val btnSkip = root.findViewById<Button>(R.id.btnSkipRest)
+        val btnPause = root.findViewById<Button>(R.id.btnPauseGuard)
+
+        val handler = Handler(Looper.getMainLooper())
+
+        /** 数字键盘实例，供"收起面板/输入错误"时清空缓冲 */
+        var input: PinPad.Input? = null
+
+        pinPanel.visibility = View.GONE
+        pinActions.visibility = View.GONE
+        tvTimer.visibility = View.GONE
+        // 没设密码时完全隐藏入口，孩子连点都点不到
+        btnParent.visibility = if (prefs.pin.isEmpty()) View.GONE else View.VISIBLE
+
+        /** 收起密码面板，回到"只能看到倒计时"的状态 */
+        fun relock() {
+            handler.removeCallbacksAndMessages(null)
+            pinPanel.visibility = View.GONE
+            pinActions.visibility = View.GONE
+            tvTimer.visibility = View.GONE
+            keypadHost.visibility = View.VISIBLE
+            tvDots.visibility = View.VISIBLE
+            tvHint.visibility = View.VISIBLE
+            btnParent.visibility = View.VISIBLE
+            input?.clear()
+        }
+
+        input = PinPad.build(keypadHost, tvDots, prefs.pin.length) { entered, pad ->
+            pad.clear()
+            val left = PinGuard.lockedLeftMs(prefs)
+            if (left > 0L) {
+                // 冷却期内一律不校验，避免孩子靠"多试几次"蒙对
+                onMessage(ctx.getString(R.string.pin_locked_fmt, PinGuard.lockedLeftSeconds(prefs)))
+            } else if (entered == prefs.pin) {
+                PinGuard.onOk(prefs)
+                // 通过：收起键盘，露出两个操作按钮，并给一个操作时限
+                keypadHost.visibility = View.GONE
+                tvDots.visibility = View.GONE
+                tvTimer.visibility = View.VISIBLE
+                pinActions.visibility = View.VISIBLE
+
+                var leftSec = ACTION_WINDOW_S
+                fun tickText() {
+                    tvTimer.text = ctx.getString(R.string.parent_action_window, leftSec)
+                }
+                tickText()
+                val tick = object : Runnable {
+                    override fun run() {
+                        leftSec -= 1
+                        if (leftSec <= 0) {
+                            onMessage(ctx.getString(R.string.parent_action_timeout))
+                            relock()
+                            return
+                        }
+                        tickText()
+                        handler.postDelayed(this, 1000L)
+                    }
+                }
+                handler.postDelayed(tick, 1000L)
+            } else {
+                val cooled = PinGuard.onWrong(prefs)
+                onMessage(
+                    if (cooled) {
+                        ctx.getString(R.string.pin_locked_fmt, PinGuard.lockedLeftSeconds(prefs))
+                    } else {
+                        ctx.getString(
+                            R.string.pin_wrong_tries,
+                            PinGuard.MAX_TRIES - prefs.pinFails
+                        )
+                    }
+                )
+            }
+        }
+
+        btnParent.setOnClickListener {
+            val left = PinGuard.lockedLeftMs(prefs)
+            if (left > 0L) {
+                onMessage(ctx.getString(R.string.pin_locked_fmt, PinGuard.lockedLeftSeconds(prefs)))
+                return@setOnClickListener
+            }
+            tvHint.visibility = View.GONE
+            btnParent.visibility = View.GONE
+            pinPanel.visibility = View.VISIBLE
+            pinActions.visibility = View.GONE
+            tvTimer.visibility = View.GONE
+            keypadHost.visibility = View.VISIBLE
+            tvDots.visibility = View.VISIBLE
+            input?.clear()
+        }
+
+        btnSkip.setOnClickListener {            handler.removeCallbacksAndMessages(null)
+            onSkip()
+        }
+        btnPause.setOnClickListener {
+            handler.removeCallbacksAndMessages(null)
+            onPauseGuard()
+        }
+    }
+
+    /**
+     * 按模式切换文案。
+     *
+     * 「休息」和「停用时段」都会锁屏，但对孩子说的话不该一样：前者是"你用了太久"，
+     * 后者是"现在不是玩手机的时间"。文案写错会让孩子觉得"我才刚拿起来凭什么说我用久了"。
+     */
+    fun applyMode(root: View, ctx: Context, mode: Mode) {
+        root.findViewById<TextView>(R.id.tvEmoji)?.text =
+            if (mode == Mode.QUIET) "🌙" else "😴"
+        root.findViewById<TextView>(R.id.tvTitle)?.setText(
+            if (mode == Mode.QUIET) R.string.quiet_title else R.string.rest_title
+        )
+        root.findViewById<TextView>(R.id.tvRestHint)?.setText(
+            if (mode == Mode.QUIET) R.string.quiet_hint else R.string.rest_hint
+        )
+        // 「跳过本次休息」在停用模式下意思不对，换成「提前结束本次停用」
+        root.findViewById<Button>(R.id.btnSkipRest)?.setText(
+            if (mode == Mode.QUIET) R.string.quiet_skip else R.string.skip_rest
+        )
+    }
+
+    /** 刷新倒计时与次数 */
+    /**
+     * 渲染倒计时。
+     *
+     * [plan] 是"这一轮为什么休这么久"的一句话（如「使用时长达到上限 · 本次 5 分钟」、
+     * 「违规惩罚 ×3，本次 15 分钟」）。没有就自动隐藏那一行。
+     * [mode] 决定用哪套文案（休息 / 停用时段）。
+     */
+    fun render(
+        root: View,
+        ctx: Context,
+        restLeftMs: Long,
+        restCount: Int,
+        plan: String = "",
+        mode: Mode = Mode.REST
+    ) {
+        applyMode(root, ctx, mode)
+        root.findViewById<TextView>(R.id.tvCountdown)?.text = fmt(restLeftMs)
+        root.findViewById<TextView>(R.id.tvRestCount)?.apply {
+            text = if (mode == Mode.QUIET) {
+                // 停用时段没有"第几次"的概念，显示一句更贴切的
+                ctx.getString(R.string.quiet_count_fmt, fmt(restLeftMs))
+            } else {
+                ctx.getString(R.string.rest_count_fmt, restCount)
+            }
+        }
+        root.findViewById<TextView>(R.id.tvRestPlan)?.apply {
+            text = plan
+            visibility = if (plan.isBlank()) View.GONE else View.VISIBLE
+        }
+    }
+}

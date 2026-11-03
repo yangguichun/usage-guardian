@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- 全屏锁屏遮罩必需：允许在其他应用上层绘制 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!-- 后台常驻服务 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <!-- 常驻通知（Android 13+ 需要） -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- 开机自启 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- 申请加入电池优化白名单，避免服务被系统回收 -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!--
+      休息时把媒体音量压到 0（「兜底静音」，默认关闭，由家长手动开启）。
+      这是普通权限，安装时自动授予，不会弹窗。
+    -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <!--
+      精确闹钟：进程被系统回收后，靠它把守护服务准时叫醒。
+      USE_EXACT_ALARM 在 Android 13+ 会自动授予；Android 12 走 SCHEDULE_EXACT_ALARM。
+      两个都声明，取不到精确权限时代码里会退化为普通闹钟，不影响功能。
+    -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <!--
+      远程管理（可选功能）：连家长自建的后台服务器上报状态、拉取指令。
+      不配服务器就完全不会联网。
+    -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!--
+      时间线（可选功能）：上报"每个时刻前台用的是什么应用"，家长在后台就能看到。
+      两件事：
+        1. PACKAGE_USAGE_STATS —— 特殊权限，必须在系统设置里手动授予
+           （设置 → 特殊应用权限 → 使用情况访问）。没授权就只上报在线时间。
+        2. QUERY_ALL_PACKAGES —— Android 11+ 的包可见性限制，
+           不加这个连应用名都查不到，只能显示包名。本应用为侧载分发，
+           不受应用商店对该权限的限制。
+    -->
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+
+    <application
+        android:name=".GuardianApp"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Guardian"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="34">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="unspecified">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".GuardianService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="specialUse"
+            android:stopWithTask="false">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="parental_control_screen_time" />
+        </service>
+
+        <!--
+          复活任务：JobScheduler 通道。
+          与闹钟互相独立，哪条先到都能把守护服务重新拉起来。
+        -->
+        <service
+            android:name=".ResurrectJobService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <!--
+          通知监听服务：只为拿到「通知使用权」，进而可以直接暂停别的应用正在播放的视频。
+          本服务不重写任何通知回调，不读取任何通知内容。
+          家长没授权时系统不会绑定它，功能自动降级为"只靠音频焦点"。
+        -->
+        <service
+            android:name=".MediaWatchService"
+            android:enabled="true"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <!--
+          设备管理器：激活后系统会禁用本应用的「强行停止」按钮，
+          并在卸载前强制走"取消激活"流程。这是防止孩子划掉进程的关键一环。
+        -->
+        <receiver
+            android:name=".AdminReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin" />
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 强制休息的兜底全屏界面：悬浮窗被国产 ROM 拦截时启用 -->
+        <activity
+            android:name=".LockActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|keyboardHidden|uiMode|density"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            android:noHistory="false"
+            android:showWhenLocked="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.Guardian.Lock"
+            tools:targetApi="27" />
+
+        <receiver
+            android:name=".BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>使用守护 · 管理后台</title>
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+
+<!-- ================= 登录 ================= -->
+<section id="login" class="login-wrap hidden">
+  <form class="login-card" id="loginForm" autocomplete="off">
+    <div class="brand-mark">使</div>
+    <h1>使用守护</h1>
+    <p class="muted">家长管理后台 · 请登录</p>
+    <input id="username" type="text" placeholder="用户名" autocomplete="username" autocapitalize="none">
+    <input id="pwd" type="password" placeholder="密码" autocomplete="current-password">
+    <button class="btn primary block" type="submit">进入</button>
+    <p id="loginErr" class="err"></p>
+    <p class="muted small" style="margin-top:2px">首次使用请用内置管理员 <code>admin</code> 登录</p>
+  </form>
+</section>
+
+<!-- ================= 主界面 ================= -->
+<div id="app" class="hidden">
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="brand-mark small">使</div>
+      <div>
+        <div class="brand-name">使用守护</div>
+        <div class="brand-sub" id="bootTime">正在连接…</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span class="pill" id="onlinePill"><i class="dot"></i><span>—</span></span>
+      <span class="pill user-pill" id="userPill" title="当前登录账号"><b id="userName">—</b><span id="userRole"></span></span>
+      <button class="btn ghost" id="btnUsers">账号管理</button>
+      <button class="btn ghost" id="btnPair">添加设备</button>
+      <button class="btn ghost" id="btnAccount">我的账号</button>
+      <button class="btn ghost" id="btnLogout">退出</button>
+    </div>
+  </header>
+
+  <main>
+    <div id="pwdWarn" class="banner hidden">
+      内置管理员 <code>admin</code> 还在用默认口令 <code>guardian2026</code>，
+      请点右上角「我的账号」立刻改掉。
+    </div>
+
+    <!-- 统计 -->
+    <section class="stats" id="stats"></section>
+
+    <div class="layout">
+      <!-- 设备列表 -->
+      <section class="panel devices-panel">
+        <div class="panel-head">
+          <h2 id="devicesTitle">设备</h2>
+          <span class="muted small" id="deviceHint">每 5 秒自动刷新</span>
+        </div>
+        <div id="devices" class="devices"></div>
+        <div id="emptyState" class="empty hidden">
+          <p>还没有设备接入。</p>
+          <p class="muted small">点右上角「添加设备」生成 6 位配对码，然后在这台平板上：
+            <b>使用守护 → 远程管理 → 填写服务器地址和配对码</b>。</p>
+        </div>
+      </section>
+
+      <!-- 侧栏 -->
+      <aside class="side">
+        <section class="panel">
+          <div class="panel-head"><h2>近 7 天</h2><span class="muted small">当前账号可见设备合计</span></div>
+          <div id="trend" class="trend"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>事件</h2>
+            <span class="muted small" id="evWindow">最近 48 小时</span>
+          </div>
+          <div id="events" class="events"></div>
+          <button class="btn ghost block small" id="btnAllEvents" style="margin-top:10px">
+            查看全部事件 / 按天查询
+          </button>
+        </section>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<!-- ================= 设备主页（点设备进来） ================= -->
+<div id="devicePage" class="page hidden">
+  <header class="topbar page-topbar">
+    <button class="btn ghost back" id="btnBack">← 返回</button>
+    <div class="page-title">
+      <h2 id="dpName">设备</h2>
+      <div class="muted small" id="dpMeta"></div>
+    </div>
+    <span class="badge" id="dpBadge"><i></i><span>—</span></span>
+  </header>
+
+  <main class="page-body">
+    <section class="stats" id="dpStats"></section>
+
+    <!-- ===== 时间线 ===== -->
+    <section class="panel">
+      <div class="panel-head wrap">
+        <div>
+          <h2>时间线</h2>
+          <div class="muted small" id="tlSub">在线时段 + 每个时刻在用的应用</div>
+        </div>
+        <div class="tl-controls">
+          <!-- 日期控件：默认今天，左右可翻；下面的时间轴、图例、事件、统计都跟着走 -->
+          <div class="daypicker">
+            <button class="icon-btn" id="btnPrevDay" title="前一天">‹</button>
+            <input type="date" id="dayInput" class="date-input" title="选择日期">
+            <button class="icon-btn" id="btnNextDay" title="后一天">›</button>
+          </div>
+          <button class="btn ghost small" id="btnToday">今天</button>
+          <button class="btn ghost small" id="btnTlRange" title="切换「只看有活动的时段 / 完整 24 小时」">全天</button>
+        </div>
+      </div>
+
+      <div class="tl-legend" id="tlLegend"></div>
+
+      <div class="tl-scroll" id="tlScroll">
+        <div class="tl-canvas" id="tlCanvas">
+          <div class="muted small">加载中…</div>
+        </div>
+      </div>
+
+      <div class="tl-tip" id="tlTip">点按色块查看具体时段</div>
+    </section>
+
+    <!-- ===== 停用时段（宵禁） ===== -->
+    <section class="panel" id="quietPanel">
+      <div class="panel-head wrap">
+        <div>
+          <h2>停用时段</h2>
+          <div class="muted small" id="quietSub">
+            规定每天几点到几点不能玩：到点自动锁屏，时段结束自动解锁
+          </div>
+        </div>
+        <div class="tl-controls">
+          <button class="btn ghost small" id="btnQuietAdd">＋ 添加时段</button>
+        </div>
+      </div>
+
+      <div id="quietNow" class="quiet-now hidden"></div>
+      <div class="quiet-list" id="quietList"></div>
+      <div class="muted small quiet-tip">
+        支持跨夜（如 22:00 → 06:00，勾"周五"时周六凌晨也算在内）。
+        规则存在服务器上，设备离线时设置也不会丢，下次上线自动生效。
+      </div>
+      <div class="quiet-foot">
+        <span class="muted small" id="quietHint"></span>
+        <button class="btn primary" id="btnQuietSave">保存并下发</button>
+      </div>
+    </section>
+
+    <div class="layout">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>用了什么</h2>
+          <span class="muted small" id="dpAppsHint"></span>
+        </div>
+        <div id="dpApps" class="apps"></div>
+      </section>
+
+      <aside class="side">
+        <section class="panel">
+          <div class="panel-head"><h2>状态</h2></div>
+          <div class="kv" id="dpKv"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head"><h2>近 14 天</h2><span class="muted small">每日使用时长</span></div>
+          <div class="daily" id="dpDaily"></div>
+        </section>
+      </aside>
+    </div>
+
+    <section class="panel">
+      <div class="panel-head"><h2>远程操作</h2><span class="muted small">指令在 20 秒内送达</span></div>
+      <div class="device-actions" id="dpActions"></div>
+
+      <details class="cfg-box">
+        <summary>修改配置参数</summary>
+        <div id="dpConfig"></div>
+      </details>
+    </section>
+
+    <div class="layout">
+      <section class="panel">
+        <div class="panel-head"><h2>最近指令</h2></div>
+        <div class="cmd-list" id="dpCommands"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head wrap">
+          <h2>事件</h2>
+          <span class="muted small" id="dpEvHint">当天</span>
+        </div>
+        <div class="cmd-list" id="dpEvents"></div>
+        <div class="pager" id="dpEvPager"></div>
+      </section>
+    </div>
+
+    <section class="panel danger-zone">
+      <div class="panel-head"><h2>移除设备</h2></div>
+      <p class="muted small">移除后这台平板的令牌立即失效，App 里会提示「设备令牌已失效」，
+        需要重新配对才能再连上。设备上的守护本身不受影响。</p>
+      <button class="btn danger block" id="btnDelDev">移除这台设备</button>
+    </section>
+  </main>
+</div>
+
+<!-- ================= 配对码 ================= -->
+<div class="modal hidden" id="pairModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3>添加设备</h3>
+      <button class="icon-btn" data-close="pairModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="muted small">配对码 10 分钟内有效，只能用一次。在平板上打开「使用守护」→「远程管理」，
+        填入服务器地址和下面这串数字。</p>
+      <div id="pairOwnerRow" class="field hidden">
+        <div><label>归属账号</label><div class="hint">配好的平板会出现在这个账号下</div></div>
+        <select id="pairOwner" class="select"></select>
+      </div>
+      <div class="pair-code" id="pairCode">------</div>
+      <div class="muted small" id="pairHint">正在生成…</div>
+      <button class="btn primary block" id="btnNewCode">重新生成</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 账号管理 ================= -->
+<div class="modal hidden" id="usersModal">
+  <div class="modal-card wide">
+    <div class="modal-head">
+      <div>
+        <h3>账号管理</h3>
+        <div class="muted small">每个账号只能看到归属自己的平板；管理员能看到全部</div>
+      </div>
+      <button class="icon-btn" data-close="usersModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="userList" class="user-list"></div>
+
+      <div class="sect-title">新建账号</div>
+      <div class="form-grid">
+        <input id="nuName" type="text" placeholder="用户名（2~24 位）" autocapitalize="none">
+        <input id="nuPwd" type="password" placeholder="初始密码（至少 6 位）">
+        <select id="nuRole" class="select">
+          <option value="user">普通账号（只看自己的设备）</option>
+          <option value="admin">管理员（看全部 + 管理账号）</option>
+        </select>
+        <input id="nuNote" type="text" placeholder="备注（可空，例如「爸爸的手机」）">
+      </div>
+      <button class="btn primary block" id="btnCreateUser" style="margin-top:12px">创建账号</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 我的账号 ================= -->
+<div class="modal hidden" id="accountModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div>
+        <h3>我的账号</h3>
+        <div class="muted small" id="accMeta"></div>
+      </div>
+      <button class="icon-btn" data-close="accountModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="sect-title">修改密码</div>
+      <div class="form-grid">
+        <input id="oldPwd" type="password" placeholder="当前密码">
+        <input id="newPwd" type="password" placeholder="新密码（至少 6 位）">
+        <input id="newPwd2" type="password" placeholder="再输一次新密码">
+      </div>
+      <button class="btn primary block" id="btnChangePwd" style="margin-top:12px">保存新密码</button>
+      <p class="muted small" style="margin-top:12px">
+        改完之后，这个账号在其它浏览器上的登录会失效，需要重新登录。
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 全部事件（按天 + 分页） ================= -->
+<div class="modal hidden" id="eventsModal">
+  <div class="modal-card wide">
+    <div class="modal-head">
+      <div>
+        <h3>全部事件</h3>
+        <div class="muted small" id="evModalSub">默认今天，可左右翻或直接选日期</div>
+      </div>
+      <button class="icon-btn" data-close="eventsModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="ev-filters">
+        <div class="daypicker">
+          <button class="icon-btn" id="btnEvPrev" title="前一天">‹</button>
+          <input type="date" id="evDay" class="date-input">
+          <button class="icon-btn" id="btnEvNext" title="后一天">›</button>
+        </div>
+        <button class="btn ghost small" id="btnEvToday">今天</button>
+        <button class="btn ghost small" id="btnEvAllTime">全部时间</button>
+        <select id="evDevice" class="select" title="只看某台设备">
+          <option value="">全部设备</option>
+        </select>
+      </div>
+      <div id="evList" class="events tall"></div>
+      <div class="pager" id="evPager"></div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

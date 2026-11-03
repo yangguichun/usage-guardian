@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  设备管理器的权限声明。
+  我们只申请 force-lock（锁屏）这一项，它是本应用"强制休息"需要的，
+  申请越少，激活时系统弹出的提示越简单，家长越放心。
+  真正起作用的是"成为设备管理器"这件事本身（阻止被强行停止 / 卸载），
+  而不是这些具体的策略权限。
+-->
+<device-admin xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-policies>
+        <force-lock />
+    </uses-policies>
+</device-admin>

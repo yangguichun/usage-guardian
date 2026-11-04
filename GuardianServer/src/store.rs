@@ -138,6 +138,15 @@ pub struct Device {
     pub used_ms: i64,
     /// 今日累计（设备本地计算的）
     pub today_used_ms: i64,
+    /// 每日总时长上限（分钟，0 = 不限）。v2.5.0 新增。
+    ///
+    /// 和 `use_minutes` 是两个维度：`use_minutes` 管"连续用多久歇一会儿"，
+    /// 这个管"一天总共能用多久"。老库载入时字段缺失取 0，等于沿用旧行为。
+    pub day_limit_minutes: i64,
+    /// 设备此刻是否因为"今日额度用完"而锁着
+    pub day_locked: bool,
+    /// 家长用密码临时放行的剩余毫秒（0 = 没有临时放行）
+    pub day_unlock_left_ms: i64,
     pub rest_count: i64,
     pub use_minutes: i64,
     pub rest_minutes: i64,
@@ -183,6 +192,9 @@ impl Default for Device {
             rest_left_ms: 0,
             used_ms: 0,
             today_used_ms: 0,
+            day_limit_minutes: 0,
+            day_locked: false,
+            day_unlock_left_ms: 0,
             rest_count: 0,
             use_minutes: 30,
             rest_minutes: 5,

@@ -94,7 +94,7 @@ async function waitFor(fn, ms = 4000, step = 50) {
   console.log('\n[1] 首页');
   const loaded = await waitFor(() => d.querySelectorAll('#devices .device').length > 0);
   ok(loaded, '设备卡片渲染出来了');
-  ok(d.querySelectorAll('#devices .device').length === 2, '设备数量 = 2');
+  ok(d.querySelectorAll('#devices .device').length === 3, '设备数量 = 3');
 
   const evHtml = d.getElementById('events').innerHTML;
   ok(!d.getElementById('events').querySelector('.empty'), '首页事件不是空态');
@@ -288,7 +288,7 @@ async function waitFor(fn, ms = 4000, step = 50) {
     && d.querySelectorAll('#evList .event').length > 0);
   ok(modalOk, '弹窗打开并渲染出事件');
   ok(d.getElementById('evDay').value === today, '弹窗默认查今天');
-  ok(d.getElementById('evDevice').options.length === 3, '设备下拉 = 全部 + 2 台');
+  ok(d.getElementById('evDevice').options.length === 4, '设备下拉 = 全部 + 3 台');
   ok(/共 \d+ 条/.test(d.getElementById('evModalSub').textContent), d.getElementById('evModalSub').textContent);
   ok(d.querySelectorAll('#evList .dev-tag').length > 0, '跨设备列表带设备标签');
   const pagerTxt = d.getElementById('evPager').textContent;

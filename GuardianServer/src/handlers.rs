@@ -88,6 +88,10 @@ pub const ALLOWED_COMMANDS: &[(&str, &str)] = &[
     // 停用时段（宵禁）：到点自动锁屏、到点自动解锁，不需要家长在跟前。
     // 规则列表放在设备配置里下发（指令只带 id，设备回执里会带明细）。
     ("quiet", "更新停用时段（每天几点到几点不能玩）"),
+    // 每日总时长（v2.5.0）：和"连续使用"是两个维度，用完当天不再自动解除。
+    ("day_limit", "设置每日总时长上限"),
+    ("day_unlock", "今日解除（今天不再按额度锁）"),
+    ("day_relock", "恢复今日限制"),
 ];
 
 /// 版本号比较用（"2.3.1" → (2,3,1)）。解析不出来的段当 0，不 panic。
@@ -1204,12 +1208,21 @@ pub async fn push_command(
             )));
         }
     }
+    // 每日总时长同理：老 App 收到 day_limit 会回"不支持的指令"，
+    // 但家长会以为设好了，孩子照样玩满一整天。
+    if matches!(body.kind.as_str(), "day_limit" | "day_unlock" | "day_relock") {
+        let ver = store.devices[dev_idx].app_version.clone();
+        if !ver.is_empty() && ver_tuple(&ver) < (2, 5, 0) {
+            return Err(ApiError::bad(format!(
+                "这台设备的 App 是 {ver}，不支持「每日总时长」，请先升级到 2.5.0 及以上"
+            )));
+        }
+    }
 
     let raw: Map<String, Value> = match body.params {
         Some(Value::Object(m)) => m,
         _ => Map::new(),
     };
-
     let params = match body.kind.as_str() {
         "lock" => {
             // ★ 默认值取这台设备自己配置的休息时长，不能写死 5。
@@ -1252,11 +1265,27 @@ pub async fn push_command(
                     clean.insert(k.into(), Value::Bool(json_bool(Some(v), false)));
                 }
             }
+            // 每日上限也走 config：家长在设置区一次性保存，不用分两次点。
+            // 顺手落库 —— 设备离线时这个值也不能丢。
+            if raw.contains_key("day_limit_minutes") {
+                let m = clamp(raw.get("day_limit_minutes"), 0, 1440, 0);
+                store.devices[dev_idx].day_limit_minutes = m;
+                clean.insert("day_limit_minutes".into(), json!(m));
+            }
             if clean.is_empty() {
                 return Err(ApiError::bad("没有可修改的参数"));
             }
             Value::Object(clean)
         }
+        // ---- 每日总时长：0 表示不限 ----
+        // 和停用时段一样先落库：设备离线时家长设的值不能丢，
+        // 否则"今天设了 90 分钟"要到孩子开机后才第一次生效。
+        "day_limit" => {
+            let minutes = clamp(raw.get("minutes"), 0, 1440, 0);
+            store.devices[dev_idx].day_limit_minutes = minutes;
+            json!({ "minutes": minutes })
+        }
+        "day_unlock" | "day_relock" => Value::Object(Map::new()),
         // ---- 停用时段：整体替换规则列表 ----
         //
         // 设计成"整份替换"而不是"逐条增删改"：规则最多四五条，前端本来就是
@@ -1355,6 +1384,21 @@ pub async fn push_command(
             .and_then(|v| v.as_i64())
             .map(|m| format!("（{m} 分钟）"))
             .unwrap_or_default(),
+        // 每日额度一定要把分钟数写进事件：家长事后看到"今天 15:40 被锁"，
+        // 得能一眼看出当时设的是多少分钟，而不是只能凭记忆
+        "day_limit" => params
+            .get("minutes")
+            .and_then(|v| v.as_i64())
+            .map(|m| {
+                if m <= 0 {
+                    "（改为不限）".to_string()
+                } else {
+                    format!("（每天 {m} 分钟）")
+                }
+            })
+            .unwrap_or_default(),
+        "day_unlock" => "（今天不再按额度锁）".to_string(),
+        "day_relock" => "（恢复每日额度限制）".to_string(),
         // 停用时段一定要把规则原样写进事件流：家长事后想知道"到底什么时候设的、
         // 设成了几点到几点"，光写"更新了停用时段"根本查不出来。
         "quiet" => params
@@ -1977,6 +2021,7 @@ pub async fn device_heartbeat(
     let prev_resting = store.devices[idx].resting;
     let prev_enabled = store.devices[idx].enabled;
     let prev_in_quiet = store.devices[idx].in_quiet;
+    let prev_day_locked = store.devices[idx].day_locked;
 
     // ---- 更新状态快照 ----
     {
@@ -1998,6 +2043,11 @@ pub async fn device_heartbeat(
         d.rest_count = clamp(payload.get("rest_count"), 0, 999, 0);
         d.use_minutes = clamp(payload.get("use_minutes"), 1, 600, d.use_minutes);
         d.rest_minutes = clamp(payload.get("rest_minutes"), 1, 240, d.rest_minutes);
+        // 每日总时长：0 = 不限。缺字段时保留旧值，避免老版本 App 把家长设的上限抹成 0。
+        d.day_limit_minutes = clamp(payload.get("day_limit_minutes"), 0, 1440, d.day_limit_minutes);
+        d.day_locked = json_bool(payload.get("day_locked"), d.day_locked);
+        d.day_unlock_left_ms =
+            clamp(payload.get("day_unlock_left_ms"), 0, MAX_MS, d.day_unlock_left_ms);
         d.reset_gap_seconds = clamp(payload.get("reset_gap_seconds"), 30, 3600, d.reset_gap_seconds);
         d.tamper_policy = json_bool(payload.get("tamper_policy"), d.tamper_policy);
         d.tamper_strikes = clamp(payload.get("tamper_strikes"), 0, 999, d.tamper_strikes);
@@ -2022,6 +2072,7 @@ pub async fn device_heartbeat(
     let enabled = store.devices[idx].enabled;
     let in_quiet = store.devices[idx].in_quiet;
     let quiet_label = store.devices[idx].quiet_label.clone();
+    let day_locked = store.devices[idx].day_locked;
     let prev_quiet = prev_in_quiet;
 
     // ---- 时间线：这一刻并进"在线区间" ----
@@ -2051,6 +2102,17 @@ pub async fn device_heartbeat(
         store.add_event(Some(&did), "quiet_start", format!("{dev_name} {why}"));
     } else if prev_quiet && !in_quiet {
         store.add_event(Some(&did), "quiet_end", format!("{dev_name} 停用时段结束"));
+    }
+    // 每日额度用完 / 解除各记一笔：家长翻事件流就能确认"今天到底几点被锁的"，
+    // 这条也是核对"孩子说没玩多久"和"实际用了多久"最直接的证据。
+    if !prev_day_locked && day_locked {
+        store.add_event(
+            Some(&did),
+            "day_lock",
+            format!("{dev_name} 今日额度已用完，已锁定至明天 0 点"),
+        );
+    } else if prev_day_locked && !day_locked {
+        store.add_event(Some(&did), "day_unlock", format!("{dev_name} 今日额度限制已解除"));
     }
 
     // ---- 每日统计 ----

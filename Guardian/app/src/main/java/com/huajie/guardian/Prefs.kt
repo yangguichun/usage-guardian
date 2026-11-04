@@ -41,6 +41,40 @@ class Prefs(context: Context) {
         get() = sp.getInt(K_REST_MIN, 5)
         set(v) = edit { it.putInt(K_REST_MIN, v) }
 
+    /**
+     * 每天允许使用的总分钟数（0 = 不限制）。
+     *
+     * 和 [useMinutes] 是两个维度：[useMinutes] 管"连续用多久就歇一会儿"，
+     * 这个管"一天总共只能用多久"。用完当天不再自动解除，要等第二天 0 点，
+     * 或者由家长临时放行。
+     */
+    var dayLimitMinutes: Int
+        get() = sp.getInt(K_DAY_LIMIT_MIN, 0)
+        set(v) = edit { it.putInt(K_DAY_LIMIT_MIN, v.coerceIn(0, 1440)) }
+
+    /** 家长在后台点过「今日解除」的日期（yyyy-MM-dd）；当天内不再按每日总量锁 */
+    var dayClearedDay: String
+        get() = sp.getString(K_DAY_CLEARED_DAY, "") ?: ""
+        set(v) = edit { it.putString(K_DAY_CLEARED_DAY, v) }
+
+    /** 家长用密码临时放行到什么时候（墙钟）；到时立刻恢复每日总量判定 */
+    var dayUnlockUntilWall: Long
+        get() = sp.getLong(K_DAY_UNLOCK_UNTIL, 0L)
+        set(v) = edit { it.putLong(K_DAY_UNLOCK_UNTIL, v) }
+
+    /** 本轮每日额度锁定已经提示过的日期，避免每秒重复弹 toast */
+    var dayLockNoticeDay: String
+        get() = sp.getString(K_DAY_LOCK_NOTICE_DAY, "") ?: ""
+        set(v) = edit { it.putString(K_DAY_LOCK_NOTICE_DAY, v) }
+
+    /** 清掉今日的一切放行状态（跨天 / 家长恢复限制时用） */
+    fun clearDayUnlock() {
+        edit {
+            it.putString(K_DAY_CLEARED_DAY, "")
+            it.putLong(K_DAY_UNLOCK_UNTIL, 0L)
+        }
+    }
+
     /** 熄屏 / 退出使用超过多少秒后，连续计时重新归零 */
     var resetGapSeconds: Int
         get() = sp.getInt(K_RESET_GAP, 300)
@@ -893,6 +927,10 @@ class Prefs(context: Context) {
         // ---- 每日累计 ----
         private const val K_TODAY_USED = "today_used_ms"
         private const val K_TODAY_DAY = "today_used_day"
+        private const val K_DAY_LIMIT_MIN = "day_limit_minutes"
+        private const val K_DAY_CLEARED_DAY = "day_cleared_day"
+        private const val K_DAY_UNLOCK_UNTIL = "day_unlock_until_wall"
+        private const val K_DAY_LOCK_NOTICE_DAY = "day_lock_notice_day"
         private const val K_OFF_RANGES = "off_ranges_json"
         private const val K_OFF_DAY = "off_ranges_day"
     }

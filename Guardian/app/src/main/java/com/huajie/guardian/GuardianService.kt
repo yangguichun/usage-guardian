@@ -32,6 +32,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import org.json.JSONObject
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -421,6 +422,8 @@ class GuardianService : Service() {
             sInQuiet = false
             sQuietLeftMs = 0L
             sQuietLabel = ""
+            sDayLocked = false
+            sDayLeftMs = 0L
             sUsing = false
             sUsedMs = 0L
             // 守护没开，就不该再留一个"到点闹钟"
@@ -466,6 +469,34 @@ class GuardianService : Service() {
             return
         }
         if (sInQuiet) exitQuiet(now, notify = true)
+
+        // ============ 每日总时长（v2.5.0）：优先级仅次于停用时段 ============
+        //
+        // 三个维度的关系：
+        //   停用时段  —— 看钟点，「现在不是玩的时间」，到点自动解
+        //   每日总量  —— 看累计，「今天的时间用完了」，**不会自己解**
+        //   连续使用  —— 看这一轮，「你该歇会儿了」，倒计时结束就解
+        //
+        // 必须放在休息之前判：已经用完当天额度时，再弹一个"休息 5 分钟"
+        // 等于告诉孩子"等 5 分钟就能接着玩"，语义完全错了。
+        if (dayLimitHit(now)) {
+            enterDayLock(now)
+            sDayLeftMs = msToMidnight(now)
+            // 挡住画面的同时把视频按住，和休息一致
+            Silence.applyRest(this, prefs)
+            ensureOverlay()
+            if (overlayView == null) ensureLockActivity()
+            renderOverlay(sDayLeftMs, RestUi.Mode.DAY)
+            sUsing = false
+            sUsedMs = 0L
+            // 这个状态没有倒计时，但要保证"明天 0 点"那一刻能醒过来解除：
+            // 靠系统闹钟，进程被冻住也照样投递
+            KeepAlive.armDeadline(this, now + sDayLeftMs)
+            maybeRemote(now)
+            refreshNotification()
+            return
+        }
+        if (sDayLocked) exitDayLock(now)
 
         val leftMs = prefs.lockedUntilWall - now
 
@@ -875,6 +906,114 @@ class GuardianService : Service() {
         return prefs.sessionUsedMs + running
     }
 
+    /**
+     * 今天是否已经把「每日总时长」用完了。
+     *
+     * 三道豁免各管一件事：
+     *   · [Prefs.dayLimitMinutes] 为 0 —— 家长没开这个维度，一律不管；
+     *   · [Prefs.dayClearedDay] 是今天 —— 家长在后台点了「今日解除」；
+     *   · [Prefs.dayUnlockUntilWall] 还没到 —— 家长刚才用密码临时放行 15 分钟。
+     *
+     * 判据只认 [Prefs.todayUsedMs]，它是 refreshUsage 从系统事件整天重扫出来的，
+     * 已经扣掉了遮罩/停用这些"不计入使用"的区间。**绝不能改成进程内累加**：
+     * 进程被速冻、被杀、断网都会让增量丢失，孩子反而能靠杀后台白玩。
+     */
+    private fun dayLimitHit(now: Long): Boolean {
+        val lim = prefs.dayLimitMinutes
+        if (lim <= 0) return false
+        if (prefs.dayClearedDay == dayKeyNow(now)) return false
+        if (now < prefs.dayUnlockUntilWall) return false
+        return prefs.todayUsedMs >= lim * 60_000L
+    }
+
+    private fun dayKeyNow(now: Long): String =
+        SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date(now))
+
+    /** 距明天 0 点还有多少毫秒（本地时区） */
+    private fun msToMidnight(now: Long): Long {
+        val cal = Calendar.getInstance()
+        cal.timeInMillis = now
+        cal.add(Calendar.DAY_OF_MONTH, 1)
+        cal.set(Calendar.HOUR_OF_DAY, 0)
+        cal.set(Calendar.MINUTE, 0)
+        cal.set(Calendar.SECOND, 0)
+        cal.set(Calendar.MILLISECOND, 0)
+        return (cal.timeInMillis - now).coerceAtLeast(0L)
+    }
+
+    /**
+     * 进入「今日额度用完」。
+     *
+     * 和 [enterRest] 最大的不同：这里**不写 lockedUntilWall**。
+     * 写了就等于给了它一个倒计时，而这个状态必须一直持续到明天 0 点 ——
+     * 用一个"结束时刻"表达它，明天之前任何一次 tick 都会把它当成"还在休息"，
+     * 逻辑上看着对，实际上孩子只要熬到那一刻就又自由了。
+     */
+    private fun enterDayLock(now: Long) {
+        if (sDayLocked) return
+        // 可能刚从一轮休息里走到这里：先把休息收尾，两种状态不能并存
+        if (prefs.lockedUntilWall > now) {
+            prefs.lockedUntilWall = 0L
+            endRest()
+        }
+        prefs.sessionUsedMs = 0L
+        prefs.sessionStartWall = 0L
+        prefs.roundStartWall = now
+        // 起点前移必须同时让派生缓存失效，否则 usedMsNow() 还会拿上一轮的值
+        usageScanAt = 0L
+        // 之前若有未闭合的"不计入"区间（比如休息中），先收尾再开新的，
+        // 否则这段时间会被重复扣掉
+        prefs.closeOff(now)
+        prefs.pushOffStart(now)
+
+        sDayLocked = true
+        sResting = false
+        sRestLeftMs = 0L
+        overlayErrorNotified = false
+        lastOverlayError = null
+
+        // 一天只提示一次：这个遮罩会在孩子每次点亮屏幕时重建，
+        // 每秒弹一次 toast 只会把界面刷成一片
+        if (prefs.dayLockNoticeDay != dayKeyNow(now)) {
+            prefs.dayLockNoticeDay = dayKeyNow(now)
+            toast(getString(R.string.day_lock_title))
+        }
+        Log.i(
+            TAG,
+            "进入每日额度锁定：上限 ${prefs.dayLimitMinutes} 分钟，已用 ${prefs.todayUsedMs / 60_000} 分钟"
+        )
+    }
+
+    /** 退出「今日额度用完」：家长放行、后台解除、或跨天 */
+    private fun exitDayLock(now: Long) {
+        if (!sDayLocked) return
+        sDayLocked = false
+        sDayLeftMs = 0L
+        prefs.closeOff(now)
+        prefs.roundStartWall = now
+        usageScanAt = 0L
+        prefs.sessionUsedMs = 0L
+        prefs.sessionStartWall = if (lastActive) now else 0L
+        prefs.lastIdleWall = now
+        endRest()
+        refreshNotification()
+    }
+
+    /**
+     * 家长在「今日额度用完」遮罩上输密码 → 临时放行 [RestUi.DAY_UNLOCK_MIN] 分钟。
+     *
+     * 只放行这一小段，不放整天：这个入口是给"正在做老师布置的作业"用的，
+     * 不是给"今天再玩一会儿"用的。真要整天放开，家长在网页上点「今日解除」。
+     */
+    private fun unlockDayTemporarily() {
+        val now = System.currentTimeMillis()
+        prefs.dayUnlockUntilWall = now + RestUi.DAY_UNLOCK_MIN * 60_000L
+        exitDayLock(now)
+        toast(getString(R.string.day_unlock_done, RestUi.DAY_UNLOCK_MIN))
+        // 立刻重算：遮罩这一刻就该消失，而不是等下一个 20 秒扫描
+        step()
+    }
+
     private fun startRest(now: Long) {
         enterRest(now, getString(R.string.rest_reason_usage_limit))
         // 已经进休息了，到点闹钟就没有意义了，立刻撤掉
@@ -1114,10 +1253,14 @@ class GuardianService : Service() {
      */
     private fun renderOverlay(leftMs: Long, mode: RestUi.Mode = RestUi.Mode.REST) {
         val v = overlayView ?: return
-        val plan = if (mode == RestUi.Mode.QUIET) {
-            getString(R.string.quiet_plan, sQuietLabel)
-        } else {
-            prefs.restPlan
+        val plan = when (mode) {
+            RestUi.Mode.QUIET -> getString(R.string.quiet_plan, sQuietLabel)
+            RestUi.Mode.DAY -> getString(
+                R.string.day_lock_plan,
+                prefs.dayLimitMinutes,
+                (prefs.todayUsedMs / 60_000L).toInt()
+            )
+            else -> prefs.restPlan
         }
         RestUi.render(v, this, leftMs, prefs.restCount, plan, mode)
     }
@@ -1158,6 +1301,11 @@ class GuardianService : Service() {
     /** 家长验证通过：跳过本次休息 / 放行本轮停用 */
     private fun skipRest() {
         val now = System.currentTimeMillis()
+        // 每日额度锁定：这里不能"跳过"，只能临时放行一小段 —— 语义完全不同
+        if (sDayLocked) {
+            unlockDayTemporarily()
+            return
+        }
         if (sInQuiet) {
             skipQuiet(now)
             return
@@ -1228,10 +1376,31 @@ class GuardianService : Service() {
                     }
                 }
 
+                // ---- 每日总时长（v2.5.0）----
+                // 「今日解除」= 今天剩下的时间都不再按额度锁。它不是"临时放行"，
+                // 所以记在 dayClearedDay 上，跨天自动失效。
+                "day_unlock" -> {
+                    prefs.dayClearedDay = dayKeyNow(now)
+                    prefs.dayUnlockUntilWall = 0L
+                    if (sDayLocked) exitDayLock(now)
+                    step()
+                    true to "已解除今日限制（明天 0 点恢复）"
+                }
+
+                // 家长反悔了：立刻恢复限制，该锁就锁
+                "day_relock" -> {
+                    prefs.clearDayUnlock()
+                    step()
+                    if (sDayLocked) {
+                        true to "已恢复限制，设备已锁定（今天额度已用完）"
+                    } else {
+                        true to "已恢复限制（今天还没用完额度）"
+                    }
+                }
+
                 // 家长在后台把「拆防护」计数归零：惩罚倍数回到 ×1，
                 // 之后的休息时长就等于配置值。误判累积上去后必须有这个出口。
-                "reset_tamper" -> {
-                    val before = prefs.tamperStrikes
+                "reset_tamper" -> {                    val before = prefs.tamperStrikes
                     prefs.clearTamper()
                     GuardianService.refresh(this)
                     true to "已清零违规计数（原 $before 次），休息时长恢复为 ${prefs.restMinutes} 分钟"
@@ -1316,6 +1485,14 @@ class GuardianService : Service() {
                         prefs.restMinutes = p.optInt("rest_minutes", prefs.restMinutes).coerceIn(1, 240)
                         applied.add("休息 ${prefs.restMinutes} 分钟")
                     }
+                    if (p.has("day_limit_minutes")) {
+                        prefs.dayLimitMinutes =
+                            p.optInt("day_limit_minutes", prefs.dayLimitMinutes).coerceIn(0, 1440)
+                        applied.add(
+                            if (prefs.dayLimitMinutes <= 0) "每日总时长不限"
+                            else "每日总时长 ${prefs.dayLimitMinutes} 分钟"
+                        )
+                    }
                     if (p.has("reset_gap_seconds")) {
                         prefs.resetGapSeconds =
                             p.optInt("reset_gap_seconds", prefs.resetGapSeconds).coerceIn(30, 3600)
@@ -1342,6 +1519,9 @@ class GuardianService : Service() {
                     if (applied.isEmpty()) {
                         false to "没有可修改的参数"
                     } else {
+                        // 立刻重判一次：把每日上限从"不限"改成 30 分钟时，
+                        // 此刻很可能已经超了，不能等到下一次扫描才锁
+                        step()
                         refreshNotification()
                         true to "已应用：" + applied.joinToString("，")
                     }
@@ -1412,6 +1592,11 @@ class GuardianService : Service() {
             .setContentIntent(pi)
 
         when {
+            // ---------- 每日额度用完：没有倒计时，只是一句状态 ----------
+            sDayLocked -> {
+                b.setContentText(getString(R.string.day_lock_notif)).setShowWhen(false)
+            }
+
             // ---------- 停用时段：系统倒计时 ----------
             sInQuiet && sQuietLeftMs > 0L -> {
                 b.setContentText(getString(R.string.quiet_notif))
@@ -1469,6 +1654,7 @@ class GuardianService : Service() {
         runCatching {
             val now = System.currentTimeMillis()
             val key = when {
+                sDayLocked -> "daylock:${prefs.dayLimitMinutes}"
                 sInQuiet -> "quiet:${sQuietLabel}"
                 sResting && prefs.lockedUntilWall > now -> "rest:${prefs.lockedUntilWall / 1000}"
                 !prefs.enabled -> if (prefs.remoteConfigured()) "standby" else "off"
@@ -1529,6 +1715,18 @@ class GuardianService : Service() {
             // 昨天的"不计入区间"和新的一天无关；本轮也从头算
             prefs.resetOffRanges()
             prefs.roundStartWall = 0L
+
+            // 每日额度跟着自然日归零：昨天用完了，今天 0 点要能重新用。
+            // 遮罩也得主动撤掉 —— 这里只改状态不撤窗，孩子会看到"日期已经过了、
+            // 屏幕还锁着"的鬼状态。
+            prefs.clearDayUnlock()
+            prefs.dayLockNoticeDay = ""
+            if (sDayLocked) {
+                sDayLocked = false
+                sDayLeftMs = 0L
+                prefs.closeOff(System.currentTimeMillis())
+                endRest()
+            }
         }
     }
 
@@ -1622,6 +1820,18 @@ class GuardianService : Service() {
         /** 当前停用时段的描述（"每天 22:00–06:00"），上报给后台看 */
         @Volatile var sQuietLabel = ""
 
+        /**
+         * 是否正处于「今日额度用完」（v2.5.0）。
+         *
+         * 和 [sResting] 并列而不是复用它：休息有倒计时、到点自己解除；
+         * 这个没有倒计时，只能等第二天 0 点或家长放行。
+         * 混成一个状态，孩子只要等"倒计时"跑完就又能玩了。
+         */
+        @Volatile var sDayLocked = false
+
+        /** 距明天 0 点还有多久（毫秒），只在 [sDayLocked] 时有意义 */
+        @Volatile var sDayLeftMs = 0L
+
         /** 本轮已使用毫秒 */
         @Volatile var sUsedMs = 0L
 
@@ -1681,6 +1891,23 @@ class GuardianService : Service() {
             // 只改持久化状态，下次启动时 onUseStart / refreshUsage 会自己对齐。
             val p = Prefs(ctx)
             val now = System.currentTimeMillis()
+
+            // 每日额度锁定：服务不在时也按"临时放行"处理，不能落进下面的休息分支
+            // （那样会把今天剩下的额度当成一次普通休息，等 5 分钟孩子又能玩了）
+            val today = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date(now))
+            if (p.dayLimitMinutes > 0 &&
+                p.dayClearedDay != today &&
+                now >= p.dayUnlockUntilWall &&
+                p.todayUsedMs >= p.dayLimitMinutes * 60_000L
+            ) {
+                p.dayUnlockUntilWall = now + RestUi.DAY_UNLOCK_MIN * 60_000L
+                p.sessionUsedMs = 0L
+                p.sessionStartWall = 0L
+                p.roundStartWall = now
+                p.closeOff(now)
+                return
+            }
+
             val hit = Quiet.current(ctx, p, now)
             if (hit != null) {
                 p.quietSkipUntilWall = now + hit.leftMs

@@ -331,6 +331,14 @@ object Remote {
             // 服务没跑（比如刚配对、界面里点"立即同步"）就退回 Prefs 里的口径
             .put("used_ms", maxOf(p.sessionUsedMs + running, GuardianService.sUsedMs))
             .put("today_used_ms", maxOf(p.todayUsedMs, GuardianService.sTodayUsed))
+            // 每日总时长（v2.5.0）：上限值以设备为准上报，后台改配置时再下发回来。
+            // day_locked 决定设备卡上显示"今日额度已用完"还是正常状态。
+            .put("day_limit_minutes", p.dayLimitMinutes)
+            .put("day_locked", GuardianService.sDayLocked)
+            .put(
+                "day_unlock_left_ms",
+                (p.dayUnlockUntilWall - now).coerceAtLeast(0L)
+            )
             .put("rest_count", p.restCount)
             .put("use_minutes", p.useMinutes)
             .put("rest_minutes", p.restMinutes)

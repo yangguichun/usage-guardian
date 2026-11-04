@@ -99,6 +99,10 @@
     <!-- 时长设置 -->
     <string name="sec_duration">时长设置</string>
     <string name="label_use">连续使用时长</string>
+    <string name="label_day_limit">每日总时长</string>
+    <string name="hint_day_limit">一天累计用满就锁到第二天 0 点；滑到最左边表示不限</string>
+    <string name="day_limit_off">不限</string>
+    <string name="day_limit_value">%1$d 小时 %2$d 分</string>
     <string name="label_rest">每次强制休息</string>
     <string name="label_gap">重新计时阈值</string>
     <string name="hint_gap">熄屏或离开使用超过这个时间，连续使用时长就重新从零开始算（防止"玩一会儿歇一会儿"绕过限制）。</string>
@@ -221,6 +225,16 @@
     <string name="quiet_ended">停用时段结束，可以继续用了</string>
     <string name="quiet_skip">提前结束本次停用</string>
     <string name="quiet_skipped">本轮停用已放行（明天照常锁）</string>
+
+    <!-- 每日总时长用完（v2.5.0） -->
+    <string name="day_lock_title">今天的额度用完了</string>
+    <string name="day_lock_hint">今天能玩的时间已经用完\n明天 0 点自动恢复，先去干点别的吧</string>
+    <string name="day_lock_plan">今日上限 %1$d 分钟 · 已用 %2$d 分钟</string>
+    <string name="day_lock_resume">明天 0 点自动恢复</string>
+    <string name="day_unlock_temp">临时放行 %1$d 分钟</string>
+    <string name="day_unlock_done">已临时放行 %1$d 分钟，到时自动恢复锁定</string>
+    <string name="day_lock_notif">今日额度已用完 · 明天 0 点恢复</string>
+    <string name="day_unlock_remote">家长已在后台解除今日限制</string>
 
     <!-- 上锁遮片：设置内容藏起来时，屏幕上要有一句明确的话，不能是一片空白 -->
     <string name="lock_hint_title">🔒 已上锁</string>

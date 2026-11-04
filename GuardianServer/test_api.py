@@ -785,6 +785,103 @@ def main():
         # 别人的设备：配置读取也要 404（不是 403，避免探测设备 id 是否存在）。
         # 这里放在多账号段落里验证 —— 那时才有第二个账号的 token。
 
+        # ---------- 每日总时长（v2.5） ----------
+        #
+        # 第三个维度：一天累计用满就锁到次日 0 点，**不会自己解除**。
+        # 这里重点验四件事：
+        #   ① 旧 App 必须被拦住（否则家长以为设好了，孩子照样玩一整天）；
+        #   ② 上限要落库（设备离线时设置不能丢）；
+        #   ③ 设备上报的 day_locked 要能被后台看见，并写进事件流；
+        #   ④ 今日解除 / 恢复限制两条指令确实发得下去。
+        print("[每日总时长]")
+        st, body = req(
+            "POST",
+            f"/api/devices/{dev_id}/command",
+            {"type": "day_limit", "params": {"minutes": 90}},
+            token=token,
+        )
+        check("旧版本设置每日上限被拒 400", 400, st)
+        check_that("提示要升级到 2.5.0", "2.5.0" in body["detail"], body["detail"])
+
+        # 升级后再设。注意心跳里**不带** day_limit_minutes：
+        # 缺字段时服务端保留旧值，这条规则本身也要被试到。
+        hb_v25 = dict(hb)
+        hb_v25["app_version"] = "2.5.0"
+        req("POST", "/api/device/heartbeat", hb_v25, token=dev_token)
+
+        st, body = req(
+            "POST",
+            f"/api/devices/{dev_id}/command",
+            {"type": "day_limit", "params": {"minutes": 90}},
+            token=token,
+        )
+        check("设置每日上限 200", 200, st)
+
+        st, body = req("POST", "/api/device/heartbeat", hb_v25, token=dev_token)
+        cmds = body.get("commands", [])
+        check_that(
+            "每日上限指令下发到设备",
+            any(c["type"] == "day_limit" for c in cmds),
+            [c["type"] for c in cmds],
+        )
+        dcmd = next((c for c in cmds if c["type"] == "day_limit"), None)
+        check("下发分钟数 90", 90, dcmd["params"]["minutes"] if dcmd else -1)
+
+        st, body = req("GET", f"/api/devices/{dev_id}", token=token)
+        check("上限已落库", 90, body["device"]["day_limit_minutes"])
+        check("缺字段心跳没把它抹成 0", 90, body["device"]["day_limit_minutes"])
+
+        # 设备上报"今天已经用完"
+        hb_locked = dict(hb_v25)
+        hb_locked.update({"day_locked": True, "today_used_ms": 90 * 60 * 1000})
+        req("POST", "/api/device/heartbeat", hb_locked, token=dev_token)
+        st, body = req("GET", f"/api/devices/{dev_id}", token=token)
+        check("设备已锁状态被后台看见", True, body["device"]["day_locked"])
+
+        st, body = req("GET", "/api/events", token=token)
+        kinds = [e["kind"] for e in body["events"]]
+        check_that("有 day_lock 事件", "day_lock" in kinds, kinds[:8])
+
+        st, body = req(
+            "POST", f"/api/devices/{dev_id}/command", {"type": "day_unlock"}, token=token
+        )
+        check("今日解除 200", 200, st)
+        st, body = req("POST", "/api/device/heartbeat", hb_locked, token=dev_token)
+        check_that(
+            "今日解除指令下发",
+            any(c["type"] == "day_unlock" for c in body.get("commands", [])),
+            [c["type"] for c in body.get("commands", [])],
+        )
+
+        st, body = req(
+            "POST", f"/api/devices/{dev_id}/command", {"type": "day_relock"}, token=token
+        )
+        check("恢复今日限制 200", 200, st)
+
+        # 超范围要被夹住：1440 分钟（24 小时）是语义上的最大值，
+        # 再大就等于"把设备锁死"，不能让它进库
+        st, body = req(
+            "POST",
+            f"/api/devices/{dev_id}/command",
+            {"type": "day_limit", "params": {"minutes": 99999}},
+            token=token,
+        )
+        check("设置超范围上限 200", 200, st)
+        st, body = req("POST", "/api/device/heartbeat", hb_v25, token=dev_token)
+        dcmd = next((c for c in body.get("commands", []) if c["type"] == "day_limit"), None)
+        check("超范围被夹到 1440", 1440, dcmd["params"]["minutes"] if dcmd else -1)
+
+        # 0 = 不限，这个值必须能存下去（家长关掉这个维度的唯一方式）
+        st, body = req(
+            "POST",
+            f"/api/devices/{dev_id}/command",
+            {"type": "day_limit", "params": {"minutes": 0}},
+            token=token,
+        )
+        check("关闭每日上限 200", 200, st)
+        st, body = req("GET", f"/api/devices/{dev_id}", token=token)
+        check("上限已改为不限", 0, body["device"]["day_limit_minutes"])
+
         # ---------- 休息状态变化写事件 ----------
         print("[事件流]")
         hb_rest = dict(hb)

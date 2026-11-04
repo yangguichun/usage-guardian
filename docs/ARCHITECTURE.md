@@ -68,12 +68,18 @@ App 每 20 秒上报一次状态，服务端在同一响应里带回**全量规�
 DEVICE_SHUTDOWN=26 / DEVICE_STARTUP=27`。minSdk 26，这些常量名 API 28 才有，
 引用名字会 `NoSuchFieldError`。
 
-## 4. 休息 vs 停用
+## 4. 三种限制：休息 / 每日总量 / 停用
 
-两条线语义不同，**停用优先级高于休息**，混在一起会互相清状态：
+三者语义不同，**优先级：停用 > 每日总量 > 休息**。混在一起会互相清状态：
 
 - 休息：看「本轮用了多久」，到上限弹遮罩，倒计时结束后前移 `roundStartWall`；
+- 每日总量：看「今天累计用了多久」，达到 `day_limit_minutes` 后锁到次日 0 点，**没有倒计时**；
 - 停用（宵禁）：看「现在几点」，规则 `{enabled, label, from, to, days}`，`from/to` 是 0 点起算的分钟数（0–1440），`days` 是 7 位掩码；跨夜按「时段开始那天」判星期。
+
+每日总量**不能用 `lockedUntilWall` 表达**：那是一个「结束时刻」，写进去就等于给了它倒计时，
+孩子熬到那一刻就自由了。它只由 `todayUsedMs >= dayLimitMinutes * 60000` 实时判定，
+豁免只有三种：`dayClearedDay == 今天`（后台「今日解除」）、`dayUnlockUntilWall > now`
+（密码临时放行 15 分钟）、`day_limit_minutes <= 0`（没开）。
 
 进入停用必须**清空本轮已用时长**并停掉时长闹钟，否则熬完宵禁一解锁就被判超时、立刻又锁。
 
@@ -137,6 +143,7 @@ Rust + axum，SQLite（`rusqlite` + `bundled`），单文件 `data/guardian.db`�
 
 | 版本 | 关键变化 |
 | --- | --- |
+| v2.5.0 | 每日总时长（`day_limit` / `day_unlock` / `day_relock`，要求 `app_version >= 2.5.0`） |
 | v2.4.2 | 跳过保护缓存失效修复、hash 路由、应用过滤、面板内距统一 |
 | v2.4.1 | 计时口径统一为整天重扫、`roundStartWall`、`offRanges` |
 | v2.4.0 | 停用时段（宵禁）、`quiet` 指令（要求 `app_version >= 2.4.0`） |

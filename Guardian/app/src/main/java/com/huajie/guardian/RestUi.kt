@@ -27,16 +27,39 @@ object RestUi {
     private const val ACTION_WINDOW_S = 60
 
     /**
-     * 遮罩的两种形态。
+     * 每日额度用完时，家长用密码「临时放行」的分钟数。
+     *
+     * 固定 15 分钟而不是让家长现场填：解锁场景几乎都是"临时做一下作业"，
+     * 多一步输入只会让家长在遮罩前手忙脚乱；而且短时长也限制了孩子
+     * 反复找家长解锁的空间。
+     */
+    const val DAY_UNLOCK_MIN = 15
+
+    /**
+     * 遮罩的三种形态。
      *
      * 共用同一个布局，只换文案 —— 多写一份布局，两边（悬浮窗 / LockActivity）
      * 的绑定逻辑只好跟着复制一份，很快就不同步了。
+     *
+     * DAY 是 v2.5.0 的「每日总时长用完」：它和 REST 的区别不只是文案，
+     * 更关键的是**没有到点自动解除**，只能等第二天 0 点或家长放行。
      */
-    enum class Mode { REST, QUIET }
+    enum class Mode { REST, QUIET, DAY }
 
     fun fmt(ms: Long): String {
         val s = ms.coerceAtLeast(0L) / 1000L
         return String.format(Locale.US, "%02d:%02d", s / 60, s % 60)
+    }
+
+    /**
+     * 超过一小时也能正确显示的格式（[fmt] 只到分钟，用于休息倒计时）。
+     *
+     * 每日额度锁要一直显示到明天 0 点，最长能剩十几个小时，
+     * 用 [fmt] 会变成 "742:31" 这种看着像坏了的东西。
+     */
+    fun fmtHms(ms: Long): String {
+        val s = ms.coerceAtLeast(0L) / 1000L
+        return String.format(Locale.US, "%02d:%02d:%02d", s / 3600, (s % 3600) / 60, s % 60)
     }
 
     /** 绑定遮罩上的全部交互 */
@@ -161,18 +184,32 @@ object RestUi {
      * 后者是"现在不是玩手机的时间"。文案写错会让孩子觉得"我才刚拿起来凭什么说我用久了"。
      */
     fun applyMode(root: View, ctx: Context, mode: Mode) {
-        root.findViewById<TextView>(R.id.tvEmoji)?.text =
-            if (mode == Mode.QUIET) "🌙" else "😴"
+        root.findViewById<TextView>(R.id.tvEmoji)?.text = when (mode) {
+            Mode.QUIET -> "🌙"
+            Mode.DAY -> "🔒"
+            else -> "😴"
+        }
         root.findViewById<TextView>(R.id.tvTitle)?.setText(
-            if (mode == Mode.QUIET) R.string.quiet_title else R.string.rest_title
+            when (mode) {
+                Mode.QUIET -> R.string.quiet_title
+                Mode.DAY -> R.string.day_lock_title
+                else -> R.string.rest_title
+            }
         )
         root.findViewById<TextView>(R.id.tvRestHint)?.setText(
-            if (mode == Mode.QUIET) R.string.quiet_hint else R.string.rest_hint
+            when (mode) {
+                Mode.QUIET -> R.string.quiet_hint
+                Mode.DAY -> R.string.day_lock_hint
+                else -> R.string.rest_hint
+            }
         )
-        // 「跳过本次休息」在停用模式下意思不对，换成「提前结束本次停用」
-        root.findViewById<Button>(R.id.btnSkipRest)?.setText(
-            if (mode == Mode.QUIET) R.string.quiet_skip else R.string.skip_rest
-        )
+        // 「跳过本次休息」在另外两种模式下意思都不对：
+        // 停用时段叫「提前结束本次停用」，每日额度叫「临时放行」
+        root.findViewById<Button>(R.id.btnSkipRest)?.text = when (mode) {
+            Mode.QUIET -> ctx.getString(R.string.quiet_skip)
+            Mode.DAY -> ctx.getString(R.string.day_unlock_temp, DAY_UNLOCK_MIN)
+            else -> ctx.getString(R.string.skip_rest)
+        }
     }
 
     /** 刷新倒计时与次数 */
@@ -192,13 +229,14 @@ object RestUi {
         mode: Mode = Mode.REST
     ) {
         applyMode(root, ctx, mode)
-        root.findViewById<TextView>(R.id.tvCountdown)?.text = fmt(restLeftMs)
+        root.findViewById<TextView>(R.id.tvCountdown)?.text =
+            if (mode == Mode.DAY) fmtHms(restLeftMs) else fmt(restLeftMs)
         root.findViewById<TextView>(R.id.tvRestCount)?.apply {
-            text = if (mode == Mode.QUIET) {
+            text = when (mode) {
                 // 停用时段没有"第几次"的概念，显示一句更贴切的
-                ctx.getString(R.string.quiet_count_fmt, fmt(restLeftMs))
-            } else {
-                ctx.getString(R.string.rest_count_fmt, restCount)
+                Mode.QUIET -> ctx.getString(R.string.quiet_count_fmt, fmt(restLeftMs))
+                Mode.DAY -> ctx.getString(R.string.day_lock_resume)
+                else -> ctx.getString(R.string.rest_count_fmt, restCount)
             }
         }
         root.findViewById<TextView>(R.id.tvRestPlan)?.apply {

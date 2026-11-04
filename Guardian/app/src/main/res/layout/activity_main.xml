@@ -243,6 +243,43 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp" />
 
+        <!-- 每日总时长（0 = 不限） -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/label_day_limit"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tvDayValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/seekDay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/hint_day_limit"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="12sp" />
+
         <!-- 强制休息时长 -->
         <LinearLayout
             android:layout_width="match_parent"

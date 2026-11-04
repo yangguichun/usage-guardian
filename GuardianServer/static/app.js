@@ -297,6 +297,8 @@ function statusOf(d) {
   if (!d.online) return { cls: 'away', text: '离线' };
   // 停用时段的优先级最高：它盖过"守护中"，家长一眼要知道"现在为什么不能玩"
   if (d.in_quiet) return { cls: 'quiet', text: '停用时段' };
+  // 每日额度用完是一个"要锁到明天"的状态，比"休息中"更值得被看见
+  if (d.day_locked) return { cls: 'rest', text: '今日额度用完' };
   if (d.resting) return { cls: 'rest', text: '休息中' };
   if (!d.enabled) return { cls: 'off', text: '守护已关闭' };
   return { cls: 'use', text: '守护中' };
@@ -468,6 +470,12 @@ document.addEventListener('click', async (e) => {
   if (act === 'pause') {
     if (!confirm('暂停守护后，这台设备将不再限制使用时间，直到你在后台或设备上重新开启。确定吗？')) return;
   }
+  if (act === 'day_unlock') {
+    if (!confirm('今天就解除每日总时长限制？到明天 0 点前都不会再按额度锁。适合孩子有作业要做的情况。')) return;
+  }
+  if (act === 'day_relock') {
+    if (!confirm('恢复每日限制？如果今天额度已经用完，设备会立刻锁定。')) return;
+  }
 
   btn.disabled = true;
   try {
@@ -478,6 +486,8 @@ document.addEventListener('click', async (e) => {
     });
     toast(act === 'sync' ? '已通知设备立刻同步'
       : act === 'reset_tamper' ? '已下发清零，设备 20 秒内执行'
+      : act === 'day_unlock' ? '已解除今日限制，设备 20 秒内生效'
+      : act === 'day_relock' ? '已恢复每日限制'
       : '指令已排队，设备 20 秒内执行');
     setTimeout(() => (view === 'device' ? renderDevicePage(true) : load()), 1200);
   } catch (err) {
@@ -759,9 +769,12 @@ function renderDpStats(d, tl) {
         ? fmtDur(d.used_ms || 0)
         : (usedMs == null ? '—' : fmtDur(usedMs)),
       foot: isToday
-        ? `今天累计 ${fmtDur(usedMs)} · 上限 ${d.use_minutes} 分钟`
+        ? `今天累计 ${fmtDur(usedMs)}`
+          + (d.day_limit_minutes > 0 ? ` · 每日上限 ${fmtShort(d.day_limit_minutes * 60000)}` : '')
+          + ` · 本轮上限 ${d.use_minutes} 分钟`
         : '设备上报的当日累计',
       bar: pct,
+      warn: isToday && !!d.day_locked,
     },
     {
       label: `${label}前台`,
@@ -880,6 +893,10 @@ function applyAppFilter(pkg) {
 
 function renderDpKv(d) {  const rows = [
     ['守护状态', d.enabled ? '已开启' : '<span style="color:var(--danger)">已关闭（不受时间限制）</span>'],
+    ['连续使用上限', `${d.use_minutes} 分钟`],
+    ['每日总时长', d.day_limit_minutes > 0
+      ? `${d.day_limit_minutes} 分钟${d.day_locked ? '（<span style="color:var(--danger)">今天已用完</span>）' : ''}`
+      : '不限'],
     ['每次休息', `${d.rest_minutes} 分钟`],
     ['重新计时阈值', `熄屏 ${d.reset_gap_seconds} 秒后归零`],
     ['家长密码', d.pin_set ? '已设置' : '<span style="color:var(--danger)">未设置（孩子可自行关闭守护）</span>'],
@@ -905,9 +922,15 @@ function renderDpDaily(list) {
 }
 
 function renderDpActions(d) {
+  // 「今日解除」只在设了每日上限时才出现：没开这个维度时点它没有意义，
+  // 反而会让家长误以为"每天有个额度"。
+  const dayBtn = !d.day_limit_minutes ? '' : d.day_locked
+    ? `<button class="btn ok" data-act="day_unlock" data-id="${esc(d.id)}">今日解除</button>`
+    : `<button class="btn ghost" data-act="day_relock" data-id="${esc(d.id)}">恢复今日限制</button>`;
   $('dpActions').innerHTML = `
     <button class="btn primary" data-act="lock" data-id="${esc(d.id)}" data-min="${d.rest_minutes}">锁定 ${d.rest_minutes} 分钟</button>
     <button class="btn ok" data-act="unlock" data-id="${esc(d.id)}" ${d.resting ? '' : 'disabled'}>解除锁定</button>
+    ${dayBtn}
     ${d.enabled
       ? `<button class="btn warn" data-act="pause" data-id="${esc(d.id)}">暂停守护</button>`
       : `<button class="btn ok" data-act="enable" data-id="${esc(d.id)}">开启守护</button>`}
@@ -924,6 +947,10 @@ function renderDpConfig(d) {
     <div class="field">
       <div><label>每次休息时长</label><div class="hint">强制休息多少分钟</div></div>
       <input type="number" id="cfgRest" min="1" max="240" value="${d.rest_minutes}">
+    </div>
+    <div class="field">
+      <div><label>每日总时长</label><div class="hint">一天累计用满就锁到次日 0 点，不自动解除；填 0 表示不限</div></div>
+      <input type="number" id="cfgDay" min="0" max="1440" step="15" value="${d.day_limit_minutes || 0}">
     </div>
     <div class="field">
       <div><label>重新计时阈值</label><div class="hint">熄屏超过这么多秒，连续时长归零</div></div>
@@ -953,6 +980,7 @@ function renderDpConfig(d) {
       params: {
         use_minutes: Number($('cfgUse').value),
         rest_minutes: Number($('cfgRest').value),
+        day_limit_minutes: Number($('cfgDay').value),
         reset_gap_seconds: Number($('cfgGap').value),
         tamper_policy: $('cfgTamper').checked,
         pause_media_on_rest: $('cfgPause').checked,

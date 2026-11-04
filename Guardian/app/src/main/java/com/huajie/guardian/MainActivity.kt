@@ -276,6 +276,22 @@ class MainActivity : AppCompatActivity() {
             initial = prefs.useMinutes
         ) { prefs.useMinutes = it }
 
+        // ---- 每日总时长（v2.5.0）----
+        // 0 = 不限。滑到最左边显示「不限」，其余按半小时一档。
+        bindSeek(
+            findViewById(R.id.seekDay), findViewById(R.id.tvDayValue),
+            step = 30, min = 0, max = 480, unit = getString(R.string.unit_minute),
+            initial = prefs.dayLimitMinutes,
+            format = { v ->
+                if (v <= 0) getString(R.string.day_limit_off)
+                else getString(R.string.day_limit_value, v / 60, v % 60)
+            }
+        ) { v ->
+            prefs.dayLimitMinutes = v
+            // 改成不限时，如果正锁着要立刻放开；改小了要立刻判一次
+            GuardianService.refresh(this)
+        }
+
         bindSeek(
             findViewById(R.id.seekRest), findViewById(R.id.tvRestValue),
             step = 1, min = 1, max = 30, unit = getString(R.string.unit_minute),
@@ -602,18 +618,20 @@ class MainActivity : AppCompatActivity() {
         max: Int,
         unit: String,
         initial: Int,
+        format: ((Int) -> String)? = null,
         onValue: (Int) -> Unit
     ) {
         val steps = (max - min) / step
         seek.max = steps
         val idx = ((initial - min) / step).coerceIn(0, steps)
         seek.progress = idx
-        label.text = getString(R.string.value_fmt, min + idx * step, unit)
+        fun text(v: Int) = format?.invoke(v) ?: getString(R.string.value_fmt, v, unit)
+        label.text = text(min + idx * step)
 
         seek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(sb: SeekBar?, progress: Int, fromUser: Boolean) {
                 val v = min + progress * step
-                label.text = getString(R.string.value_fmt, v, unit)
+                label.text = text(v)
                 onValue(v)
                 GuardianService.refresh(this@MainActivity)
             }

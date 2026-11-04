@@ -47,6 +47,20 @@ class LockActivity : AppCompatActivity() {
                 handler.postDelayed(this, 500L)
                 return
             }
+            if (GuardianService.sDayLocked) {
+                RestUi.render(
+                    root, this@LockActivity,
+                    GuardianService.sDayLeftMs, 0,
+                    getString(
+                        R.string.day_lock_plan,
+                        prefs.dayLimitMinutes,
+                        (prefs.todayUsedMs / 60_000L).toInt()
+                    ),
+                    RestUi.Mode.DAY
+                )
+                handler.postDelayed(this, 500L)
+                return
+            }
             val left = prefs.lockedUntilWall - System.currentTimeMillis()
             if (left <= 0L) {
                 finishSelf()
@@ -59,9 +73,10 @@ class LockActivity : AppCompatActivity() {
         }
     }
 
-    /** 此刻是否应该继续把屏幕挡着（休息 或 停用时段，任一成立即可） */
+    /** 此刻是否应该继续把屏幕挡着（休息 / 停用时段 / 每日额度，任一成立即可） */
     private fun keepLocked(): Boolean =
-        GuardianService.sInQuiet || prefs.lockedUntilWall > System.currentTimeMillis()
+        GuardianService.sInQuiet || GuardianService.sDayLocked ||
+            prefs.lockedUntilWall > System.currentTimeMillis()
 
     private val restEndReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -97,10 +112,15 @@ class LockActivity : AppCompatActivity() {
                 // 服务那份会把本轮起点前移、这份漏了，于是点完跳过下一秒又被判超时，
                 // 遮罩立刻弹回来。现在统一交给服务处理，两边不会再走偏。
                 val wasQuiet = GuardianService.sInQuiet
+                val wasDay = GuardianService.sDayLocked
                 GuardianService.skipFromMask(this)
                 Toast.makeText(
                     this,
-                    getString(if (wasQuiet) R.string.quiet_skipped else R.string.rest_skipped),
+                    when {
+                        wasDay -> getString(R.string.day_unlock_done, RestUi.DAY_UNLOCK_MIN)
+                        wasQuiet -> getString(R.string.quiet_skipped)
+                        else -> getString(R.string.rest_skipped)
+                    },
                     Toast.LENGTH_LONG
                 ).show()
                 finishSelf()
@@ -130,7 +150,18 @@ class LockActivity : AppCompatActivity() {
         }
 
         // 进入时立刻渲染一次，避免半秒空白
-        if (GuardianService.sInQuiet) {
+        if (GuardianService.sDayLocked) {
+            RestUi.render(
+                root, this,
+                GuardianService.sDayLeftMs, 0,
+                getString(
+                    R.string.day_lock_plan,
+                    prefs.dayLimitMinutes,
+                    (prefs.todayUsedMs / 60_000L).toInt()
+                ),
+                RestUi.Mode.DAY
+            )
+        } else if (GuardianService.sInQuiet) {
             RestUi.render(
                 root, this,
                 GuardianService.sQuietLeftMs, 0,

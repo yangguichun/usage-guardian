@@ -13,8 +13,8 @@ android {
         // HarmonyOS 4 / EMUI 的底层是 Android 12（API 31），完全满足
         minSdk = 26
         targetSdk = 34
-        versionCode = 20
-        versionName = "2.4.2"
+        versionCode = 21
+        versionName = "2.5.0"
     }
 
     buildTypes {

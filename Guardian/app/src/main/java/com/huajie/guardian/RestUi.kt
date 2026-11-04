@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Handler
 import android.os.Looper
+import android.util.TypedValue
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
@@ -90,6 +91,24 @@ object RestUi {
         )
         root.findViewById<TextView>(R.id.tvParentLead)?.visibility =
             if (mode == Mode.DAY) View.VISIBLE else View.GONE
+    }
+
+    /**
+     * 每日额度锁的剩余时间。
+     *
+     * 这里不能用 [fmtHms]：「08:23:45」这种 8 位字符串在 76sp 下比 360dp 的手机还宽，
+     * 会被系统折成两行；而且家长看到「到明天 0 点还有多久」，本来就要的是
+     * 「8 小时 23 分」，不是秒表。
+     */
+    fun fmtDayLeft(ms: Long): String {
+        val min = (ms.coerceAtLeast(0L) + 59_999L) / 60_000L
+        val h = min / 60
+        val m = min % 60
+        return when {
+            h > 0 && m > 0 -> "$h 小时 $m 分"
+            h > 0 -> "$h 小时"
+            else -> "$m 分"
+        }
     }
 
     /** 绑定遮罩上的全部交互 */
@@ -268,8 +287,17 @@ object RestUi {
         mode: Mode = Mode.REST
     ) {
         applyMode(root, ctx, mode)
-        root.findViewById<TextView>(R.id.tvCountdown)?.text =
-            if (mode == Mode.DAY) fmtHms(restLeftMs) else fmt(restLeftMs)
+        val tvCd = root.findViewById<TextView>(R.id.tvCountdown)
+        if (tvCd != null) {
+            if (mode == Mode.DAY) {
+                // 最长能剩十几个小时，字号得降下来，否则一行放不下
+                tvCd.text = fmtDayLeft(restLeftMs)
+                tvCd.setTextSize(TypedValue.COMPLEX_UNIT_SP, 44f)
+            } else {
+                tvCd.text = fmt(restLeftMs)
+                tvCd.setTextSize(TypedValue.COMPLEX_UNIT_SP, 76f)
+            }
+        }
         root.findViewById<TextView>(R.id.tvRestCount)?.apply {
             text = when (mode) {
                 // 停用时段没有"第几次"的概念，显示一句更贴切的

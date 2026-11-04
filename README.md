@@ -2,7 +2,7 @@
 
 > 一个爸爸给孩子平板写的防沉迷系统。**到点就锁，锁了就出不去，锁不住就记账。**
 
-![版本](https://img.shields.io/badge/version-2.5.1-blue)
+![版本](https://img.shields.io/badge/version-2.5.2-blue)
 ![平台](https://img.shields.io/badge/Android-8.0%2B%20(API%2026)-green)
 ![服务端](https://img.shields.io/badge/server-Rust%20%2F%20axum-orange)
 ![许可](https://img.shields.io/badge/license-MIT-lightgrey)
@@ -111,7 +111,7 @@
 
 ### 1. 装 App
 
-从 [Releases](https://github.com/yangguichun/usage-guardian/releases) 下载 `使用守护-v2.5.1-release.apk`，安装到平板。
+从 [Releases](https://github.com/yangguichun/usage-guardian/releases) 下载 `使用守护-v2.5.2-release.apk`，安装到平板。
 首次打开按要求授予：**使用情况访问、悬浮窗、通知、自启动、电池优化白名单**，并激活设备管理员。
 
 在设置页填服务端地址完成配对；**不配对时一个请求都不会发出**。
@@ -188,7 +188,7 @@ screenshots/         演示截图
 
 ## 版本
 
-当前 **v2.5.1**（App versionCode 22 / 服务端 2.5.0）。变更记录见 [Releases](https://github.com/yangguichun/usage-guardian/releases)。
+当前 **v2.5.2**（App versionCode 23 / 服务端 2.5.0）。变更记录见 [Releases](https://github.com/yangguichun/usage-guardian/releases)。
 
 ## 许可
 

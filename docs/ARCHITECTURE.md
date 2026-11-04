@@ -143,6 +143,7 @@ Rust + axum，SQLite（`rusqlite` + `bundled`），单文件 `data/guardian.db`�
 
 | 版本 | 关键变化 |
 | --- | --- |
+| v2.5.1 | 每日额度遮罩补显式家长解锁入口（`syncParentEntry`），未设密码也给出说明 |
 | v2.5.0 | 每日总时长（`day_limit` / `day_unlock` / `day_relock`，要求 `app_version >= 2.5.0`） |
 | v2.4.2 | 跳过保护缓存失效修复、hash 路由、应用过滤、面板内距统一 |
 | v2.4.1 | 计时口径统一为整天重扫、`roundStartWall`、`offRanges` |

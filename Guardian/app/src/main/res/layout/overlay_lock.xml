@@ -96,11 +96,24 @@
                 android:textColor="#8C96AD"
                 android:textSize="14sp" />
 
+            <!-- 只有「每日额度用完」这一屏会显示：它不会自己解除，必须让家长
+                 一眼看到解锁入口，否则只能干等到明天 0 点 -->
+            <TextView
+                android:id="@+id/tvParentLead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:gravity="center"
+                android:text="@string/day_parent_lead"
+                android:textColor="#8FE0C0"
+                android:textSize="13sp"
+                android:visibility="gone" />
+
             <Button
                 android:id="@+id/btnParentAction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:backgroundTint="#25304D"
                 android:backgroundTintMode="src_over"
                 android:paddingStart="22dp"

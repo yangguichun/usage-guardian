@@ -228,10 +228,13 @@
 
     <!-- 每日总时长用完（v2.5.0） -->
     <string name="day_lock_title">今天的额度用完了</string>
-    <string name="day_lock_hint">今天能玩的时间已经用完\n明天 0 点自动恢复，先去干点别的吧</string>
+    <string name="day_lock_hint">今天能玩的时间已经用完\n明天 0 点自动恢复\n写作业、查资料需要用？家长点下方按钮解锁</string>
     <string name="day_lock_plan">今日上限 %1$d 分钟 · 已用 %2$d 分钟</string>
     <string name="day_lock_resume">明天 0 点自动恢复</string>
+    <string name="day_parent_lead">家长可临时放行一小段时间</string>
+    <string name="day_parent_unlock">家长解锁（临时放行 %1$d 分钟）</string>
     <string name="day_unlock_temp">临时放行 %1$d 分钟</string>
+    <string name="pin_unset_cannot_unlock">还没有设置家长密码，无法临时解锁</string>
     <string name="day_unlock_done">已临时放行 %1$d 分钟，到时自动恢复锁定</string>
     <string name="day_lock_notif">今日额度已用完 · 明天 0 点恢复</string>
     <string name="day_unlock_remote">家长已在后台解除今日限制</string>

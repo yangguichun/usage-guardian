@@ -1,6 +1,7 @@
 package com.huajie.guardian
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.os.Handler
 import android.os.Looper
 import android.view.View
@@ -62,6 +63,35 @@ object RestUi {
         return String.format(Locale.US, "%02d:%02d:%02d", s / 3600, (s % 3600) / 60, s % 60)
     }
 
+    /**
+     * 家长入口的文案、颜色与可见性。
+     *
+     * 「每日额度用完」这一屏不会自己解除，如果入口还像休息屏那样只是一行
+     * 深色小字，家长根本不知道该去哪儿输密码，只能干等到第二天 0 点 ——
+     * 所以这一屏把按钮改成明确的「家长解锁（临时放行 15 分钟）」并换成实色。
+     *
+     * 没设密码时也把按钮放出来（点了会提示去设置），否则家长面对的是
+     * 一个完全没有解释的死屏；其余两种模式维持"没密码就不给入口"。
+     */
+    private fun syncParentEntry(root: View, ctx: Context, mode: Mode) {
+        val btn = root.findViewById<Button>(R.id.btnParentAction) ?: return
+        val pinPanel = root.findViewById<View>(R.id.pinPanel)
+        val hasPin = Prefs(ctx).pin.isNotEmpty()
+
+        btn.text = if (mode == Mode.DAY) {
+            ctx.getString(R.string.day_parent_unlock, DAY_UNLOCK_MIN)
+        } else {
+            ctx.getString(R.string.parent_action)
+        }
+        val show = pinPanel?.visibility != View.VISIBLE && (hasPin || mode == Mode.DAY)
+        btn.visibility = if (show) View.VISIBLE else View.GONE
+        btn.backgroundTintList = ColorStateList.valueOf(
+            if (mode == Mode.DAY) 0xFF2E7D6B.toInt() else 0xFF25304D.toInt()
+        )
+        root.findViewById<TextView>(R.id.tvParentLead)?.visibility =
+            if (mode == Mode.DAY) View.VISIBLE else View.GONE
+    }
+
     /** 绑定遮罩上的全部交互 */
     fun bind(
         root: View,
@@ -89,8 +119,9 @@ object RestUi {
         pinPanel.visibility = View.GONE
         pinActions.visibility = View.GONE
         tvTimer.visibility = View.GONE
-        // 没设密码时完全隐藏入口，孩子连点都点不到
-        btnParent.visibility = if (prefs.pin.isEmpty()) View.GONE else View.VISIBLE
+        // 没设密码时默认不给入口（孩子连点都点不到）；
+        // 但「每日额度」那一屏是例外，见 syncParentEntry
+        syncParentEntry(root, ctx, Mode.REST)
 
         /** 收起密码面板，回到"只能看到倒计时"的状态 */
         fun relock() {
@@ -101,7 +132,8 @@ object RestUi {
             keypadHost.visibility = View.VISIBLE
             tvDots.visibility = View.VISIBLE
             tvHint.visibility = View.VISIBLE
-            btnParent.visibility = View.VISIBLE
+            // 按当前模式重新决定入口（每日额度那屏的按钮样式不同）
+            syncParentEntry(root, ctx, root.tag as? Mode ?: Mode.REST)
             input?.clear()
         }
 
@@ -153,6 +185,10 @@ object RestUi {
         }
 
         btnParent.setOnClickListener {
+            if (prefs.pin.isEmpty()) {
+                onMessage(ctx.getString(R.string.pin_unset_cannot_unlock))
+                return@setOnClickListener
+            }
             val left = PinGuard.lockedLeftMs(prefs)
             if (left > 0L) {
                 onMessage(ctx.getString(R.string.pin_locked_fmt, PinGuard.lockedLeftSeconds(prefs)))
@@ -210,6 +246,9 @@ object RestUi {
             Mode.DAY -> ctx.getString(R.string.day_unlock_temp, DAY_UNLOCK_MIN)
             else -> ctx.getString(R.string.skip_rest)
         }
+        // 记在 view 上：bind() 里的"超时重新上锁"要用当前模式恢复入口外观
+        root.tag = mode
+        syncParentEntry(root, ctx, mode)
     }
 
     /** 刷新倒计时与次数 */

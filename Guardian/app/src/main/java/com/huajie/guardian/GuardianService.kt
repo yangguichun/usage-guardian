@@ -418,6 +418,9 @@ class GuardianService : Service() {
 
         if (!prefs.enabled) {
             endRest()
+            // 暂停守护时顺手把答题锁清掉：留着它，孩子下一 tick 会看到
+            // 一个永远不消失的题目遮罩（功能已经关了，却还在挡屏幕）
+            QuizLock.reset()
             sResting = false
             sInQuiet = false
             sQuietLeftMs = 0L
@@ -497,6 +500,31 @@ class GuardianService : Service() {
             return
         }
         if (sDayLocked) exitDayLock(now)
+
+        // ============ 答题解锁（v2.6.0）============
+        //
+        // 排在这里的理由：停用 / 每日额度是"根本不能玩"，优先；
+        // 休息有一条独立倒计时，让它先走完 —— 否则答题屏被休息顶掉，
+        // 孩子会以为"答了也没用"。
+        if (quizStep(now, active)) {
+            // 挡住画面、按住后台视频，和休息一致
+            Silence.applyRest(this, prefs)
+            ensureOverlay()
+            if (overlayView == null) ensureLockActivity()
+            if (QuizLock.phase == QuizLock.Phase.WAIT) {
+                renderOverlay(
+                    (QuizLock.waitUntilWall - now).coerceAtLeast(0L),
+                    RestUi.Mode.QUIZWAIT
+                )
+            } else {
+                renderOverlay(0L, RestUi.Mode.QUIZ)
+            }
+            sUsing = false
+            sUsedMs = 0L
+            maybeRemote(now)
+            refreshNotification()
+            return
+        }
 
         val leftMs = prefs.lockedUntilWall - now
 
@@ -583,7 +611,10 @@ class GuardianService : Service() {
         // 先对账：此刻没有任何遮罩，却还挂着一段"未闭合的不计入区间"，
         // 说明进程是在上次遮罩期间被杀掉的。不收尾的话，那段区间会一直
         // 延长到现在，把之后孩子正常玩的时间全扣成"被锁着干等"。
-        if (prefs.lockedUntilWall <= now && !sInQuiet) prefs.closeOff(now)
+        //
+        // ★ 答题锁（v2.6.0）也靠这段区间把"答题的这几分钟"从使用时长里扣掉，
+        // 它不写 lockedUntilWall，所以必须显式排除，否则每秒都会被这里收掉。
+        if (prefs.lockedUntilWall <= now && !sInQuiet && !QuizLock.active) prefs.closeOff(now)
 
         if (!Usage.hasPermission(this)) {
             // 没有"使用情况访问"就看不到事件，只能退回老的秒级累加。
@@ -1014,8 +1045,131 @@ class GuardianService : Service() {
         step()
     }
 
-    private fun startRest(now: Long) {
-        enterRest(now, getString(R.string.rest_reason_usage_limit))
+    // ==================================================================
+    // 答题解锁（v2.6.0）
+    // ==================================================================
+
+    /**
+     * 答题锁这一 tick 要不要接管屏幕。返回 true 表示"已占用"，别再往下走。
+     *
+     * ## 为什么判据是 `todayUsedMs - quizBaseMs`
+     *
+     * 不用自己的秒表：[Prefs.todayUsedMs] 是每次从系统事件整天重扫、
+     * 再扣掉遮罩期的权威值。跟着它走，进程被杀、被速冻、跨过熄屏都不会
+     * 把"还欠几分钟"算错 —— 而自己累加的话，杀一次后台就能白玩十分钟。
+     *
+     * [Prefs.quizBaseMs] 只在**答对之后**前移。所以孩子杀掉进程逃掉这次答题，
+     * 重启后判据依然成立，会重新出题。
+     */
+    private fun quizStep(now: Long, active: Boolean): Boolean {
+        if (!prefs.quizEnabled) {
+            // 家长中途关掉了这个功能：别把已经弹出来的题留在屏幕上
+            if (QuizLock.active) finishQuiz(now, silent = true)
+            return false
+        }
+        // 休息有独立倒计时，先让它走完再接管
+        if (prefs.lockedUntilWall > now) return false
+
+        when (QuizLock.phase) {
+            QuizLock.Phase.WAIT -> {
+                if (now >= QuizLock.waitUntilWall) {
+                    finishQuiz(now, silent = false)
+                    return false
+                }
+                return true
+            }
+            QuizLock.Phase.ASK -> return true
+            null -> {
+                if (!active) return false
+                if (!quizDue(now)) return false
+                enterQuiz(now)
+                return QuizLock.active
+            }
+        }
+    }
+
+    /** 距上一次答对，是否已经攒够了答题间隔 */
+    private fun quizDue(now: Long): Boolean {
+        val interval = prefs.quizIntervalMinutes.coerceAtLeast(1) * 60_000L
+        // 跨天双保险：rolloverDayIfNeeded 也会清，但那个函数可能因为
+        // 进程刚起、todayUsedMs 还没重建而错过一次
+        val today = dayKeyNow(now)
+        if (prefs.quizBaseDay != today) {
+            prefs.quizBaseDay = today
+            prefs.quizBaseMs = 0L
+        }
+        return prefs.todayUsedMs - prefs.quizBaseMs >= interval
+    }
+
+    /**
+     * 出题。
+     *
+     * 题库优先用服务端下发的缓存；从没连过服务端就退回本地算术题 ——
+     * 宁可出一道本地题，也不要弹一个没有题目的空遮罩。
+     */
+    private fun enterQuiz(now: Long) {
+        val list = QuizBank.cached(prefs).ifEmpty { QuizBank.localFallback() }
+        val q = QuizBank.pick(list, prefs.quizLastQid) ?: return
+        QuizLock.reset()
+        QuizLock.ask(q)
+        prefs.quizLastQid = q.id
+        // 答题期间的时间不算"使用"：开一段不计入区间，和休息一致。
+        // 不扣的话，孩子故意不答、一直挂在题目屏上，今天的额度照样被扣光。
+        prefs.closeOff(now)
+        prefs.pushOffStart(now)
+        overlayErrorNotified = false
+        Log.i(TAG, "出一道题（${q.subject}/${q.type}）：${q.stem.take(30)}")
+    }
+
+    /**
+     * 这一题没答对：换一题；已经是第二题就罚时。
+     *
+     * [wrongAnswer] 是上一题的正确答答案，用来在下一题上方提示一句；
+     * 孩子主动点「换一题」时传 null。
+     */
+    private fun quizAdvance(now: Long, wrongAnswer: String?) {
+        if (QuizLock.asked >= QUIZ_MAX_ASK) {
+            QuizLock.startPenalty(now + prefs.quizPenaltyMinutes * 60_000L)
+            toast(getString(R.string.quiz_wait_title))
+            Log.i(TAG, "两题未答对，休息 ${prefs.quizPenaltyMinutes} 分钟")
+            return
+        }
+        val list = QuizBank.cached(prefs).ifEmpty { QuizBank.localFallback() }
+        val q = QuizBank.pick(list, prefs.quizLastQid)
+        if (q == null) {
+            // 题库空得只剩一道空题：放行，不要把孩子永远锁在空白遮罩里
+            finishQuiz(now, silent = true)
+            return
+        }
+        prefs.quizLastQid = q.id
+        QuizLock.ask(
+            q,
+            if (wrongAnswer != null) getString(R.string.quiz_wrong_fmt, wrongAnswer) else ""
+        )
+    }
+
+    /**
+     * 结束一轮答题：撤遮罩、把判据起点推到此刻、下次再攒够间隔。
+     *
+     * [silent] 用于"家长关掉功能""题库坏了"这类不需要给孩子提示的情况。
+     */
+    private fun finishQuiz(now: Long, silent: Boolean, byParent: Boolean = false) {
+        QuizLock.reset()
+        prefs.closeOff(now)
+        prefs.quizBaseMs = prefs.todayUsedMs
+        prefs.quizBaseDay = dayKeyNow(now)
+        // endRest 会撤悬浮窗、放音频焦点、广播通知兜底的 LockActivity 退出
+        endRest()
+        if (!silent) {
+            toast(
+                getString(
+                    if (byParent) R.string.quiz_passed_parent else R.string.quiz_right
+                )
+            )
+        }
+    }
+
+    private fun startRest(now: Long) {        enterRest(now, getString(R.string.rest_reason_usage_limit))
         // 已经进休息了，到点闹钟就没有意义了，立刻撤掉
         KeepAlive.cancelDeadline(this)
         ensureOverlay()
@@ -1260,9 +1414,11 @@ class GuardianService : Service() {
                 prefs.dayLimitMinutes,
                 (prefs.todayUsedMs / 60_000L).toInt()
             )
+            // 答题屏上方已经有题干，再塞一行说明只会抢注意力
+            RestUi.Mode.QUIZ, RestUi.Mode.QUIZWAIT -> ""
             else -> prefs.restPlan
         }
-        RestUi.render(v, this, leftMs, prefs.restCount, plan, mode)
+        RestUi.render(v, this, leftMs, prefs.restCount, plan, mode, prefs.quizIntervalMinutes)
     }
 
     private fun removeOverlay() {
@@ -1301,6 +1457,13 @@ class GuardianService : Service() {
     /** 家长验证通过：跳过本次休息 / 放行本轮停用 */
     private fun skipRest() {
         val now = System.currentTimeMillis()
+        // 答题锁：家长验证通过 = 放行本次答题。
+        // 放在每日额度之前判：两者不可能同时成立（每日额度锁时不会出题），
+        // 但顺序写固定了以后改优先级不用再想。
+        if (QuizLock.active) {
+            finishQuiz(now, silent = false, byParent = true)
+            return
+        }
         // 每日额度锁定：这里不能"跳过"，只能临时放行一小段 —— 语义完全不同
         if (sDayLocked) {
             unlockDayTemporarily()
@@ -1516,6 +1679,29 @@ class GuardianService : Service() {
                         prefs.muteOnRest = p.optBoolean("mute_on_rest", false)
                         applied.add(if (prefs.muteOnRest) "静音兜底开" else "静音兜底关")
                     }
+                    // ---- 答题解锁（v2.6.0）----
+                    if (p.has("quiz_interval_minutes")) {
+                        prefs.quizIntervalMinutes =
+                            p.optInt("quiz_interval_minutes", prefs.quizIntervalMinutes)
+                                .coerceIn(1, 180)
+                        applied.add("每 ${prefs.quizIntervalMinutes} 分钟一道题")
+                    }
+                    if (p.has("quiz_penalty_minutes")) {
+                        prefs.quizPenaltyMinutes =
+                            p.optInt("quiz_penalty_minutes", prefs.quizPenaltyMinutes)
+                                .coerceIn(1, 60)
+                        applied.add("答错两题休 ${prefs.quizPenaltyMinutes} 分钟")
+                    }
+                    if (p.has("quiz_enabled")) {
+                        val on = p.optBoolean("quiz_enabled", false)
+                        // 和界面上的约束相同：没密码就不开，否则家长自己也放行不了
+                        if (on && prefs.pin.isEmpty()) {
+                            return false to "设备还没设置家长密码，不能开启答题解锁"
+                        }
+                        prefs.quizEnabled = on
+                        if (!on) QuizLock.reset()
+                        applied.add(if (on) "答题解锁开" else "答题解锁关")
+                    }
                     if (applied.isEmpty()) {
                         false to "没有可修改的参数"
                     } else {
@@ -1528,6 +1714,13 @@ class GuardianService : Service() {
                 }
 
                 "sync" -> true to "已同步"
+
+                // 题库名单变了：设备不需要保存 id 列表（心跳每轮都会带新的），
+                // 只要把版本号清掉，下一次心跳就会整批重下。
+                "quiz_banks" -> {
+                    prefs.quizCacheVersion = ""
+                    true to "题库名单已更新，题目将在下一次心跳后重新下载"
+                }
 
                 else -> false to "不支持的指令：$type"
             }
@@ -1721,6 +1914,10 @@ class GuardianService : Service() {
             // 屏幕还锁着"的鬼状态。
             prefs.clearDayUnlock()
             prefs.dayLockNoticeDay = ""
+            // 答题锁的判据起点也按天归零，否则昨天剩下的"已攒够"会让
+            // 今天一开机就出一题
+            prefs.quizBaseMs = 0L
+            prefs.quizBaseDay = today
             if (sDayLocked) {
                 sDayLocked = false
                 sDayLeftMs = 0L
@@ -1747,6 +1944,9 @@ class GuardianService : Service() {
 
         /** 心跳写盘间隔 */
         private const val HEARTBEAT_WRITE_MS = 5_000L
+
+        /** 一轮答题最多出几道题（两题都没答对就罚时） */
+        private const val QUIZ_MAX_ASK = 2
 
         /**
          * 使用时长从系统事件重建的间隔。
@@ -1892,6 +2092,17 @@ class GuardianService : Service() {
             val p = Prefs(ctx)
             val now = System.currentTimeMillis()
 
+            // 答题锁：服务不在时也按"放行这次答题"处理 ——
+            // 如果落到下面的休息分支，就会把答题屏当成一次休息，
+            // 等 5 分钟孩子又能玩了（而答题本身是无限次的）
+            if (QuizLock.active) {
+                QuizLock.reset()
+                p.quizBaseMs = p.todayUsedMs
+                p.quizBaseDay = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date(now))
+                p.closeOff(now)
+                return
+            }
+
             // 每日额度锁定：服务不在时也按"临时放行"处理，不能落进下面的休息分支
             // （那样会把今天剩下的额度当成一次普通休息，等 5 分钟孩子又能玩了）
             val today = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date(now))
@@ -1923,6 +2134,46 @@ class GuardianService : Service() {
                 p.roundStartWall = now
                 p.closeOff(now)
             }
+        }
+
+        /**
+         * 答题屏上作答的统一入口（悬停窗和 LockActivity 都走这里）。
+         *
+         * 为什么不像 [skipFromMask] 那样自带一份兜底：判对判错要改的是
+         * 服务里的那份状态（下一题从哪来、什么时候进罚时），服务不在时
+         * 遮罩本来也不会存在。所以这里只加一层"服务刚好没了"的兜底：
+         * 清掉状态、把判据起点推到此刻，至少不会把孩子永远锁在题目屏上。
+         */
+        fun quizAnswerFromMask(ctx: Context, correct: Boolean) {
+            val svc = instance
+            if (svc != null) {
+                val now = System.currentTimeMillis()
+                if (correct) {
+                    svc.finishQuiz(now, silent = false)
+                    svc.step()
+                } else {
+                    svc.quizAdvance(now, QuizLock.question?.answer)
+                    svc.renderOverlay(0L, RestUi.Mode.QUIZ)
+                }
+                return
+            }
+            val p = Prefs(ctx)
+            QuizLock.reset()
+            p.quizBaseMs = p.todayUsedMs
+            p.quizBaseDay = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+                .format(Date(System.currentTimeMillis()))
+        }
+
+        /** 答题屏上点「换一题」 */
+        fun quizSwitchFromMask(ctx: Context) {
+            val svc = instance
+            if (svc != null) {
+                val now = System.currentTimeMillis()
+                svc.quizAdvance(now, null)
+                svc.renderOverlay(0L, RestUi.Mode.QUIZ)
+                return
+            }
+            quizAnswerFromMask(ctx, false)
         }
 
         fun start(ctx: Context) {

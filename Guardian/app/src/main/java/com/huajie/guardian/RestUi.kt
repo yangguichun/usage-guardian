@@ -46,7 +46,7 @@ object RestUi {
      * DAY 是 v2.5.0 的「每日总时长用完」：它和 REST 的区别不只是文案，
      * 更关键的是**没有到点自动解除**，只能等第二天 0 点或家长放行。
      */
-    enum class Mode { REST, QUIET, DAY }
+    enum class Mode { REST, QUIET, DAY, QUIZ, QUIZWAIT }
 
     fun fmt(ms: Long): String {
         val s = ms.coerceAtLeast(0L) / 1000L
@@ -238,31 +238,38 @@ object RestUi {
      * 「休息」和「停用时段」都会锁屏，但对孩子说的话不该一样：前者是"你用了太久"，
      * 后者是"现在不是玩手机的时间"。文案写错会让孩子觉得"我才刚拿起来凭什么说我用久了"。
      */
-    fun applyMode(root: View, ctx: Context, mode: Mode) {
+    fun applyMode(root: View, ctx: Context, mode: Mode, intervalMin: Int = 10) {
         root.findViewById<TextView>(R.id.tvEmoji)?.text = when (mode) {
             Mode.QUIET -> "🌙"
             Mode.DAY -> "🔒"
+            Mode.QUIZ -> "📖"
+            Mode.QUIZWAIT -> "⏳"
             else -> "😴"
         }
         root.findViewById<TextView>(R.id.tvTitle)?.setText(
             when (mode) {
                 Mode.QUIET -> R.string.quiet_title
                 Mode.DAY -> R.string.day_lock_title
+                Mode.QUIZ -> R.string.quiz_title
+                Mode.QUIZWAIT -> R.string.quiz_wait_title
                 else -> R.string.rest_title
             }
         )
-        root.findViewById<TextView>(R.id.tvRestHint)?.setText(
-            when (mode) {
-                Mode.QUIET -> R.string.quiet_hint
-                Mode.DAY -> R.string.day_lock_hint
-                else -> R.string.rest_hint
+        root.findViewById<TextView>(R.id.tvRestHint)?.apply {
+            text = when (mode) {
+                Mode.QUIET -> ctx.getString(R.string.quiet_hint)
+                Mode.DAY -> ctx.getString(R.string.day_lock_hint)
+                Mode.QUIZ -> ctx.getString(R.string.quiz_hint, intervalMin)
+                Mode.QUIZWAIT -> ctx.getString(R.string.quiz_wait_hint)
+                else -> ctx.getString(R.string.rest_hint)
             }
-        )
-        // 「跳过本次休息」在另外两种模式下意思都不对：
-        // 停用时段叫「提前结束本次停用」，每日额度叫「临时放行」
+        }
+        // 「跳过本次休息」在其余模式下意思都不对：
+        // 停用时段叫「提前结束本次停用」，每日额度叫「临时放行」，答题屏叫「放行本次答题」
         root.findViewById<Button>(R.id.btnSkipRest)?.text = when (mode) {
             Mode.QUIET -> ctx.getString(R.string.quiet_skip)
             Mode.DAY -> ctx.getString(R.string.day_unlock_temp, DAY_UNLOCK_MIN)
+            Mode.QUIZ, Mode.QUIZWAIT -> ctx.getString(R.string.quiz_pass_btn)
             else -> ctx.getString(R.string.skip_rest)
         }
         // 记在 view 上：bind() 里的"超时重新上锁"要用当前模式恢复入口外观
@@ -284,27 +291,53 @@ object RestUi {
         restLeftMs: Long,
         restCount: Int,
         plan: String = "",
-        mode: Mode = Mode.REST
+        mode: Mode = Mode.REST,
+        intervalMin: Int = 10
     ) {
-        applyMode(root, ctx, mode)
+        applyMode(root, ctx, mode, intervalMin)
         val tvCd = root.findViewById<TextView>(R.id.tvCountdown)
         if (tvCd != null) {
-            if (mode == Mode.DAY) {
-                // 最长能剩十几个小时，字号得降下来，否则一行放不下
-                tvCd.text = fmtDayLeft(restLeftMs)
-                tvCd.setTextSize(TypedValue.COMPLEX_UNIT_SP, 44f)
-            } else {
-                tvCd.text = fmt(restLeftMs)
-                tvCd.setTextSize(TypedValue.COMPLEX_UNIT_SP, 76f)
+            when (mode) {
+                // 答题屏没有倒计时：答完就解除，答不完则进 QUIZWAIT 才出现秒表。
+                // 显示"00:00"会让孩子以为到点就自动解，一直盯着数字等。
+                Mode.QUIZ -> tvCd.visibility = View.GONE
+                Mode.DAY -> {
+                    tvCd.visibility = View.VISIBLE
+                    // 最长能剩十几个小时，字号得降下来，否则一行放不下
+                    tvCd.text = fmtDayLeft(restLeftMs)
+                    tvCd.setTextSize(TypedValue.COMPLEX_UNIT_SP, 44f)
+                }
+                else -> {
+                    tvCd.visibility = View.VISIBLE
+                    tvCd.text = fmt(restLeftMs)
+                    tvCd.setTextSize(TypedValue.COMPLEX_UNIT_SP, 76f)
+                }
             }
         }
+
+        // 答题面板：只有"正在答题"这一种形态显示
+        if (mode == Mode.QUIZ) {
+            QuizUi.render(
+                root, ctx,
+                onAnswer = { ok -> GuardianService.quizAnswerFromMask(ctx, ok) },
+                onSwitch = { GuardianService.quizSwitchFromMask(ctx) }
+            )
+        } else {
+            root.findViewById<View>(R.id.quizPanel)?.visibility = View.GONE
+        }
+
         root.findViewById<TextView>(R.id.tvRestCount)?.apply {
+            visibility = View.VISIBLE
             text = when (mode) {
                 // 停用时段没有"第几次"的概念，显示一句更贴切的
                 Mode.QUIET -> ctx.getString(R.string.quiet_count_fmt, fmt(restLeftMs))
                 Mode.DAY -> ctx.getString(R.string.day_lock_resume)
+                // 答题屏上方已经有"数学 · 第 1 题"，这一行再写一句就是重复
+                Mode.QUIZ -> ""
+                Mode.QUIZWAIT -> ctx.getString(R.string.quiz_wait_count, fmt(restLeftMs))
                 else -> ctx.getString(R.string.rest_count_fmt, restCount)
             }
+            if (text.isNullOrBlank()) visibility = View.GONE
         }
         root.findViewById<TextView>(R.id.tvRestPlan)?.apply {
             text = plan

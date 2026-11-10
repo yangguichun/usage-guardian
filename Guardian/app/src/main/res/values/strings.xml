@@ -239,6 +239,30 @@
     <string name="day_lock_notif">今日额度已用完 · 明天 0 点恢复</string>
     <string name="day_unlock_remote">家长已在后台解除今日限制</string>
 
+    <!-- 答题解锁（v2.6.0） -->
+    <string name="label_quiz">答题解锁</string>
+    <string name="hint_quiz">每用一段时间弹一道小题，答对才能继续。\n题库从服务器下载（语文 / 数学 / 英语），没配服务器时用本地算术题。</string>
+    <string name="label_quiz_interval">每隔多久出一道题</string>
+    <string name="label_quiz_penalty">两题都没答对，休息</string>
+    <string name="quiz_state_fmt">已缓存 %1$d 道题</string>
+    <string name="quiz_state_none">还没有从服务器取到题库，现在用本地算术题</string>
+    <string name="quiz_need_pin">请先设置家长密码：答题屏上的「放行」入口需要密码，否则家长自己也只能等着</string>
+    <string name="quiz_hint">每用 %1$d 分钟出一次题\n不会做可以换一题，两题都没答对就先休息一会儿</string>
+    <string name="quiz_title">答对这道题就能继续</string>
+    <string name="quiz_tag_fmt">%1$s · 第 %2$d 题</string>
+    <string name="quiz_switch">换一题</string>
+    <string name="quiz_pass_btn">放行本次答题</string>
+    <string name="quiz_right">答对了，继续玩吧</string>
+    <string name="quiz_wrong_fmt">答错了，正确答案是 %1$s</string>
+    <string name="quiz_wait_title">先休息一下</string>
+    <string name="quiz_wait_hint">两题都没答对\n倒计时结束自动解锁，不用找家长</string>
+    <string name="quiz_wait_count">%1$s 后自动解锁</string>
+    <string name="quiz_passed_parent">家长已放行本次答题</string>
+    <string name="quiz_by_parent">家长放行</string>
+    <string name="quiz_need_letter">请把空缺的字母补齐</string>
+    <string name="quiz_no_bank">题库还没下载下来，先用本地算术题顶上\n连上服务端后会自动换成你配的题库</string>
+    <string name="quiz_lock_notif">答题解锁中</string>
+
     <!-- 上锁遮片：设置内容藏起来时，屏幕上要有一句明确的话，不能是一片空白 -->
     <string name="lock_hint_title">🔒 已上锁</string>
     <string name="lock_hint_sub">请输入家长密码解锁设置界面\n（密码框没弹出来的话，点一下返回键再进来一次）</string>

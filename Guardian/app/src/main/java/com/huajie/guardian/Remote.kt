@@ -198,6 +198,10 @@ object Remote {
                 }
             }.onFailure { Log.w(TAG, "解析停用时段规则失败", it) }
 
+            // ---- 答题解锁（v2.6.0）：配置 + 题库版本 ----
+            runCatching { syncQuiz(app, p, r.body) }
+                .onFailure { Log.w(TAG, "同步答题配置失败", it) }
+
             if (cmds == null) return
             if (cmds.length() == 0) return
 
@@ -294,6 +298,74 @@ object Remote {
         }
     }
 
+    /**
+     * 答题解锁：同步"开关 / 间隔 / 罚时"，并在题库版本变了时重新取题。
+     *
+     * ## 为什么"题库为空就不采纳服务端配置"
+     *
+     * 家长可能只在手机客户端里开了答题锁（没配任何题库，走本地算术题），
+     * 这时服务端每次心跳都会说 `quiz_active = false`。如果照单全收，
+     * 家长刚在手机上打开的功能会在 20 秒内被网页端"关掉"。
+     * 所以约定：**只有服务端为此设备配了题库，才由服务端说了算**。
+     */
+    private fun syncQuiz(app: Context, p: Prefs, body: String) {
+        val o = JSONObject(body)
+        if (!o.has("quiz_banks")) return
+        val banks = o.optJSONArray("quiz_banks") ?: JSONArray()
+        if (banks.length() == 0) return
+
+        val active = o.optBoolean("quiz_active", false)
+        val interval = o.optInt("interval_minutes", p.quizIntervalMinutes)
+        val penalty = o.optInt("penalty_minutes", p.quizPenaltyMinutes)
+        var changed = false
+        if (p.quizEnabled != active) {
+            p.quizEnabled = active
+            changed = true
+        }
+        if (p.quizIntervalMinutes != interval) {
+            p.quizIntervalMinutes = interval
+            changed = true
+        }
+        if (p.quizPenaltyMinutes != penalty) {
+            p.quizPenaltyMinutes = penalty
+            changed = true
+        }
+
+        val version = o.optString("quiz_version")
+        if (active && version.isNotEmpty() && version != p.quizCacheVersion) {
+            fetchQuiz(p, version)
+        }
+        if (changed) {
+            Log.i(TAG, "答题配置更新：enabled=$active interval=$interval penalty=$penalty")
+            GuardianService.refresh(app)
+        }
+    }
+
+    /** 拉一次题目（题库很小，一次拿够，之后按版本号判断要不要重下） */
+    private fun fetchQuiz(p: Prefs, version: String) {
+        val body = JSONObject().put("limit", QuizBank.FETCH_LIMIT)
+        val r = post(p.serverUrl + "/api/device/quiz", body.toString(), p.deviceToken)
+        if (!r.ok) {
+            Log.w(TAG, "取题失败：${r.error}")
+            return
+        }
+        val o = runCatching { JSONObject(r.body) }.getOrNull() ?: return
+        val arr = o.optJSONArray("questions") ?: return
+        val list = ArrayList<Q>(arr.length())
+        for (i in 0 until arr.length()) {
+            val q = arr.optJSONObject(i) ?: continue
+            // 服务端会剔除结构不完整的题；这里再挡一次，坏数据不会进缓存
+            Q.fromJson(q)?.let { list.add(it) }
+        }
+        if (list.isEmpty()) {
+            Log.w(TAG, "取回来的题全都不可用，保留旧缓存")
+            return
+        }
+        QuizBank.saveCache(p, o.optString("version", version), list)
+        p.quizCacheAtWall = System.currentTimeMillis()
+        Log.i(TAG, "题库已更新：${list.size} 题（版本 $version）")
+    }
+
     /** 本地时区当天 0 点（毫秒） */
     private fun localMidnight(now: Long): Long {
         val cal = java.util.Calendar.getInstance()
@@ -340,6 +412,14 @@ object Remote {
                 (p.dayUnlockUntilWall - now).coerceAtLeast(0L)
             )
             .put("rest_count", p.restCount)
+            // 答题解锁（v2.6.0）：后台据此在设备卡上显示"答题解锁中"，
+            // 也顺便让家长看见设备当前的实际参数（可能和网页上配的不一样，
+            // 比如题库还没下发、功能只在客户端开过）
+            .put("quiz_enabled", p.quizEnabled)
+            .put("quiz_locked", QuizLock.active)
+            .put("quiz_interval_minutes", p.quizIntervalMinutes)
+            .put("quiz_penalty_minutes", p.quizPenaltyMinutes)
+            .put("quiz_cache_count", runCatching { QuizBank.cached(p).size }.getOrDefault(0))
             .put("use_minutes", p.useMinutes)
             .put("rest_minutes", p.restMinutes)
             .put("reset_gap_seconds", p.resetGapSeconds)

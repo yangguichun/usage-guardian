@@ -67,6 +67,64 @@ class Prefs(context: Context) {
         get() = sp.getString(K_DAY_LOCK_NOTICE_DAY, "") ?: ""
         set(v) = edit { it.putString(K_DAY_LOCK_NOTICE_DAY, v) }
 
+    // ==================== 答题解锁（v2.6.0）====================
+
+    /**
+     * 是否启用「用 N 分钟就出一道题」的解锁方式。
+     *
+     * 关掉时其余 quiz 字段全部不生效 —— 这和「每日总量」「停用时段」不同，
+     * 那两项是限制，这一项是**放行方式**（把"到点就锁死"换成"答对才继续"）。
+     */
+    var quizEnabled: Boolean
+        get() = sp.getBoolean(K_QUIZ_ENABLED, false)
+        set(v) = edit { it.putBoolean(K_QUIZ_ENABLED, v) }
+
+    /** 每累计使用多少分钟出一道题（默认 10） */
+    var quizIntervalMinutes: Int
+        get() = sp.getInt(K_QUIZ_INTERVAL, 10)
+        set(v) = edit { it.putInt(K_QUIZ_INTERVAL, v.coerceIn(1, 180)) }
+
+    /** 两题都没答对时罚多久（默认 2 分钟） */
+    var quizPenaltyMinutes: Int
+        get() = sp.getInt(K_QUIZ_PENALTY, 2)
+        set(v) = edit { it.putInt(K_QUIZ_PENALTY, v.coerceIn(1, 60)) }
+
+    /**
+     * 上一次答对时的「今日已用时长」。
+     *
+     * 判据是 `todayUsedMs - quizBaseMs >= 间隔`，而不是自己另记一个秒表：
+     * 今日已用本来就从系统事件整天重扫、且已扣掉遮罩期，跟着它走天生幂等 ——
+     * 进程被杀、被速冻、跨过熄屏都不会让"还欠几分钟"这件事算错。
+     */
+    var quizBaseMs: Long
+        get() = sp.getLong(K_QUIZ_BASE_MS, 0L)
+        set(v) = edit { it.putLong(K_QUIZ_BASE_MS, v) }
+
+    /** [quizBaseMs] 属于哪一天（跨天要归零） */
+    var quizBaseDay: String
+        get() = sp.getString(K_QUIZ_BASE_DAY, "") ?: ""
+        set(v) = edit { it.putString(K_QUIZ_BASE_DAY, v) }
+
+    /** 本地缓存的题目（JSON 数组，来自服务端下发） */
+    var quizCacheJson: String
+        get() = sp.getString(K_QUIZ_CACHE, "") ?: ""
+        set(v) = edit { it.putString(K_QUIZ_CACHE, v) }
+
+    /** 缓存对应的服务端题库版本号 */
+    var quizCacheVersion: String
+        get() = sp.getString(K_QUIZ_CACHE_VER, "") ?: ""
+        set(v) = edit { it.putString(K_QUIZ_CACHE_VER, v) }
+
+    /** 上次取题成功的墙钟时刻（后台诊断用） */
+    var quizCacheAtWall: Long
+        get() = sp.getLong(K_QUIZ_CACHE_AT, 0L)
+        set(v) = edit { it.putLong(K_QUIZ_CACHE_AT, v) }
+
+    /** 上一次出过的题，避免连着出同一道 */
+    var quizLastQid: Long
+        get() = sp.getLong(K_QUIZ_LAST_QID, 0L)
+        set(v) = edit { it.putLong(K_QUIZ_LAST_QID, v) }
+
     /** 清掉今日的一切放行状态（跨天 / 家长恢复限制时用） */
     fun clearDayUnlock() {
         edit {
@@ -933,5 +991,16 @@ class Prefs(context: Context) {
         private const val K_DAY_LOCK_NOTICE_DAY = "day_lock_notice_day"
         private const val K_OFF_RANGES = "off_ranges_json"
         private const val K_OFF_DAY = "off_ranges_day"
+
+        // ---- 答题解锁（v2.6.0）----
+        private const val K_QUIZ_ENABLED = "quiz_enabled"
+        private const val K_QUIZ_INTERVAL = "quiz_interval_minutes"
+        private const val K_QUIZ_PENALTY = "quiz_penalty_minutes"
+        private const val K_QUIZ_BASE_MS = "quiz_base_ms"
+        private const val K_QUIZ_BASE_DAY = "quiz_base_day"
+        private const val K_QUIZ_CACHE = "quiz_cache_json"
+        private const val K_QUIZ_CACHE_VER = "quiz_cache_version"
+        private const val K_QUIZ_CACHE_AT = "quiz_cache_at_wall"
+        private const val K_QUIZ_LAST_QID = "quiz_last_qid"
     }
 }

@@ -304,6 +304,41 @@ class MainActivity : AppCompatActivity() {
             initial = prefs.resetGapSeconds / 60
         ) { prefs.resetGapSeconds = it * 60 }
 
+        // ---- 答题解锁（v2.6.0）----
+        //
+        // 开关放在家长密码之后，和"惩罚休息"一个道理：开了却没有密码，
+        // 遮罩上不会出现「家长操作」入口，家长自己想放行也放不了。
+        val swQuiz = findViewById<android.widget.Switch>(R.id.swQuiz)
+        val tvQuizState = findViewById<TextView>(R.id.tvQuizState)
+        fun renderQuizState() {
+            val n = QuizBank.cached(prefs).size
+            tvQuizState.text = if (n > 0) getString(R.string.quiz_state_fmt, n)
+            else getString(R.string.quiz_state_none)
+        }
+        swQuiz.isChecked = prefs.quizEnabled
+        renderQuizState()
+        swQuiz.setOnCheckedChangeListener { _, checked ->
+            if (checked && prefs.pin.isEmpty()) {
+                Toast.makeText(this, R.string.quiz_need_pin, Toast.LENGTH_LONG).show()
+                swQuiz.isChecked = false
+                return@setOnCheckedChangeListener
+            }
+            prefs.quizEnabled = checked
+            GuardianService.refresh(this)
+        }
+
+        bindSeek(
+            findViewById(R.id.seekQuizInterval), findViewById(R.id.tvQuizIntervalValue),
+            step = 1, min = 1, max = 60, unit = getString(R.string.unit_minute),
+            initial = prefs.quizIntervalMinutes
+        ) { prefs.quizIntervalMinutes = it }
+
+        bindSeek(
+            findViewById(R.id.seekQuizPenalty), findViewById(R.id.tvQuizPenaltyValue),
+            step = 1, min = 1, max = 15, unit = getString(R.string.unit_minute),
+            initial = prefs.quizPenaltyMinutes
+        ) { prefs.quizPenaltyMinutes = it }
+
         // ---- 家长密码 ----
         findViewById<Button>(R.id.btnPin).setOnClickListener { editPin() }
         findViewById<Button>(R.id.btnClearPin).setOnClickListener { clearPin() }

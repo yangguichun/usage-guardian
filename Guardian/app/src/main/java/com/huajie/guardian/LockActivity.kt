@@ -62,6 +62,19 @@ class LockActivity : AppCompatActivity() {
                 return
             }
             val left = prefs.lockedUntilWall - System.currentTimeMillis()
+            if (QuizLock.active) {
+                // 答题锁：和服务里同一套优先级（停用 / 每日额度 先判）
+                val wait = QuizLock.phase == QuizLock.Phase.WAIT
+                RestUi.render(
+                    root, this@LockActivity,
+                    if (wait) (QuizLock.waitUntilWall - System.currentTimeMillis()).coerceAtLeast(0L) else 0L,
+                    0, "",
+                    if (wait) RestUi.Mode.QUIZWAIT else RestUi.Mode.QUIZ,
+                    prefs.quizIntervalMinutes
+                )
+                handler.postDelayed(this, 500L)
+                return
+            }
             if (left <= 0L) {
                 finishSelf()
                 return
@@ -73,9 +86,9 @@ class LockActivity : AppCompatActivity() {
         }
     }
 
-    /** 此刻是否应该继续把屏幕挡着（休息 / 停用时段 / 每日额度，任一成立即可） */
+    /** 此刻是否应该继续把屏幕挡着（休息 / 停用时段 / 每日额度 / 答题，任一成立即可） */
     private fun keepLocked(): Boolean =
-        GuardianService.sInQuiet || GuardianService.sDayLocked ||
+        GuardianService.sInQuiet || GuardianService.sDayLocked || QuizLock.active ||
             prefs.lockedUntilWall > System.currentTimeMillis()
 
     private val restEndReceiver = object : BroadcastReceiver() {
@@ -113,10 +126,12 @@ class LockActivity : AppCompatActivity() {
                 // 遮罩立刻弹回来。现在统一交给服务处理，两边不会再走偏。
                 val wasQuiet = GuardianService.sInQuiet
                 val wasDay = GuardianService.sDayLocked
+                val wasQuiz = QuizLock.active
                 GuardianService.skipFromMask(this)
                 Toast.makeText(
                     this,
                     when {
+                        wasQuiz -> getString(R.string.quiz_passed_parent)
                         wasDay -> getString(R.string.day_unlock_done, RestUi.DAY_UNLOCK_MIN)
                         wasQuiet -> getString(R.string.quiet_skipped)
                         else -> getString(R.string.rest_skipped)
@@ -167,6 +182,10 @@ class LockActivity : AppCompatActivity() {
                 GuardianService.sQuietLeftMs, 0,
                 getString(R.string.quiet_plan, GuardianService.sQuietLabel),
                 RestUi.Mode.QUIET
+            )
+        } else if (QuizLock.active) {
+            RestUi.render(
+                root, this, 0L, 0, "", RestUi.Mode.QUIZ, prefs.quizIntervalMinutes
             )
         } else {
             RestUi.render(

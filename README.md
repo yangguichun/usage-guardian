@@ -117,7 +117,7 @@
 
 ### 1. 装 App
 
-从 [Releases](https://github.com/yangguichun/usage-guardian/releases) 下载 `使用守护-v2.6.0-release.apk`，安装到平板。
+从 [Releases](https://github.com/yangguichun/usage-guardian/releases) 下载 `Guardian-v2.6.0-release.apk`，安装到平板。
 首次打开按要求授予：**使用情况访问、悬浮窗、通知、自启动、电池优化白名单**，并激活设备管理员。
 
 在设置页填服务端地址完成配对；**不配对时一个请求都不会发出**。

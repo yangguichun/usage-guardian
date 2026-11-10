@@ -1,6 +1,6 @@
 [package]
 name = "guardian-server"
-version = "2.6.0"
+version = "2.6.1"
 edition = "2021"
 description = "「使用守护」管理后台 —— 单文件静态二进制，零运行时依赖"
 

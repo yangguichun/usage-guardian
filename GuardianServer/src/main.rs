@@ -220,11 +220,18 @@ async fn main() {
         println!("       登录后请立刻在右上角「账号」里改掉这个口令。");
     }
 
-    // 首次启动时导入内置题库（语文拼音 / 数学口算 / 牛津树词汇）。
-    // 幂等：库里已经有一条内置题库就跳过，不会重复导入。
+    // 导入 / 补齐内置题库（语文拼音 / 数学口算 / 牛津树词汇）。
+    // 幂等：按题库名逐题面比对，只补题库里还没有的题，已有题库 id 不变。
     if let Some(n) = quiz::ensure_seed(&store.db) {
         let (b, q) = quiz::stats(&store.db);
-        println!("[题库] 已导入内置题库 {n} 道题（当前共 {b} 套、{q} 道）");
+        println!("[题库] 内置题库补齐 {n} 道题（当前共 {b} 套、{q} 道）");
+    }
+    // 去重：旧版随机抽题会撞题面，补题只能加不能删，所以单独清一遍。
+    // 幂等，只在真删掉东西时打日志。
+    let dup = quiz::dedupe_seed(&store.db);
+    if dup > 0 {
+        let (_, q) = quiz::stats(&store.db);
+        println!("[题库] 清理重复题面 {dup} 条（当前共 {q} 道）");
     }
 
     let state = Arc::new(AppState {

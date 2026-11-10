@@ -225,6 +225,16 @@ async function waitFor(fn, ms = 4000, step = 50) {
   ok(sent0 && sent0.from === 1320 && sent0.to === 360, `时间按"0 点起算的分钟数"下发（${sent0 && sent0.from}→${sent0 && sent0.to}）`);
   ok(sent0 && sent0.id === 'q_night', '规则 id 原样带上（服务端据此保持稳定）');
 
+  console.log('\n[2.85] 锁定原因 / 本机规则条数（v2.6.1）');
+  // 家长最难自己查清的一件事就是"孩子为什么被锁"。设备把原因报上来之后，
+  // 设备卡上必须真的显示出来，而不是只存在接口里。
+  const cardText = d.getElementById('devices').textContent;
+  ok(/使用时长达到上限/.test(cardText),
+    `设备卡显示本次锁定原因（${cardText.replace(/\s+/g, ' ').slice(0, 80)}…）`);
+  // 本机规则的内容不在服务端，只报条数；不提示的话家长会以为设置没生效
+  ok(/本机另有 1 条/.test(d.getElementById('quietHint').textContent),
+    `停用面板提示本机另有几条（${d.getElementById('quietHint').textContent.slice(0, 60)}…）`);
+
   console.log('\n[2.8] 应用 ↔ 时间线联动（点一行只看它，点空白恢复）');
   // 每次都要重新查：renderDpApps 会重建 #dpApps 的 innerHTML，
   // 之前拿到的行已经是脱离文档的孤儿节点，再点它不会冒泡到容器。

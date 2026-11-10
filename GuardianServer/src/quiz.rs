@@ -731,24 +731,49 @@ fn q_from_json(v: &Value, bank_subject: &str, default_level: i64) -> Result<Ques
 
 const SEED_JSON: &str = include_str!("../static/quiz_seed.json");
 
-/// 首次启动时导入内置题库（只在一条内置题库都没有时执行）。
-///
-/// 为什么不放进部署脚本：家长可能是自己下载二进制在树莓派上跑的，
-/// 多一步手动操作就多一个"装了但没题"的坑。这个函数本身是幂等的。
-pub fn ensure_seed(db: &Db) -> Option<usize> {
-    {
-        let c = db.c();
-        let n: i64 = c
-            .query_row(
-                "SELECT COUNT(*) FROM quiz_bank WHERE is_seed = 1",
-                [],
-                |r| r.get(0),
-            )
-            .unwrap_or(0);
-        if n > 0 {
-            return None;
+/// 找一条内置题库（按名字 + 科目），用于"原地补题"。
+fn seed_bank_id(db: &Db, name: &str, subject: &str) -> Option<i64> {
+    let c = db.c();
+    c.query_row(
+        "SELECT id FROM quiz_bank WHERE is_seed = 1 AND name = ?1 AND subject = ?2
+         ORDER BY id ASC LIMIT 1",
+        params![name, subject],
+        |r| r.get(0),
+    )
+    .optional()
+    .ok()
+    .flatten()
+}
+
+/// 某题库里已经有的题干集合
+fn stems_of(db: &Db, bank_id: i64) -> std::collections::HashSet<String> {
+    let c = db.c();
+    let mut st = match c.prepare("SELECT stem FROM quiz_question WHERE bank_id = ?1") {
+        Ok(s) => s,
+        Err(_) => return std::collections::HashSet::new(),
+    };
+    let mut out = std::collections::HashSet::new();
+    if let Ok(it) = st.query_map(params![bank_id], |r| r.get::<_, String>(0)) {
+        for s in it.flatten() {
+            out.insert(s);
         }
     }
+    out
+}
+
+/// 导入 / **补齐**内置题库，返回本次新增的题数（没有新增返回 None）。
+///
+/// ## 为什么是"补齐"而不是"没有就建一套"
+///
+/// 早期版本只在**一条内置题库都没有**时才导入。后果：题库内容升级
+/// （比如数学题从 80 道扩到 200 道）在已经跑起来的服务器上永远不生效 ——
+/// 只能把 `quiz_bank` 整表删掉重建，而那样 **bank id 会变**，
+/// 设备上报的 `quiz_banks` 名单（存的是 id）全部失效，孩子的答题解锁直接哑掉。
+///
+/// 现在按 `name + subject` 找到已有的内置题库**原地补题**：只插入题面
+/// (`stem`) 还不存在的题，题库 id、家长对其它题库的改动、设备绑定都不动。
+/// 整个函数幂等，每次启动跑一遍也不会重复插题。
+pub fn ensure_seed(db: &Db) -> Option<usize> {
     let parsed: Value = serde_json::from_str(SEED_JSON).ok()?;
     let arr = parsed.get("banks")?.as_array()?;
     let mut total = 0usize;
@@ -760,18 +785,72 @@ pub fn ensure_seed(db: &Db) -> Option<usize> {
             .filter(|s| valid_subject(s))
             .unwrap_or("mixed");
         let note = b.get("description").and_then(|x| x.as_str()).unwrap_or("");
-        let id = bank_create(db, "", name, subject, note, true)?;
+        let id = match seed_bank_id(db, name, subject) {
+            Some(id) => id,
+            None => bank_create(db, "", name, subject, note, true)?,
+        };
+        let mut have = stems_of(db, id);
         let mut items = Vec::new();
         if let Some(qs) = b.get("questions").and_then(|x| x.as_array()) {
             for v in qs {
                 if let Ok(q) = q_from_json(v, subject, 1) {
-                    items.push(q);
+                    // 同一套种子里理论上不会有重复题面，这里仍然过一遍，
+                    // 免得将来改种子时手滑写重了，库里就多出一条永远抽到的重复题
+                    if have.insert(q.stem.clone()) {
+                        items.push(q);
+                    }
                 }
             }
         }
-        total += bulk_add(db, id, &items);
+        if !items.is_empty() {
+            total += bulk_add(db, id, &items);
+        }
     }
-    Some(total)
+    if total > 0 {
+        Some(total)
+    } else {
+        None
+    }
+}
+
+/// 清掉内置题库里**同一题面的重复行**（保留 id 最小的那条），返回删掉的条数。
+///
+/// 为什么要单独做一遍：补题只能"加"，删不掉已经存在的重复。
+/// v2.6.0 的数学题库是随机抽的，80 道里有 5 道题面重复
+/// （比如 "18 + 1 = ?" 出现两次），孩子连着抽到同一道题就会觉得题库坏了。
+/// 这里按题面去重，**不动题库 id**，所以设备上报的题库名单不受影响。
+///
+/// 只处理 `is_seed = 1` 的内置题库：家长自己建的题库里，两条同题干
+/// 可能是故意加的（比如同一个题干配不同的选项），不能替家长做决定。
+pub fn dedupe_seed(db: &Db) -> usize {
+    let ids: Vec<i64> = {
+        let c = db.c();
+        let mut st = match c.prepare("SELECT id FROM quiz_bank WHERE is_seed = 1") {
+            Ok(s) => s,
+            Err(_) => return 0,
+        };
+        let mut v: Vec<i64> = Vec::new();
+        if let Ok(it) = st.query_map([], |r| r.get::<_, i64>(0)) {
+            v = it.flatten().collect();
+        }
+        v
+    };
+    let c = db.c();
+    let mut removed = 0usize;
+    for id in ids {
+        let n = c
+            .execute(
+                "DELETE FROM quiz_question
+                 WHERE bank_id = ?1
+                   AND id NOT IN (
+                     SELECT MIN(id) FROM quiz_question WHERE bank_id = ?1 GROUP BY stem
+                   )",
+                params![id],
+            )
+            .unwrap_or(0);
+        removed += n;
+    }
+    removed
 }
 
 /// 给诊断/统计用：内置题库有几套、几道题

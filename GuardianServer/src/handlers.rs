@@ -1635,6 +1635,9 @@ pub async fn device_quiet(
         "in_quiet": d.in_quiet,
         "quiet_left_ms": d.quiet_left_ms,
         "quiet_label": d.quiet_label,
+        // 设备本机另外设的条数（内容不在服务端）：后台据此提示
+        // "这台机器上还有 N 条本机规则，规则列表里看不到"
+        "local_count": d.quiet_local_count,
     })))
 }
 
@@ -2509,6 +2512,12 @@ pub async fn device_heartbeat(
         // 归零会让"今天使用"在升级/降级时突然掉到 0（看着像统计坏了）
         d.today_used_ms = clamp(payload.get("today_used_ms"), 0, MAX_MS, d.today_used_ms);
         d.rest_count = clamp(payload.get("rest_count"), 0, 999, 0);
+        // 本次锁定的原因与总时长：设备算好报上来，只用于展示和事件文案。
+        // 老 App 不带这两个字段 → 保持旧值（不归零），后台最多显示上一次的原因。
+        if let Some(v) = payload.get("rest_reason").and_then(|v| v.as_str()) {
+            d.rest_reason = v.chars().take(60).collect();
+        }
+        d.rest_ms = clamp(payload.get("rest_ms"), 0, MAX_MS, d.rest_ms);
         d.use_minutes = clamp(payload.get("use_minutes"), 1, 600, d.use_minutes);
         d.rest_minutes = clamp(payload.get("rest_minutes"), 1, 240, d.rest_minutes);
         // 每日总时长：0 = 不限。缺字段时保留旧值，避免老版本 App 把家长设的上限抹成 0。
@@ -2534,6 +2543,8 @@ pub async fn device_heartbeat(
         if let Some(v) = payload.get("quiet_label").and_then(|v| v.as_str()) {
             d.quiet_label = v.chars().take(40).collect();
         }
+        // 设备本机另设了几条规则：只收条数，内容不采信也不覆盖（v2.6.1）
+        d.quiet_local_count = clamp(payload.get("quiet_local_count"), 0, 32, d.quiet_local_count);
         // ---- 答题解锁（v2.6.0）：只收状态，不收题库选择 ----
         //
         // 开关 / 间隔 / 罚时是"设备上也能改"的普通配置，跟着上报走（和 use_minutes 一样）；
@@ -2557,6 +2568,9 @@ pub async fn device_heartbeat(
     let in_quiet = store.devices[idx].in_quiet;
     let quiet_label = store.devices[idx].quiet_label.clone();
     let day_locked = store.devices[idx].day_locked;
+    let rest_reason = store.devices[idx].rest_reason.clone();
+    let rest_ms = store.devices[idx].rest_ms;
+    let rest_minutes = store.devices[idx].rest_minutes;
     let prev_quiet = prev_in_quiet;
 
     // ---- 时间线：这一刻并进"在线区间" ----
@@ -2568,7 +2582,34 @@ pub async fn device_heartbeat(
     if prev_resting && !resting {
         store.add_event(Some(&did), "rest_end", format!("{dev_name} 休息结束"));
     } else if !prev_resting && resting {
-        store.add_event(Some(&did), "rest_start", format!("{dev_name} 进入强制休息"));
+        // ★ 事件里必须写清"为什么锁、锁多久"。
+        //
+        // 只写"进入强制休息"的话，家长看到孩子被锁却查不出原因：
+        // 到底是玩满了 20 分钟、被记了违规导致 ×3、还是家长自己远程锁的？
+        // 以前只能靠猜，还会误以为"休息时长算错了"。
+        let why = if rest_reason.is_empty() {
+            "进入强制休息".to_string()
+        } else {
+            format!("进入强制休息（{rest_reason}）")
+        };
+        let dur = if rest_ms > 0 {
+            let mins = rest_ms / 60_000;
+            if rest_minutes > 0 && mins > rest_minutes {
+                // 时长被放大时说清倍数：家长设 5 分钟、孩子实际休 15 分钟，
+                // 只有在事件里写出"是设置值的 3 倍"，家长才知道去看违规次数
+                format!(
+                    "，{} 分钟（是设置值 {} 分钟的 {:.0} 倍）",
+                    mins,
+                    rest_minutes,
+                    mins as f64 / rest_minutes as f64
+                )
+            } else {
+                format!("，{mins} 分钟")
+            }
+        } else {
+            String::new()
+        };
+        store.add_event(Some(&did), "rest_start", format!("{dev_name} {why}{dur}"));
     }
     if prev_enabled && !enabled {
         store.add_event(Some(&did), "guard_off", format!("{dev_name} 的守护被关闭"));

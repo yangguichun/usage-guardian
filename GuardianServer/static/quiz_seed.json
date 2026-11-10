@@ -1977,14 +1977,84 @@
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "8 + 3 = ?",
+     "stem": "1 + 1 = ?",
      "options": [
-      "11",
-      "8",
-      "9",
-      "10"
+      "2",
+      "3",
+      "1",
+      "4"
      ],
-     "answer": "11",
+     "answer": "2",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "1 + 2 = ?",
+     "options": [
+      "4",
+      "3",
+      "2",
+      "5"
+     ],
+     "answer": "3",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "1 + 3 = ?",
+     "options": [
+      "5",
+      "3",
+      "4",
+      "6"
+     ],
+     "answer": "4",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "3 + 1 = ?",
+     "options": [
+      "5",
+      "3",
+      "6",
+      "4"
+     ],
+     "answer": "4",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "2 + 3 = ?",
+     "options": [
+      "5",
+      "6",
+      "4",
+      "7"
+     ],
+     "answer": "5",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "4 + 1 = ?",
+     "options": [
+      "6",
+      "5",
+      "4",
+      "7"
+     ],
+     "answer": "5",
      "hint": ""
     },
     {
@@ -1993,9 +2063,9 @@
      "level": 1,
      "stem": "2 + 4 = ?",
      "options": [
-      "6",
+      "7",
       "5",
-      "3",
+      "6",
       "8"
      ],
      "answer": "6",
@@ -2005,11 +2075,347 @@
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "6 + 6 = ?",
+     "stem": "4 + 2 = ?",
+     "options": [
+      "7",
+      "5",
+      "8",
+      "6"
+     ],
+     "answer": "6",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "1 + 6 = ?",
+     "options": [
+      "7",
+      "8",
+      "6",
+      "9"
+     ],
+     "answer": "7",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "3 + 4 = ?",
+     "options": [
+      "8",
+      "7",
+      "6",
+      "9"
+     ],
+     "answer": "7",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "5 + 2 = ?",
+     "options": [
+      "8",
+      "6",
+      "7",
+      "9"
+     ],
+     "answer": "7",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "6 + 1 = ?",
+     "options": [
+      "8",
+      "6",
+      "9",
+      "7"
+     ],
+     "answer": "7",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "2 + 6 = ?",
+     "options": [
+      "8",
+      "9",
+      "7",
+      "10"
+     ],
+     "answer": "8",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "4 + 4 = ?",
      "options": [
       "9",
-      "2",
-      "15",
+      "8",
+      "7",
+      "10"
+     ],
+     "answer": "8",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "6 + 2 = ?",
+     "options": [
+      "9",
+      "7",
+      "8",
+      "10"
+     ],
+     "answer": "8",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "1 + 8 = ?",
+     "options": [
+      "10",
+      "8",
+      "11",
+      "9"
+     ],
+     "answer": "9",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "3 + 6 = ?",
+     "options": [
+      "9",
+      "10",
+      "8",
+      "11"
+     ],
+     "answer": "9",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "5 + 4 = ?",
+     "options": [
+      "10",
+      "9",
+      "8",
+      "11"
+     ],
+     "answer": "9",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "7 + 2 = ?",
+     "options": [
+      "10",
+      "8",
+      "9",
+      "11"
+     ],
+     "answer": "9",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "1 + 9 = ?",
+     "options": [
+      "11",
+      "9",
+      "12",
+      "10"
+     ],
+     "answer": "10",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "3 + 7 = ?",
+     "options": [
+      "10",
+      "11",
+      "9",
+      "12"
+     ],
+     "answer": "10",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "4 + 6 = ?",
+     "options": [
+      "11",
+      "10",
+      "9",
+      "12"
+     ],
+     "answer": "10",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "6 + 4 = ?",
+     "options": [
+      "11",
+      "9",
+      "10",
+      "12"
+     ],
+     "answer": "10",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "8 + 2 = ?",
+     "options": [
+      "11",
+      "9",
+      "12",
+      "10"
+     ],
+     "answer": "10",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "1 + 10 = ?",
+     "options": [
+      "11",
+      "12",
+      "10",
+      "13"
+     ],
+     "answer": "11",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "3 + 8 = ?",
+     "options": [
+      "12",
+      "11",
+      "10",
+      "13"
+     ],
+     "answer": "11",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "5 + 6 = ?",
+     "options": [
+      "12",
+      "10",
+      "11",
+      "13"
+     ],
+     "answer": "11",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "7 + 4 = ?",
+     "options": [
+      "12",
+      "10",
+      "13",
+      "11"
+     ],
+     "answer": "11",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "9 + 2 = ?",
+     "options": [
+      "11",
+      "12",
+      "10",
+      "13"
+     ],
+     "answer": "11",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "1 + 11 = ?",
+     "options": [
+      "13",
+      "12",
+      "11",
+      "14"
+     ],
+     "answer": "12",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "3 + 9 = ?",
+     "options": [
+      "13",
+      "11",
+      "12",
+      "14"
+     ],
+     "answer": "12",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "4 + 8 = ?",
+     "options": [
+      "13",
+      "11",
+      "14",
       "12"
      ],
      "answer": "12",
@@ -2019,14 +2425,112 @@
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "13 + 4 = ?",
+     "stem": "6 + 6 = ?",
      "options": [
-      "17",
-      "15",
-      "7",
-      "20"
+      "12",
+      "13",
+      "11",
+      "14"
      ],
-     "answer": "17",
+     "answer": "12",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "8 + 4 = ?",
+     "options": [
+      "13",
+      "12",
+      "11",
+      "14"
+     ],
+     "answer": "12",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "10 + 2 = ?",
+     "options": [
+      "13",
+      "11",
+      "12",
+      "14"
+     ],
+     "answer": "12",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "1 + 12 = ?",
+     "options": [
+      "14",
+      "12",
+      "15",
+      "13"
+     ],
+     "answer": "13",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "3 + 10 = ?",
+     "options": [
+      "13",
+      "14",
+      "12",
+      "15"
+     ],
+     "answer": "13",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "5 + 8 = ?",
+     "options": [
+      "14",
+      "13",
+      "12",
+      "15"
+     ],
+     "answer": "13",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "7 + 6 = ?",
+     "options": [
+      "14",
+      "12",
+      "13",
+      "15"
+     ],
+     "answer": "13",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "9 + 4 = ?",
+     "options": [
+      "14",
+      "12",
+      "15",
+      "13"
+     ],
+     "answer": "13",
      "hint": ""
     },
     {
@@ -2036,9 +2540,9 @@
      "stem": "11 + 2 = ?",
      "options": [
       "13",
+      "14",
       "12",
-      "15",
-      "14"
+      "15"
      ],
      "answer": "13",
      "hint": ""
@@ -2047,84 +2551,294 @@
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "6 + 4 = ?",
+     "stem": "12 + 1 = ?",
      "options": [
-      "8",
-      "10",
-      "20",
-      "9"
+      "14",
+      "13",
+      "12",
+      "15"
      ],
-     "answer": "10",
+     "answer": "13",
      "hint": ""
     },
     {
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "11 + 1 = ?",
+     "stem": "2 + 12 = ?",
      "options": [
-      "2",
-      "12",
-      "10",
+      "15",
+      "13",
+      "14",
+      "16"
+     ],
+     "answer": "14",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "4 + 10 = ?",
+     "options": [
+      "15",
+      "13",
+      "16",
       "14"
      ],
-     "answer": "12",
+     "answer": "14",
      "hint": ""
     },
     {
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "6 + 12 = ?",
+     "stem": "6 + 8 = ?",
      "options": [
-      "18",
-      "19",
+      "14",
+      "15",
+      "13",
+      "16"
+     ],
+     "answer": "14",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "8 + 6 = ?",
+     "options": [
+      "15",
+      "14",
+      "13",
+      "16"
+     ],
+     "answer": "14",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "10 + 4 = ?",
+     "options": [
+      "15",
+      "13",
+      "14",
+      "16"
+     ],
+     "answer": "14",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "12 + 2 = ?",
+     "options": [
+      "15",
+      "13",
       "16",
+      "14"
+     ],
+     "answer": "14",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "1 + 14 = ?",
+     "options": [
+      "15",
+      "16",
+      "14",
       "17"
      ],
-     "answer": "18",
+     "answer": "15",
      "hint": ""
     },
     {
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "7 + 5 = ?",
-     "options": [
-      "10",
-      "9",
-      "12",
-      "15"
-     ],
-     "answer": "12",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "5 + 13 = ?",
+     "stem": "3 + 12 = ?",
      "options": [
       "16",
-      "18",
-      "19",
-      "15"
+      "15",
+      "14",
+      "17"
      ],
-     "answer": "18",
+     "answer": "15",
      "hint": ""
     },
     {
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "11 + 6 = ?",
+     "stem": "5 + 10 = ?",
+     "options": [
+      "16",
+      "14",
+      "15",
+      "17"
+     ],
+     "answer": "15",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "6 + 9 = ?",
      "options": [
       "16",
       "14",
       "17",
-      "19"
+      "15"
      ],
-     "answer": "17",
+     "answer": "15",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "8 + 7 = ?",
+     "options": [
+      "15",
+      "16",
+      "14",
+      "17"
+     ],
+     "answer": "15",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "10 + 5 = ?",
+     "options": [
+      "16",
+      "15",
+      "14",
+      "17"
+     ],
+     "answer": "15",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "12 + 3 = ?",
+     "options": [
+      "16",
+      "14",
+      "15",
+      "17"
+     ],
+     "answer": "15",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "14 + 1 = ?",
+     "options": [
+      "16",
+      "14",
+      "17",
+      "15"
+     ],
+     "answer": "15",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "2 + 14 = ?",
+     "options": [
+      "16",
+      "17",
+      "15",
+      "18"
+     ],
+     "answer": "16",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "4 + 12 = ?",
+     "options": [
+      "17",
+      "16",
+      "15",
+      "18"
+     ],
+     "answer": "16",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "6 + 10 = ?",
+     "options": [
+      "17",
+      "15",
+      "16",
+      "18"
+     ],
+     "answer": "16",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "8 + 8 = ?",
+     "options": [
+      "17",
+      "15",
+      "18",
+      "16"
+     ],
+     "answer": "16",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "10 + 6 = ?",
+     "options": [
+      "16",
+      "17",
+      "15",
+      "18"
+     ],
+     "answer": "16",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "11 + 5 = ?",
+     "options": [
+      "17",
+      "16",
+      "15",
+      "18"
+     ],
+     "answer": "16",
      "hint": ""
     },
     {
@@ -2133,10 +2847,10 @@
      "level": 1,
      "stem": "13 + 3 = ?",
      "options": [
-      "16",
-      "13",
       "17",
-      "6"
+      "15",
+      "16",
+      "18"
      ],
      "answer": "16",
      "hint": ""
@@ -2145,25 +2859,67 @@
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "15 + 4 = ?",
+     "stem": "15 + 1 = ?",
      "options": [
-      "16",
+      "17",
+      "15",
       "18",
-      "20",
-      "19"
+      "16"
      ],
-     "answer": "19",
+     "answer": "16",
      "hint": ""
     },
     {
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "16 + 1 = ?",
+     "stem": "2 + 15 = ?",
      "options": [
-      "15",
-      "19",
+      "17",
+      "18",
       "16",
+      "19"
+     ],
+     "answer": "17",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "4 + 13 = ?",
+     "options": [
+      "18",
+      "17",
+      "16",
+      "19"
+     ],
+     "answer": "17",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "6 + 11 = ?",
+     "options": [
+      "18",
+      "16",
+      "17",
+      "19"
+     ],
+     "answer": "17",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "8 + 9 = ?",
+     "options": [
+      "18",
+      "16",
+      "19",
       "17"
      ],
      "answer": "17",
@@ -2173,112 +2929,14 @@
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "18 + 1 = ?",
-     "options": [
-      "19",
-      "17",
-      "16",
-      "9"
-     ],
-     "answer": "19",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "15 + 3 = ?",
+     "stem": "10 + 7 = ?",
      "options": [
       "17",
-      "15",
       "18",
-      "8"
-     ],
-     "answer": "18",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "14 + 2 = ?",
-     "options": [
-      "18",
-      "19",
       "16",
-      "13"
-     ],
-     "answer": "16",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "17 + 2 = ?",
-     "options": [
-      "19",
-      "20",
-      "18",
-      "9"
-     ],
-     "answer": "19",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "14 + 2 = ?",
-     "options": [
-      "16",
-      "19",
-      "17",
-      "14"
-     ],
-     "answer": "16",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "10 + 1 = ?",
-     "options": [
-      "9",
-      "11",
-      "14",
-      "1"
-     ],
-     "answer": "11",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "10 + 3 = ?",
-     "options": [
-      "13",
-      "3",
-      "15",
-      "12"
-     ],
-     "answer": "13",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "17 + 1 = ?",
-     "options": [
-      "16",
-      "8",
-      "18",
       "19"
      ],
-     "answer": "18",
+     "answer": "17",
      "hint": ""
     },
     {
@@ -2287,10 +2945,10 @@
      "level": 1,
      "stem": "12 + 5 = ?",
      "options": [
+      "18",
       "17",
-      "19",
-      "20",
-      "15"
+      "16",
+      "19"
      ],
      "answer": "17",
      "hint": ""
@@ -2299,14 +2957,70 @@
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "13 + 1 = ?",
+     "stem": "14 + 3 = ?",
      "options": [
-      "12",
-      "15",
-      "14",
-      "4"
+      "18",
+      "16",
+      "17",
+      "19"
      ],
-     "answer": "14",
+     "answer": "17",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "15 + 2 = ?",
+     "options": [
+      "18",
+      "16",
+      "19",
+      "17"
+     ],
+     "answer": "17",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "1 + 17 = ?",
+     "options": [
+      "18",
+      "19",
+      "17",
+      "20"
+     ],
+     "answer": "18",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "3 + 15 = ?",
+     "options": [
+      "19",
+      "18",
+      "17",
+      "20"
+     ],
+     "answer": "18",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "5 + 13 = ?",
+     "options": [
+      "19",
+      "17",
+      "18",
+      "20"
+     ],
+     "answer": "18",
      "hint": ""
     },
     {
@@ -2315,10 +3029,10 @@
      "level": 1,
      "stem": "7 + 11 = ?",
      "options": [
-      "8",
-      "18",
+      "19",
+      "17",
       "20",
-      "16"
+      "18"
      ],
      "answer": "18",
      "hint": ""
@@ -2327,26 +3041,12 @@
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "11 + 9 = ?",
+     "stem": "9 + 9 = ?",
      "options": [
-      "17",
       "18",
       "19",
+      "17",
       "20"
-     ],
-     "answer": "20",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "10 + 8 = ?",
-     "options": [
-      "18",
-      "17",
-      "19",
-      "16"
      ],
      "answer": "18",
      "hint": ""
@@ -2355,67 +3055,67 @@
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "13 + 7 = ?",
+     "stem": "11 + 7 = ?",
      "options": [
-      "20",
+      "19",
       "18",
       "17",
-      "19"
+      "20"
      ],
-     "answer": "20",
+     "answer": "18",
      "hint": ""
     },
     {
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "11 + 8 = ?",
+     "stem": "13 + 5 = ?",
      "options": [
       "19",
       "17",
       "18",
       "20"
      ],
-     "answer": "19",
+     "answer": "18",
      "hint": ""
     },
     {
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "15 + 5 = ?",
+     "stem": "15 + 3 = ?",
      "options": [
-      "10",
-      "20",
-      "18",
-      "19"
-     ],
-     "answer": "20",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "9 + 4 = ?",
-     "options": [
-      "15",
-      "12",
-      "14",
-      "13"
-     ],
-     "answer": "13",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "18 + 1 = ?",
-     "options": [
-      "16",
       "19",
-      "9",
+      "17",
+      "20",
+      "18"
+     ],
+     "answer": "18",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "17 + 1 = ?",
+     "options": [
+      "18",
+      "19",
+      "17",
+      "20"
+     ],
+     "answer": "18",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "1 + 18 = ?",
+     "options": [
+      "20",
+      "19",
+      "18",
       "17"
      ],
      "answer": "19",
@@ -2425,40 +3125,264 @@
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "12 + 4 = ?",
+     "stem": "3 + 16 = ?",
      "options": [
-      "17",
-      "14",
-      "16",
-      "15"
-     ],
-     "answer": "16",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "15 + 2 = ?",
-     "options": [
-      "16",
       "20",
-      "17",
-      "15"
+      "18",
+      "19",
+      "17"
      ],
-     "answer": "17",
+     "answer": "19",
      "hint": ""
     },
     {
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "3 − 2 = ?",
+     "stem": "5 + 14 = ?",
+     "options": [
+      "20",
+      "18",
+      "17",
+      "19"
+     ],
+     "answer": "19",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "7 + 12 = ?",
+     "options": [
+      "19",
+      "20",
+      "18",
+      "17"
+     ],
+     "answer": "19",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "9 + 10 = ?",
+     "options": [
+      "20",
+      "19",
+      "18",
+      "17"
+     ],
+     "answer": "19",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "11 + 8 = ?",
+     "options": [
+      "20",
+      "18",
+      "19",
+      "17"
+     ],
+     "answer": "19",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "13 + 6 = ?",
+     "options": [
+      "20",
+      "18",
+      "17",
+      "19"
+     ],
+     "answer": "19",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "15 + 4 = ?",
+     "options": [
+      "19",
+      "20",
+      "18",
+      "17"
+     ],
+     "answer": "19",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "17 + 2 = ?",
+     "options": [
+      "20",
+      "19",
+      "18",
+      "17"
+     ],
+     "answer": "19",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "1 + 19 = ?",
+     "options": [
+      "19",
+      "18",
+      "20",
+      "17"
+     ],
+     "answer": "20",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "2 + 18 = ?",
+     "options": [
+      "19",
+      "18",
+      "17",
+      "20"
+     ],
+     "answer": "20",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "4 + 16 = ?",
+     "options": [
+      "20",
+      "19",
+      "18",
+      "17"
+     ],
+     "answer": "20",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "6 + 14 = ?",
+     "options": [
+      "19",
+      "20",
+      "18",
+      "17"
+     ],
+     "answer": "20",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "8 + 12 = ?",
+     "options": [
+      "19",
+      "18",
+      "20",
+      "17"
+     ],
+     "answer": "20",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "10 + 10 = ?",
+     "options": [
+      "19",
+      "18",
+      "17",
+      "20"
+     ],
+     "answer": "20",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "12 + 8 = ?",
+     "options": [
+      "20",
+      "19",
+      "18",
+      "17"
+     ],
+     "answer": "20",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "14 + 6 = ?",
+     "options": [
+      "19",
+      "20",
+      "18",
+      "17"
+     ],
+     "answer": "20",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "16 + 4 = ?",
+     "options": [
+      "19",
+      "18",
+      "20",
+      "17"
+     ],
+     "answer": "20",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "18 + 2 = ?",
+     "options": [
+      "19",
+      "18",
+      "17",
+      "20"
+     ],
+     "answer": "20",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "2 − 1 = ?",
      "options": [
       "1",
-      "0",
       "2",
-      "4"
+      "0",
+      "3"
      ],
      "answer": "1",
      "hint": ""
@@ -2467,82 +3391,12 @@
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "11 − 4 = ?",
+     "stem": "4 − 1 = ?",
      "options": [
-      "8",
-      "5",
-      "7",
-      "9"
-     ],
-     "answer": "7",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "18 − 5 = ?",
-     "options": [
-      "14",
-      "13",
-      "3",
-      "11"
-     ],
-     "answer": "13",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "20 − 6 = ?",
-     "options": [
-      "14",
-      "11",
-      "16",
-      "15"
-     ],
-     "answer": "14",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "13 − 1 = ?",
-     "options": [
-      "9",
-      "12",
-      "13",
-      "11"
-     ],
-     "answer": "12",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "8 − 1 = ?",
-     "options": [
-      "7",
       "4",
-      "17",
-      "6"
-     ],
-     "answer": "7",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "9 − 6 = ?",
-     "options": [
-      "6",
-      "0",
       "3",
-      "4"
+      "2",
+      "5"
      ],
      "answer": "3",
      "hint": ""
@@ -2553,10 +3407,10 @@
      "level": 1,
      "stem": "5 − 1 = ?",
      "options": [
-      "6",
+      "5",
+      "3",
       "4",
-      "1",
-      "3"
+      "6"
      ],
      "answer": "4",
      "hint": ""
@@ -2565,54 +3419,96 @@
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "10 − 5 = ?",
+     "stem": "5 − 4 = ?",
+     "options": [
+      "2",
+      "0",
+      "3",
+      "1"
+     ],
+     "answer": "1",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "6 − 3 = ?",
+     "options": [
+      "3",
+      "4",
+      "2",
+      "5"
+     ],
+     "answer": "3",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "7 − 1 = ?",
+     "options": [
+      "7",
+      "6",
+      "5",
+      "8"
+     ],
+     "answer": "6",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "7 − 5 = ?",
+     "options": [
+      "3",
+      "1",
+      "2",
+      "4"
+     ],
+     "answer": "2",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "8 − 2 = ?",
      "options": [
       "7",
       "5",
-      "3",
-      "4"
-     ],
-     "answer": "5",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "15 − 13 = ?",
-     "options": [
-      "12",
-      "0",
-      "2",
-      "3"
-     ],
-     "answer": "2",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "6 − 4 = ?",
-     "options": [
-      "2",
-      "1",
-      "12",
-      "4"
-     ],
-     "answer": "2",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "17 − 9 = ?",
-     "options": [
       "8",
-      "6",
-      "5",
-      "7"
+      "6"
+     ],
+     "answer": "6",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "8 − 5 = ?",
+     "options": [
+      "3",
+      "4",
+      "2",
+      "5"
+     ],
+     "answer": "3",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "9 − 1 = ?",
+     "options": [
+      "9",
+      "8",
+      "7",
+      "10"
      ],
      "answer": "8",
      "hint": ""
@@ -2621,24 +3517,52 @@
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "18 − 3 = ?",
+     "stem": "9 − 4 = ?",
      "options": [
+      "6",
+      "4",
       "5",
-      "15",
-      "17",
-      "14"
+      "7"
      ],
-     "answer": "15",
+     "answer": "5",
      "hint": ""
     },
     {
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "12 − 8 = ?",
+     "stem": "9 − 7 = ?",
      "options": [
+      "3",
+      "1",
       "4",
-      "2",
+      "2"
+     ],
+     "answer": "2",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "10 − 3 = ?",
+     "options": [
+      "7",
+      "8",
+      "6",
+      "9"
+     ],
+     "answer": "7",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "10 − 6 = ?",
+     "options": [
+      "5",
+      "4",
       "3",
       "6"
      ],
@@ -2649,10 +3573,24 @@
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "18 − 10 = ?",
+     "stem": "10 − 9 = ?",
      "options": [
-      "18",
-      "6",
+      "2",
+      "0",
+      "1",
+      "3"
+     ],
+     "answer": "1",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "11 − 3 = ?",
+     "options": [
+      "9",
+      "7",
       "10",
       "8"
      ],
@@ -2663,81 +3601,11 @@
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "6 − 5 = ?",
+     "stem": "11 − 6 = ?",
      "options": [
-      "2",
-      "1",
-      "4",
-      "3"
-     ],
-     "answer": "1",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "19 − 7 = ?",
-     "options": [
-      "2",
-      "12",
-      "11",
-      "9"
-     ],
-     "answer": "12",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "2 − 1 = ?",
-     "options": [
-      "2",
-      "11",
-      "1",
-      "3"
-     ],
-     "answer": "1",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "6 − 2 = ?",
-     "options": [
-      "4",
       "5",
-      "14",
-      "7"
-     ],
-     "answer": "4",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "10 − 1 = ?",
-     "options": [
-      "8",
-      "10",
-      "19",
-      "9"
-     ],
-     "answer": "9",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "15 − 10 = ?",
-     "options": [
-      "15",
       "6",
-      "5",
+      "4",
       "7"
      ],
      "answer": "5",
@@ -2747,82 +3615,12 @@
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "2 − 1 = ?",
-     "options": [
-      "11",
-      "1",
-      "3",
-      "4"
-     ],
-     "answer": "1",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "8 − 4 = ?",
-     "options": [
-      "7",
-      "14",
-      "6",
-      "4"
-     ],
-     "answer": "4",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "10 − 9 = ?",
-     "options": [
-      "11",
-      "4",
-      "0",
-      "1"
-     ],
-     "answer": "1",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "10 − 1 = ?",
-     "options": [
-      "6",
-      "10",
-      "12",
-      "9"
-     ],
-     "answer": "9",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "6 − 3 = ?",
-     "options": [
-      "1",
-      "6",
-      "13",
-      "3"
-     ],
-     "answer": "3",
-     "hint": ""
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 1,
-     "stem": "17 − 15 = ?",
+     "stem": "11 − 9 = ?",
      "options": [
       "3",
-      "5",
       "2",
-      "0"
+      "1",
+      "4"
      ],
      "answer": "2",
      "hint": ""
@@ -2831,11 +3629,53 @@
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "16 − 4 = ?",
+     "stem": "12 − 3 = ?",
      "options": [
+      "10",
+      "8",
+      "9",
+      "11"
+     ],
+     "answer": "9",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "12 − 6 = ?",
+     "options": [
+      "7",
+      "5",
+      "8",
+      "6"
+     ],
+     "answer": "6",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "12 − 9 = ?",
+     "options": [
+      "3",
+      "4",
+      "2",
+      "5"
+     ],
+     "answer": "3",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "13 − 1 = ?",
+     "options": [
+      "13",
       "12",
       "11",
-      "13",
       "14"
      ],
      "answer": "12",
@@ -2845,12 +3685,166 @@
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "12 − 11 = ?",
+     "stem": "13 − 4 = ?",
+     "options": [
+      "10",
+      "8",
+      "9",
+      "11"
+     ],
+     "answer": "9",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "13 − 7 = ?",
+     "options": [
+      "7",
+      "5",
+      "8",
+      "6"
+     ],
+     "answer": "6",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "13 − 11 = ?",
+     "options": [
+      "2",
+      "3",
+      "1",
+      "4"
+     ],
+     "answer": "2",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "14 − 2 = ?",
+     "options": [
+      "13",
+      "12",
+      "11",
+      "14"
+     ],
+     "answer": "12",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "14 − 5 = ?",
+     "options": [
+      "10",
+      "8",
+      "9",
+      "11"
+     ],
+     "answer": "9",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "14 − 8 = ?",
+     "options": [
+      "7",
+      "5",
+      "8",
+      "6"
+     ],
+     "answer": "6",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "14 − 11 = ?",
      "options": [
       "3",
+      "4",
+      "2",
+      "5"
+     ],
+     "answer": "3",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "15 − 1 = ?",
+     "options": [
+      "15",
+      "14",
+      "13",
+      "16"
+     ],
+     "answer": "14",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "15 − 5 = ?",
+     "options": [
       "11",
+      "9",
+      "10",
+      "12"
+     ],
+     "answer": "10",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "15 − 8 = ?",
+     "options": [
+      "8",
+      "6",
+      "9",
+      "7"
+     ],
+     "answer": "7",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "15 − 11 = ?",
+     "options": [
+      "4",
+      "5",
+      "3",
+      "6"
+     ],
+     "answer": "4",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "15 − 14 = ?",
+     "options": [
+      "2",
       "1",
-      "2"
+      "0",
+      "3"
      ],
      "answer": "1",
      "hint": ""
@@ -2859,11 +3853,39 @@
      "subject": "math",
      "type": "choice",
      "level": 1,
-     "stem": "10 − 4 = ?",
+     "stem": "16 − 3 = ?",
      "options": [
-      "7",
-      "6",
+      "14",
+      "12",
+      "13",
+      "15"
+     ],
+     "answer": "13",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "16 − 6 = ?",
+     "options": [
+      "11",
       "9",
+      "12",
+      "10"
+     ],
+     "answer": "10",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "16 − 10 = ?",
+     "options": [
+      "6",
+      "7",
+      "5",
       "8"
      ],
      "answer": "6",
@@ -2872,44 +3894,716 @@
     {
      "subject": "math",
      "type": "choice",
-     "level": 2,
-     "stem": "13 + （ ）= 17",
+     "level": 1,
+     "stem": "16 − 13 = ?",
+     "options": [
+      "4",
+      "3",
+      "2",
+      "5"
+     ],
+     "answer": "3",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "17 − 1 = ?",
+     "options": [
+      "17",
+      "15",
+      "16",
+      "18"
+     ],
+     "answer": "16",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "17 − 4 = ?",
+     "options": [
+      "14",
+      "12",
+      "15",
+      "13"
+     ],
+     "answer": "13",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "17 − 7 = ?",
+     "options": [
+      "10",
+      "11",
+      "9",
+      "12"
+     ],
+     "answer": "10",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "17 − 10 = ?",
+     "options": [
+      "8",
+      "7",
+      "6",
+      "9"
+     ],
+     "answer": "7",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "17 − 14 = ?",
+     "options": [
+      "4",
+      "2",
+      "3",
+      "5"
+     ],
+     "answer": "3",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "18 − 1 = ?",
+     "options": [
+      "18",
+      "16",
+      "19",
+      "17"
+     ],
+     "answer": "17",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "18 − 4 = ?",
+     "options": [
+      "14",
+      "15",
+      "13",
+      "16"
+     ],
+     "answer": "14",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "18 − 7 = ?",
+     "options": [
+      "12",
+      "11",
+      "10",
+      "13"
+     ],
+     "answer": "11",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "18 − 10 = ?",
+     "options": [
+      "9",
+      "7",
+      "8",
+      "10"
+     ],
+     "answer": "8",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "18 − 13 = ?",
      "options": [
       "6",
+      "4",
+      "7",
+      "5"
+     ],
+     "answer": "5",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "18 − 17 = ?",
+     "options": [
+      "1",
+      "2",
+      "0",
+      "3"
+     ],
+     "answer": "1",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "19 − 3 = ?",
+     "options": [
+      "17",
+      "16",
+      "15",
+      "18"
+     ],
+     "answer": "16",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "19 − 6 = ?",
+     "options": [
+      "14",
+      "12",
+      "13",
+      "15"
+     ],
+     "answer": "13",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "19 − 9 = ?",
+     "options": [
+      "11",
+      "9",
+      "12",
+      "10"
+     ],
+     "answer": "10",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "19 − 12 = ?",
+     "options": [
+      "7",
+      "8",
+      "6",
+      "9"
+     ],
+     "answer": "7",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "19 − 15 = ?",
+     "options": [
+      "5",
+      "4",
+      "3",
+      "6"
+     ],
+     "answer": "4",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "20 − 1 = ?",
+     "options": [
+      "20",
+      "18",
+      "19",
+      "17"
+     ],
+     "answer": "19",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "20 − 4 = ?",
+     "options": [
+      "17",
+      "15",
+      "18",
+      "16"
+     ],
+     "answer": "16",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "20 − 7 = ?",
+     "options": [
+      "13",
+      "14",
+      "12",
+      "15"
+     ],
+     "answer": "13",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "20 − 10 = ?",
+     "options": [
+      "11",
+      "10",
+      "9",
+      "12"
+     ],
+     "answer": "10",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "20 − 13 = ?",
+     "options": [
+      "8",
+      "6",
+      "7",
+      "9"
+     ],
+     "answer": "7",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "20 − 16 = ?",
+     "options": [
+      "5",
+      "3",
+      "6",
+      "4"
+     ],
+     "answer": "4",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "1 + （ ）= 2",
+     "options": [
+      "1",
+      "2",
+      "0",
+      "3"
+     ],
+     "answer": "1",
+     "hint": "想一想：2 里面去掉 1 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "1 + （ ）= 6",
+     "options": [
+      "6",
+      "5",
+      "4",
+      "7"
+     ],
+     "answer": "5",
+     "hint": "想一想：6 里面去掉 1 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "1 + （ ）= 11",
+     "options": [
+      "11",
+      "9",
+      "10",
+      "12"
+     ],
+     "answer": "10",
+     "hint": "想一想：11 里面去掉 1 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "1 + （ ）= 16",
+     "options": [
+      "16",
+      "14",
+      "17",
+      "15"
+     ],
+     "answer": "15",
+     "hint": "想一想：16 里面去掉 1 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "2 + （ ）= 3",
+     "options": [
+      "1",
+      "2",
+      "0",
+      "3"
+     ],
+     "answer": "1",
+     "hint": "想一想：3 里面去掉 2 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "2 + （ ）= 7",
+     "options": [
+      "6",
+      "5",
+      "4",
+      "7"
+     ],
+     "answer": "5",
+     "hint": "想一想：7 里面去掉 2 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "2 + （ ）= 12",
+     "options": [
+      "11",
+      "9",
+      "10",
+      "12"
+     ],
+     "answer": "10",
+     "hint": "想一想：12 里面去掉 2 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "2 + （ ）= 17",
+     "options": [
+      "16",
+      "14",
+      "17",
+      "15"
+     ],
+     "answer": "15",
+     "hint": "想一想：17 里面去掉 2 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "3 + （ ）= 5",
+     "options": [
+      "2",
       "3",
       "1",
       "4"
      ],
-     "answer": "4",
-     "hint": "想一想：17 里面去掉 13 还剩多少"
+     "answer": "2",
+     "hint": "想一想：5 里面去掉 3 还剩多少"
     },
     {
      "subject": "math",
      "type": "choice",
      "level": 2,
-     "stem": "7 + （ ）= 14",
+     "stem": "3 + （ ）= 9",
+     "options": [
+      "7",
+      "6",
+      "5",
+      "8"
+     ],
+     "answer": "6",
+     "hint": "想一想：9 里面去掉 3 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "3 + （ ）= 14",
+     "options": [
+      "12",
+      "10",
+      "11",
+      "13"
+     ],
+     "answer": "11",
+     "hint": "想一想：14 里面去掉 3 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "3 + （ ）= 19",
+     "options": [
+      "17",
+      "15",
+      "18",
+      "16"
+     ],
+     "answer": "16",
+     "hint": "想一想：19 里面去掉 3 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "4 + （ ）= 8",
+     "options": [
+      "4",
+      "5",
+      "3",
+      "6"
+     ],
+     "answer": "4",
+     "hint": "想一想：8 里面去掉 4 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "4 + （ ）= 12",
      "options": [
       "9",
+      "8",
       "7",
-      "5",
       "10"
      ],
-     "answer": "7",
-     "hint": "想一想：14 里面去掉 7 还剩多少"
+     "answer": "8",
+     "hint": "想一想：12 里面去掉 4 还剩多少"
     },
     {
      "subject": "math",
      "type": "choice",
      "level": 2,
-     "stem": "2 + （ ）= 4",
+     "stem": "4 + （ ）= 17",
      "options": [
-      "0",
-      "2",
-      "5",
-      "1"
+      "14",
+      "12",
+      "13",
+      "15"
+     ],
+     "answer": "13",
+     "hint": "想一想：17 里面去掉 4 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "5 + （ ）= 7",
+     "options": [
+      "3",
+      "1",
+      "4",
+      "2"
      ],
      "answer": "2",
-     "hint": "想一想：4 里面去掉 2 还剩多少"
+     "hint": "想一想：7 里面去掉 5 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "5 + （ ）= 12",
+     "options": [
+      "7",
+      "8",
+      "6",
+      "9"
+     ],
+     "answer": "7",
+     "hint": "想一想：12 里面去掉 5 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "5 + （ ）= 16",
+     "options": [
+      "12",
+      "11",
+      "10",
+      "13"
+     ],
+     "answer": "11",
+     "hint": "想一想：16 里面去掉 5 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "6 + （ ）= 7",
+     "options": [
+      "2",
+      "0",
+      "1",
+      "3"
+     ],
+     "answer": "1",
+     "hint": "想一想：7 里面去掉 6 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "6 + （ ）= 12",
+     "options": [
+      "7",
+      "5",
+      "8",
+      "6"
+     ],
+     "answer": "6",
+     "hint": "想一想：12 里面去掉 6 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "6 + （ ）= 17",
+     "options": [
+      "11",
+      "12",
+      "10",
+      "13"
+     ],
+     "answer": "11",
+     "hint": "想一想：17 里面去掉 6 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "7 + （ ）= 8",
+     "options": [
+      "2",
+      "1",
+      "0",
+      "3"
+     ],
+     "answer": "1",
+     "hint": "想一想：8 里面去掉 7 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "7 + （ ）= 13",
+     "options": [
+      "7",
+      "5",
+      "6",
+      "8"
+     ],
+     "answer": "6",
+     "hint": "想一想：13 里面去掉 7 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "7 + （ ）= 18",
+     "options": [
+      "12",
+      "10",
+      "13",
+      "11"
+     ],
+     "answer": "11",
+     "hint": "想一想：18 里面去掉 7 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "8 + （ ）= 11",
+     "options": [
+      "3",
+      "4",
+      "2",
+      "5"
+     ],
+     "answer": "3",
+     "hint": "想一想：11 里面去掉 8 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "8 + （ ）= 15",
+     "options": [
+      "8",
+      "7",
+      "6",
+      "9"
+     ],
+     "answer": "7",
+     "hint": "想一想：15 里面去掉 8 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "8 + （ ）= 20",
+     "options": [
+      "13",
+      "11",
+      "12",
+      "14"
+     ],
+     "answer": "12",
+     "hint": "想一想：20 里面去掉 8 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "9 + （ ）= 14",
+     "options": [
+      "6",
+      "4",
+      "7",
+      "5"
+     ],
+     "answer": "5",
+     "hint": "想一想：14 里面去掉 9 还剩多少"
     },
     {
      "subject": "math",
@@ -2917,9 +4611,9 @@
      "level": 2,
      "stem": "9 + （ ）= 19",
      "options": [
-      "7",
       "10",
       "11",
+      "9",
       "12"
      ],
      "answer": "10",
@@ -2929,110 +4623,12 @@
      "subject": "math",
      "type": "choice",
      "level": 2,
-     "stem": "4 + （ ）= 20",
-     "options": [
-      "15",
-      "19",
-      "17",
-      "16"
-     ],
-     "answer": "16",
-     "hint": "想一想：20 里面去掉 4 还剩多少"
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 2,
-     "stem": "4 + （ ）= 6",
-     "options": [
-      "2",
-      "1",
-      "5",
-      "3"
-     ],
-     "answer": "2",
-     "hint": "想一想：6 里面去掉 4 还剩多少"
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 2,
-     "stem": "4 + （ ）= 16",
-     "options": [
-      "10",
-      "12",
-      "11",
-      "14"
-     ],
-     "answer": "12",
-     "hint": "想一想：16 里面去掉 4 还剩多少"
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 2,
-     "stem": "11 + （ ）= 15",
-     "options": [
-      "6",
-      "5",
-      "14",
-      "4"
-     ],
-     "answer": "4",
-     "hint": "想一想：15 里面去掉 11 还剩多少"
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 2,
-     "stem": "5 + （ ）= 17",
-     "options": [
-      "9",
-      "2",
-      "12",
-      "13"
-     ],
-     "answer": "12",
-     "hint": "想一想：17 里面去掉 5 还剩多少"
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 2,
-     "stem": "5 + （ ）= 13",
-     "options": [
-      "6",
-      "8",
-      "11",
-      "5"
-     ],
-     "answer": "8",
-     "hint": "想一想：13 里面去掉 5 还剩多少"
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 2,
-     "stem": "5 + （ ）= 13",
-     "options": [
-      "7",
-      "6",
-      "8",
-      "18"
-     ],
-     "answer": "8",
-     "hint": "想一想：13 里面去掉 5 还剩多少"
-    },
-    {
-     "subject": "math",
-     "type": "choice",
-     "level": 2,
      "stem": "10 + （ ）= 13",
      "options": [
-      "6",
-      "3",
       "4",
-      "1"
+      "3",
+      "2",
+      "5"
      ],
      "answer": "3",
      "hint": "想一想：13 里面去掉 10 还剩多少"
@@ -3041,57 +4637,141 @@
      "subject": "math",
      "type": "choice",
      "level": 2,
-     "stem": "2 + （ ）= 13",
+     "stem": "10 + （ ）= 18",
      "options": [
-      "10",
-      "11",
-      "14",
-      "12"
+      "9",
+      "7",
+      "8",
+      "10"
      ],
-     "answer": "11",
-     "hint": "想一想：13 里面去掉 2 还剩多少"
+     "answer": "8",
+     "hint": "想一想：18 里面去掉 10 还剩多少"
     },
     {
      "subject": "math",
      "type": "choice",
      "level": 2,
-     "stem": "13 + （ ）= 15",
+     "stem": "11 + （ ）= 14",
      "options": [
-      "5",
       "4",
-      "1",
-      "2"
+      "2",
+      "5",
+      "3"
      ],
-     "answer": "2",
-     "hint": "想一想：15 里面去掉 13 还剩多少"
+     "answer": "3",
+     "hint": "想一想：14 里面去掉 11 还剩多少"
     },
     {
      "subject": "math",
      "type": "choice",
      "level": 2,
-     "stem": "2 + （ ）= 3",
+     "stem": "11 + （ ）= 19",
+     "options": [
+      "8",
+      "9",
+      "7",
+      "10"
+     ],
+     "answer": "8",
+     "hint": "想一想：19 里面去掉 11 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "12 + （ ）= 15",
+     "options": [
+      "4",
+      "3",
+      "2",
+      "5"
+     ],
+     "answer": "3",
+     "hint": "想一想：15 里面去掉 12 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "12 + （ ）= 20",
+     "options": [
+      "9",
+      "7",
+      "8",
+      "10"
+     ],
+     "answer": "8",
+     "hint": "想一想：20 里面去掉 12 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "13 + （ ）= 18",
+     "options": [
+      "6",
+      "4",
+      "7",
+      "5"
+     ],
+     "answer": "5",
+     "hint": "想一想：18 里面去掉 13 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "14 + （ ）= 17",
+     "options": [
+      "3",
+      "4",
+      "2",
+      "5"
+     ],
+     "answer": "3",
+     "hint": "想一想：17 里面去掉 14 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "15 + （ ）= 16",
      "options": [
       "2",
       "1",
       "0",
-      "4"
+      "3"
      ],
      "answer": "1",
-     "hint": "想一想：3 里面去掉 2 还剩多少"
+     "hint": "想一想：16 里面去掉 15 还剩多少"
     },
     {
      "subject": "math",
      "type": "choice",
      "level": 2,
-     "stem": "14 + （ ）= 16",
+     "stem": "16 + （ ）= 17",
      "options": [
-      "1",
-      "5",
+      "2",
       "0",
+      "1",
+      "3"
+     ],
+     "answer": "1",
+     "hint": "想一想：17 里面去掉 16 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "17 + （ ）= 19",
+     "options": [
+      "3",
+      "1",
+      "4",
       "2"
      ],
      "answer": "2",
-     "hint": "想一想：16 里面去掉 14 还剩多少"
+     "hint": "想一想：19 里面去掉 17 还剩多少"
     }
    ]
   },
@@ -3106,10 +4786,10 @@
      "level": 1,
      "stem": "「Kipper」是什么意思？",
      "options": [
-      "泰迪熊",
-      "秋千",
+      "花",
+      "牛奶",
       "基珀（人名）",
-      "蓝色"
+      "黄色"
      ],
      "answer": "基珀（人名）",
      "hint": ""
@@ -3120,10 +4800,10 @@
      "level": 1,
      "stem": "「Chip」是什么意思？",
      "options": [
-      "盒子",
+      "面包",
+      "睡觉",
       "奇普（人名）",
-      "比夫（人名）",
-      "门"
+      "球"
      ],
      "answer": "奇普（人名）",
      "hint": ""
@@ -3134,10 +4814,10 @@
      "level": 1,
      "stem": "「Biff」是什么意思？",
      "options": [
-      "公园",
-      "书",
-      "吃",
-      "比夫（人名）"
+      "商店",
+      "比夫（人名）",
+      "蛋糕",
+      "黄色"
      ],
      "answer": "比夫（人名）",
      "hint": ""
@@ -3148,10 +4828,10 @@
      "level": 1,
      "stem": "「Floppy」是什么意思？",
      "options": [
+      "奇普（人名）",
       "小狗弗洛皮",
-      "跑",
-      "面包",
-      "跳"
+      "雪",
+      "窗户"
      ],
      "answer": "小狗弗洛皮",
      "hint": ""
@@ -3162,10 +4842,10 @@
      "level": 1,
      "stem": "「Mum」是什么意思？",
      "options": [
-      "床",
+      "鸟",
+      "球",
       "妈妈",
-      "勺子",
-      "椅子"
+      "滑梯"
      ],
      "answer": "妈妈",
      "hint": ""
@@ -3176,10 +4856,10 @@
      "level": 1,
      "stem": "「Dad」是什么意思？",
      "options": [
-      "比夫（人名）",
-      "奇普（人名）",
-      "爸爸",
-      "滑梯"
+      "雨",
+      "跳",
+      "水",
+      "爸爸"
      ],
      "answer": "爸爸",
      "hint": ""
@@ -3190,10 +4870,10 @@
      "level": 1,
      "stem": "「dog」是什么意思？",
      "options": [
-      "公园",
-      "鸟",
       "狗",
-      "球"
+      "雨",
+      "小狗弗洛皮",
+      "红色"
      ],
      "answer": "狗",
      "hint": ""
@@ -3204,10 +4884,10 @@
      "level": 1,
      "stem": "「cat」是什么意思？",
      "options": [
-      "球",
-      "大的",
-      "商店",
-      "猫"
+      "猫",
+      "滑梯",
+      "水",
+      "妈妈"
      ],
      "answer": "猫",
      "hint": ""
@@ -3218,10 +4898,10 @@
      "level": 1,
      "stem": "「ball」是什么意思？",
      "options": [
-      "奇普（人名）",
-      "花",
-      "洗澡",
-      "球"
+      "球",
+      "盒子",
+      "帽子",
+      "苹果"
      ],
      "answer": "球",
      "hint": ""
@@ -3232,10 +4912,10 @@
      "level": 1,
      "stem": "「tree」是什么意思？",
      "options": [
-      "黄色",
-      "盒子",
-      "猫",
-      "树"
+      "喝",
+      "树",
+      "基珀（人名）",
+      "钢笔"
      ],
      "answer": "树",
      "hint": ""
@@ -3246,10 +4926,10 @@
      "level": 1,
      "stem": "「house」是什么意思？",
      "options": [
-      "房子",
-      "奇普（人名）",
-      "书包",
-      "床"
+      "商店",
+      "面包",
+      "学校",
+      "房子"
      ],
      "answer": "房子",
      "hint": ""
@@ -3260,10 +4940,10 @@
      "level": 1,
      "stem": "「car」是什么意思？",
      "options": [
+      "洗澡",
+      "雪",
       "汽车",
-      "苹果",
-      "杯子",
-      "鸡蛋"
+      "树"
      ],
      "answer": "汽车",
      "hint": ""
@@ -3274,10 +4954,10 @@
      "level": 1,
      "stem": "「cake」是什么意思？",
      "options": [
-      "秋千",
-      "比夫（人名）",
-      "书包",
-      "蛋糕"
+      "雨",
+      "桌子",
+      "蛋糕",
+      "妈妈"
      ],
      "answer": "蛋糕",
      "hint": ""
@@ -3288,10 +4968,10 @@
      "level": 1,
      "stem": "「water」是什么意思？",
      "options": [
-      "水",
-      "黄色",
-      "看见",
-      "房子"
+      "玩",
+      "泰迪熊",
+      "青蛙",
+      "水"
      ],
      "answer": "水",
      "hint": ""
@@ -3302,10 +4982,10 @@
      "level": 1,
      "stem": "「milk」是什么意思？",
      "options": [
-      "基珀（人名）",
-      "帽子",
-      "小的",
-      "牛奶"
+      "窗户",
+      "树",
+      "牛奶",
+      "睡觉"
      ],
      "answer": "牛奶",
      "hint": ""
@@ -3316,10 +4996,10 @@
      "level": 1,
      "stem": "「apple」是什么意思？",
      "options": [
-      "帮忙",
-      "小狗弗洛皮",
-      "门",
-      "苹果"
+      "玩",
+      "苹果",
+      "奇普（人名）",
+      "泰迪熊"
      ],
      "answer": "苹果",
      "hint": ""
@@ -3330,10 +5010,10 @@
      "level": 1,
      "stem": "「teddy」是什么意思？",
      "options": [
-      "商店",
+      "雨",
       "泰迪熊",
-      "大的",
-      "小的"
+      "树",
+      "鱼"
      ],
      "answer": "泰迪熊",
      "hint": ""
@@ -3344,10 +5024,10 @@
      "level": 1,
      "stem": "「box」是什么意思？",
      "options": [
-      "太阳",
+      "牛奶",
+      "看见",
       "盒子",
-      "比夫（人名）",
-      "奇普（人名）"
+      "睡觉"
      ],
      "answer": "盒子",
      "hint": ""
@@ -3358,10 +5038,10 @@
      "level": 1,
      "stem": "「bag」是什么意思？",
      "options": [
-      "面包",
-      "书包",
-      "绿色",
-      "小的"
+      "来",
+      "鸟",
+      "雨",
+      "书包"
      ],
      "answer": "书包",
      "hint": ""
@@ -3372,9 +5052,9 @@
      "level": 1,
      "stem": "「hat」是什么意思？",
      "options": [
-      "蛋糕",
-      "水",
-      "桌子",
+      "椅子",
+      "秋千",
+      "鸟",
       "帽子"
      ],
      "answer": "帽子",
@@ -3386,10 +5066,10 @@
      "level": 1,
      "stem": "「bed」是什么意思？",
      "options": [
-      "牛奶",
+      "青蛙",
+      "树",
       "床",
-      "书包",
-      "看见"
+      "商店"
      ],
      "answer": "床",
      "hint": ""
@@ -3400,10 +5080,10 @@
      "level": 1,
      "stem": "「door」是什么意思？",
      "options": [
+      "花园",
+      "书包",
       "门",
-      "黄色",
-      "钢笔",
-      "公园"
+      "秋千"
      ],
      "answer": "门",
      "hint": ""
@@ -3414,10 +5094,10 @@
      "level": 1,
      "stem": "「bird」是什么意思？",
      "options": [
-      "绿色",
-      "看",
+      "床",
       "鸟",
-      "奇普（人名）"
+      "窗户",
+      "吃"
      ],
      "answer": "鸟",
      "hint": ""
@@ -3428,10 +5108,10 @@
      "level": 1,
      "stem": "「fish」是什么意思？",
      "options": [
-      "花",
-      "书包",
-      "盒子",
-      "鱼"
+      "鱼",
+      "帽子",
+      "看",
+      "窗户"
      ],
      "answer": "鱼",
      "hint": ""
@@ -3442,10 +5122,10 @@
      "level": 1,
      "stem": "「duck」是什么意思？",
      "options": [
-      "书",
-      "树",
       "鸭子",
-      "牛奶"
+      "猫",
+      "青蛙",
+      "花园"
      ],
      "answer": "鸭子",
      "hint": ""
@@ -3456,10 +5136,10 @@
      "level": 1,
      "stem": "「egg」是什么意思？",
      "options": [
-      "洗澡",
-      "吃",
-      "鸡蛋",
-      "雪"
+      "商店",
+      "雨",
+      "小的",
+      "鸡蛋"
      ],
      "answer": "鸡蛋",
      "hint": ""
@@ -3470,10 +5150,10 @@
      "level": 2,
      "stem": "「sun」是什么意思？",
      "options": [
-      "奇普（人名）",
-      "泰迪熊",
+      "大的",
+      "帽子",
       "太阳",
-      "绿色"
+      "杯子"
      ],
      "answer": "太阳",
      "hint": ""
@@ -3484,10 +5164,10 @@
      "level": 2,
      "stem": "「rain」是什么意思？",
      "options": [
+      "花",
       "雨",
-      "盒子",
-      "雪",
-      "牛奶"
+      "来",
+      "床"
      ],
      "answer": "雨",
      "hint": ""
@@ -3498,10 +5178,10 @@
      "level": 2,
      "stem": "「snow」是什么意思？",
      "options": [
-      "汽车",
-      "猫",
-      "玩",
-      "雪"
+      "雪",
+      "门",
+      "滑梯",
+      "看见"
      ],
      "answer": "雪",
      "hint": ""
@@ -3512,10 +5192,10 @@
      "level": 2,
      "stem": "「park」是什么意思？",
      "options": [
-      "公园",
+      "太阳",
+      "狗",
       "大的",
-      "桌子",
-      "学校"
+      "公园"
      ],
      "answer": "公园",
      "hint": ""
@@ -3526,10 +5206,10 @@
      "level": 2,
      "stem": "「school」是什么意思？",
      "options": [
-      "学校",
-      "球",
-      "大的",
-      "洗澡"
+      "蛋糕",
+      "绿色",
+      "牛奶",
+      "学校"
      ],
      "answer": "学校",
      "hint": ""
@@ -3540,10 +5220,10 @@
      "level": 2,
      "stem": "「shop」是什么意思？",
      "options": [
-      "鸭子",
+      "花园",
+      "滑梯",
       "商店",
-      "房子",
-      "勺子"
+      "小狗弗洛皮"
      ],
      "answer": "商店",
      "hint": ""
@@ -3554,10 +5234,10 @@
      "level": 2,
      "stem": "「garden」是什么意思？",
      "options": [
-      "树",
-      "房子",
       "花园",
-      "球"
+      "帮忙",
+      "学校",
+      "房子"
      ],
      "answer": "花园",
      "hint": ""
@@ -3568,10 +5248,10 @@
      "level": 2,
      "stem": "「flower」是什么意思？",
      "options": [
-      "花",
-      "红色",
-      "青蛙",
-      "窗户"
+      "玩",
+      "蓝色",
+      "房子",
+      "花"
      ],
      "answer": "花",
      "hint": ""
@@ -3582,10 +5262,10 @@
      "level": 2,
      "stem": "「window」是什么意思？",
      "options": [
-      "球",
+      "雪",
       "窗户",
-      "看见",
-      "汽车"
+      "青蛙",
+      "秋千"
      ],
      "answer": "窗户",
      "hint": ""
@@ -3596,10 +5276,10 @@
      "level": 2,
      "stem": "「chair」是什么意思？",
      "options": [
+      "雪",
+      "奇普（人名）",
       "椅子",
-      "爸爸",
-      "房子",
-      "跑"
+      "小的"
      ],
      "answer": "椅子",
      "hint": ""
@@ -3610,10 +5290,10 @@
      "level": 2,
      "stem": "「table」是什么意思？",
      "options": [
-      "红色",
       "桌子",
-      "喝",
-      "来"
+      "花园",
+      "鱼",
+      "看"
      ],
      "answer": "桌子",
      "hint": ""
@@ -3624,10 +5304,10 @@
      "level": 2,
      "stem": "「spoon」是什么意思？",
      "options": [
-      "玩",
-      "椅子",
+      "青蛙",
       "勺子",
-      "盒子"
+      "苹果",
+      "猫"
      ],
      "answer": "勺子",
      "hint": ""
@@ -3638,10 +5318,10 @@
      "level": 2,
      "stem": "「cup」是什么意思？",
      "options": [
-      "蛋糕",
-      "水",
-      "洗澡",
-      "杯子"
+      "睡觉",
+      "钢笔",
+      "杯子",
+      "牛奶"
      ],
      "answer": "杯子",
      "hint": ""
@@ -3652,10 +5332,10 @@
      "level": 2,
      "stem": "「bread」是什么意思？",
      "options": [
-      "大的",
-      "面包",
-      "蛋糕",
-      "牛奶"
+      "床",
+      "青蛙",
+      "牛奶",
+      "面包"
      ],
      "answer": "面包",
      "hint": ""
@@ -3666,9 +5346,9 @@
      "level": 2,
      "stem": "「book」是什么意思？",
      "options": [
-      "洗澡",
-      "蓝色",
-      "花",
+      "滑梯",
+      "青蛙",
+      "蛋糕",
       "书"
      ],
      "answer": "书",
@@ -3680,10 +5360,10 @@
      "level": 2,
      "stem": "「pen」是什么意思？",
      "options": [
-      "房子",
-      "面包",
-      "水",
-      "钢笔"
+      "书",
+      "来",
+      "钢笔",
+      "大的"
      ],
      "answer": "钢笔",
      "hint": ""
@@ -3694,10 +5374,10 @@
      "level": 2,
      "stem": "「swing」是什么意思？",
      "options": [
-      "小的",
-      "秋千",
-      "花园",
-      "书"
+      "雨",
+      "青蛙",
+      "牛奶",
+      "秋千"
      ],
      "answer": "秋千",
      "hint": ""
@@ -3708,10 +5388,10 @@
      "level": 2,
      "stem": "「slide」是什么意思？",
      "options": [
-      "基珀（人名）",
+      "小狗弗洛皮",
       "滑梯",
-      "面包",
-      "小狗弗洛皮"
+      "大的",
+      "黄色"
      ],
      "answer": "滑梯",
      "hint": ""
@@ -3722,10 +5402,10 @@
      "level": 2,
      "stem": "「frog」是什么意思？",
      "options": [
-      "商店",
       "青蛙",
-      "书",
-      "花园"
+      "鸡蛋",
+      "比夫（人名）",
+      "跳"
      ],
      "answer": "青蛙",
      "hint": ""
@@ -3736,10 +5416,10 @@
      "level": 2,
      "stem": "「bath」是什么意思？",
      "options": [
-      "书包",
+      "来",
+      "泰迪熊",
       "洗澡",
-      "雪",
-      "泰迪熊"
+      "大的"
      ],
      "answer": "洗澡",
      "hint": ""
@@ -3750,10 +5430,10 @@
      "level": 3,
      "stem": "「big」是什么意思？",
      "options": [
-      "狗",
-      "床",
-      "公园",
-      "大的"
+      "大的",
+      "滑梯",
+      "看见",
+      "面包"
      ],
      "answer": "大的",
      "hint": ""
@@ -3764,10 +5444,10 @@
      "level": 3,
      "stem": "「small」是什么意思？",
      "options": [
-      "小的",
-      "牛奶",
-      "雪",
-      "蓝色"
+      "玩",
+      "奇普（人名）",
+      "跑",
+      "小的"
      ],
      "answer": "小的",
      "hint": ""
@@ -3778,10 +5458,10 @@
      "level": 3,
      "stem": "「red」是什么意思？",
      "options": [
-      "床",
+      "跑",
       "红色",
-      "苹果",
-      "盒子"
+      "鸟",
+      "鸭子"
      ],
      "answer": "红色",
      "hint": ""
@@ -3793,9 +5473,9 @@
      "stem": "「blue」是什么意思？",
      "options": [
       "蓝色",
-      "窗户",
-      "勺子",
-      "小的"
+      "小的",
+      "帮忙",
+      "狗"
      ],
      "answer": "蓝色",
      "hint": ""
@@ -3806,10 +5486,10 @@
      "level": 3,
      "stem": "「green」是什么意思？",
      "options": [
-      "绿色",
+      "勺子",
       "水",
-      "滑梯",
-      "窗户"
+      "绿色",
+      "盒子"
      ],
      "answer": "绿色",
      "hint": ""
@@ -3820,10 +5500,10 @@
      "level": 3,
      "stem": "「yellow」是什么意思？",
      "options": [
-      "钢笔",
-      "商店",
-      "雨",
-      "黄色"
+      "鸡蛋",
+      "黄色",
+      "奇普（人名）",
+      "帮忙"
      ],
      "answer": "黄色",
      "hint": ""
@@ -3835,9 +5515,9 @@
      "stem": "「look」是什么意思？",
      "options": [
       "看",
-      "床",
+      "房子",
       "基珀（人名）",
-      "商店"
+      "泰迪熊"
      ],
      "answer": "看",
      "hint": ""
@@ -3848,9 +5528,9 @@
      "level": 3,
      "stem": "「come」是什么意思？",
      "options": [
-      "看",
-      "喝",
-      "太阳",
+      "蛋糕",
+      "基珀（人名）",
+      "商店",
       "来"
      ],
      "answer": "来",
@@ -3862,10 +5542,10 @@
      "level": 3,
      "stem": "「see」是什么意思？",
      "options": [
-      "小狗弗洛皮",
-      "看见",
-      "妈妈",
-      "蛋糕"
+      "鸡蛋",
+      "房子",
+      "树",
+      "看见"
      ],
      "answer": "看见",
      "hint": ""
@@ -3876,10 +5556,10 @@
      "level": 3,
      "stem": "「jump」是什么意思？",
      "options": [
-      "太阳",
-      "猫",
-      "睡觉",
-      "跳"
+      "跳",
+      "比夫（人名）",
+      "鸭子",
+      "蓝色"
      ],
      "answer": "跳",
      "hint": ""
@@ -3891,9 +5571,9 @@
      "stem": "「play」是什么意思？",
      "options": [
       "玩",
-      "学校",
-      "猫",
-      "盒子"
+      "吃",
+      "秋千",
+      "书"
      ],
      "answer": "玩",
      "hint": ""
@@ -3904,10 +5584,10 @@
      "level": 3,
      "stem": "「sleep」是什么意思？",
      "options": [
+      "蛋糕",
       "睡觉",
-      "跑",
-      "鸟",
-      "喝"
+      "鸭子",
+      "鸡蛋"
      ],
      "answer": "睡觉",
      "hint": ""
@@ -3918,10 +5598,10 @@
      "level": 3,
      "stem": "「eat」是什么意思？",
      "options": [
-      "桌子",
-      "狗",
-      "来",
-      "吃"
+      "雪",
+      "吃",
+      "玩",
+      "钢笔"
      ],
      "answer": "吃",
      "hint": ""
@@ -3932,10 +5612,10 @@
      "level": 3,
      "stem": "「drink」是什么意思？",
      "options": [
-      "看",
-      "秋千",
       "喝",
-      "苹果"
+      "牛奶",
+      "滑梯",
+      "蛋糕"
      ],
      "answer": "喝",
      "hint": ""
@@ -3946,10 +5626,10 @@
      "level": 3,
      "stem": "「help」是什么意思？",
      "options": [
-      "公园",
-      "帮忙",
-      "小的",
-      "房子"
+      "黄色",
+      "猫",
+      "房子",
+      "帮忙"
      ],
      "answer": "帮忙",
      "hint": ""
@@ -3960,10 +5640,10 @@
      "level": 3,
      "stem": "「run」是什么意思？",
      "options": [
-      "奇普（人名）",
-      "妈妈",
       "跑",
-      "来"
+      "花园",
+      "雪",
+      "商店"
      ],
      "answer": "跑",
      "hint": ""
@@ -3974,10 +5654,10 @@
      "level": 1,
      "stem": "「基珀（人名）」用英语怎么说？",
      "options": [
-      "big",
+      "frog",
+      "Floppy",
       "Kipper",
-      "door",
-      "egg"
+      "look"
      ],
      "answer": "Kipper",
      "hint": ""
@@ -3988,10 +5668,10 @@
      "level": 1,
      "stem": "「奇普（人名）」用英语怎么说？",
      "options": [
-      "window",
       "Chip",
-      "Kipper",
-      "bath"
+      "water",
+      "school",
+      "Floppy"
      ],
      "answer": "Chip",
      "hint": ""
@@ -4002,10 +5682,10 @@
      "level": 1,
      "stem": "「比夫（人名）」用英语怎么说？",
      "options": [
-      "green",
+      "Chip",
+      "apple",
       "Biff",
-      "red",
-      "small"
+      "door"
      ],
      "answer": "Biff",
      "hint": ""
@@ -4016,10 +5696,10 @@
      "level": 1,
      "stem": "「小狗弗洛皮」用英语怎么说？",
      "options": [
-      "slide",
+      "jump",
       "Floppy",
-      "run",
-      "snow"
+      "Mum",
+      "chair"
      ],
      "answer": "Floppy",
      "hint": ""
@@ -4030,10 +5710,10 @@
      "level": 1,
      "stem": "「妈妈」用英语怎么说？",
      "options": [
-      "swing",
-      "tree",
-      "Mum",
-      "frog"
+      "yellow",
+      "chair",
+      "dog",
+      "Mum"
      ],
      "answer": "Mum",
      "hint": ""
@@ -4044,10 +5724,10 @@
      "level": 1,
      "stem": "「爸爸」用英语怎么说？",
      "options": [
-      "apple",
-      "jump",
+      "table",
       "Dad",
-      "cat"
+      "school",
+      "chair"
      ],
      "answer": "Dad",
      "hint": ""
@@ -4058,10 +5738,10 @@
      "level": 1,
      "stem": "「狗」用英语怎么说？",
      "options": [
-      "dog",
-      "come",
-      "see",
-      "apple"
+      "Kipper",
+      "play",
+      "bird",
+      "dog"
      ],
      "answer": "dog",
      "hint": ""
@@ -4072,10 +5752,10 @@
      "level": 1,
      "stem": "「猫」用英语怎么说？",
      "options": [
-      "look",
-      "bag",
+      "cake",
       "cat",
-      "frog"
+      "run",
+      "bread"
      ],
      "answer": "cat",
      "hint": ""
@@ -4086,10 +5766,10 @@
      "level": 1,
      "stem": "「球」用英语怎么说？",
      "options": [
-      "school",
-      "ball",
-      "yellow",
-      "egg"
+      "cup",
+      "sun",
+      "egg",
+      "ball"
      ],
      "answer": "ball",
      "hint": ""
@@ -4100,10 +5780,10 @@
      "level": 1,
      "stem": "「树」用英语怎么说？",
      "options": [
-      "garden",
-      "Floppy",
-      "Chip",
-      "tree"
+      "school",
+      "tree",
+      "water",
+      "egg"
      ],
      "answer": "tree",
      "hint": ""
@@ -4114,10 +5794,10 @@
      "level": 1,
      "stem": "「房子」用英语怎么说？",
      "options": [
-      "flower",
-      "car",
+      "window",
       "house",
-      "hat"
+      "flower",
+      "water"
      ],
      "answer": "house",
      "hint": ""
@@ -4128,10 +5808,10 @@
      "level": 1,
      "stem": "「汽车」用英语怎么说？",
      "options": [
-      "car",
+      "duck",
       "box",
-      "slide",
-      "red"
+      "car",
+      "milk"
      ],
      "answer": "car",
      "hint": ""
@@ -4142,10 +5822,10 @@
      "level": 1,
      "stem": "「蛋糕」用英语怎么说？",
      "options": [
-      "swing",
-      "car",
       "cake",
-      "park"
+      "milk",
+      "sun",
+      "table"
      ],
      "answer": "cake",
      "hint": ""
@@ -4156,10 +5836,10 @@
      "level": 1,
      "stem": "「水」用英语怎么说？",
      "options": [
-      "garden",
-      "bed",
+      "bath",
+      "dog",
       "water",
-      "book"
+      "small"
      ],
      "answer": "water",
      "hint": ""
@@ -4170,10 +5850,10 @@
      "level": 1,
      "stem": "「牛奶」用英语怎么说？",
      "options": [
-      "tree",
-      "rain",
       "milk",
-      "fish"
+      "apple",
+      "door",
+      "look"
      ],
      "answer": "milk",
      "hint": ""
@@ -4184,10 +5864,10 @@
      "level": 1,
      "stem": "「苹果」用英语怎么说？",
      "options": [
+      "cake",
       "apple",
-      "slide",
-      "door",
-      "pen"
+      "spoon",
+      "frog"
      ],
      "answer": "apple",
      "hint": ""
@@ -4198,10 +5878,10 @@
      "level": 1,
      "stem": "「泰迪熊」用英语怎么说？",
      "options": [
-      "egg",
-      "cat",
-      "teddy",
-      "school"
+      "bird",
+      "Kipper",
+      "big",
+      "teddy"
      ],
      "answer": "teddy",
      "hint": ""
@@ -4212,10 +5892,10 @@
      "level": 1,
      "stem": "「盒子」用英语怎么说？",
      "options": [
-      "small",
-      "door",
+      "book",
+      "Biff",
       "box",
-      "look"
+      "pen"
      ],
      "answer": "box",
      "hint": ""
@@ -4227,9 +5907,9 @@
      "stem": "「书包」用英语怎么说？",
      "options": [
       "bag",
-      "jump",
-      "run",
-      "duck"
+      "Kipper",
+      "ball",
+      "flower"
      ],
      "answer": "bag",
      "hint": ""
@@ -4240,10 +5920,10 @@
      "level": 1,
      "stem": "「帽子」用英语怎么说？",
      "options": [
-      "eat",
-      "sun",
+      "table",
+      "Chip",
       "hat",
-      "Dad"
+      "swing"
      ],
      "answer": "hat",
      "hint": ""
@@ -4254,10 +5934,10 @@
      "level": 1,
      "stem": "「床」用英语怎么说？",
      "options": [
-      "rain",
-      "bed",
-      "cup",
-      "fish"
+      "fish",
+      "tree",
+      "Floppy",
+      "bed"
      ],
      "answer": "bed",
      "hint": ""
@@ -4269,9 +5949,9 @@
      "stem": "「门」用英语怎么说？",
      "options": [
       "door",
-      "small",
-      "big",
-      "box"
+      "bread",
+      "Biff",
+      "tree"
      ],
      "answer": "door",
      "hint": ""
@@ -4282,10 +5962,10 @@
      "level": 1,
      "stem": "「鸟」用英语怎么说？",
      "options": [
-      "look",
-      "jump",
-      "Mum",
-      "bird"
+      "pen",
+      "apple",
+      "bird",
+      "water"
      ],
      "answer": "bird",
      "hint": ""
@@ -4296,10 +5976,10 @@
      "level": 1,
      "stem": "「鱼」用英语怎么说？",
      "options": [
-      "small",
+      "Chip",
       "fish",
-      "egg",
-      "bath"
+      "jump",
+      "apple"
      ],
      "answer": "fish",
      "hint": ""
@@ -4310,10 +5990,10 @@
      "level": 1,
      "stem": "「鸭子」用英语怎么说？",
      "options": [
-      "box",
+      "cake",
+      "bird",
       "duck",
-      "Floppy",
-      "flower"
+      "drink"
      ],
      "answer": "duck",
      "hint": ""
@@ -4324,10 +6004,10 @@
      "level": 1,
      "stem": "「鸡蛋」用英语怎么说？",
      "options": [
-      "teddy",
-      "cat",
+      "small",
       "egg",
-      "sleep"
+      "apple",
+      "Mum"
      ],
      "answer": "egg",
      "hint": ""
@@ -4339,9 +6019,9 @@
      "stem": "「太阳」用英语怎么说？",
      "options": [
       "sun",
-      "Chip",
-      "bed",
-      "Floppy"
+      "frog",
+      "yellow",
+      "ball"
      ],
      "answer": "sun",
      "hint": ""
@@ -4352,10 +6032,10 @@
      "level": 2,
      "stem": "「雨」用英语怎么说？",
      "options": [
-      "bag",
-      "hat",
+      "bath",
+      "rain",
       "sun",
-      "rain"
+      "play"
      ],
      "answer": "rain",
      "hint": ""
@@ -4366,10 +6046,10 @@
      "level": 2,
      "stem": "「雪」用英语怎么说？",
      "options": [
-      "apple",
-      "snow",
-      "duck",
-      "chair"
+      "swing",
+      "bag",
+      "Dad",
+      "snow"
      ],
      "answer": "snow",
      "hint": ""
@@ -4380,10 +6060,10 @@
      "level": 2,
      "stem": "「公园」用英语怎么说？",
      "options": [
-      "rain",
+      "box",
       "park",
-      "dog",
-      "Dad"
+      "hat",
+      "come"
      ],
      "answer": "park",
      "hint": ""
@@ -4394,10 +6074,10 @@
      "level": 2,
      "stem": "「学校」用英语怎么说？",
      "options": [
-      "swing",
-      "school",
-      "Biff",
-      "spoon"
+      "sun",
+      "egg",
+      "Kipper",
+      "school"
      ],
      "answer": "school",
      "hint": ""
@@ -4408,10 +6088,10 @@
      "level": 2,
      "stem": "「商店」用英语怎么说？",
      "options": [
-      "Dad",
-      "chair",
-      "shop",
-      "spoon"
+      "bath",
+      "Mum",
+      "slide",
+      "shop"
      ],
      "answer": "shop",
      "hint": ""
@@ -4422,9 +6102,9 @@
      "level": 2,
      "stem": "「花园」用英语怎么说？",
      "options": [
-      "teddy",
-      "Floppy",
-      "fish",
+      "box",
+      "cup",
+      "park",
       "garden"
      ],
      "answer": "garden",
@@ -4436,10 +6116,10 @@
      "level": 2,
      "stem": "「花」用英语怎么说？",
      "options": [
+      "Dad",
+      "bread",
       "flower",
-      "tree",
-      "snow",
-      "Mum"
+      "chair"
      ],
      "answer": "flower",
      "hint": ""
@@ -4450,10 +6130,10 @@
      "level": 2,
      "stem": "「窗户」用英语怎么说？",
      "options": [
-      "red",
-      "help",
-      "window",
-      "play"
+      "shop",
+      "table",
+      "sleep",
+      "window"
      ],
      "answer": "window",
      "hint": ""
@@ -4464,9 +6144,9 @@
      "level": 2,
      "stem": "「椅子」用英语怎么说？",
      "options": [
-      "big",
-      "apple",
-      "cup",
+      "house",
+      "Mum",
+      "bath",
       "chair"
      ],
      "answer": "chair",
@@ -4478,10 +6158,10 @@
      "level": 2,
      "stem": "「桌子」用英语怎么说？",
      "options": [
-      "window",
-      "hat",
+      "Biff",
+      "tree",
       "table",
-      "help"
+      "garden"
      ],
      "answer": "table",
      "hint": ""
@@ -4492,10 +6172,10 @@
      "level": 2,
      "stem": "「勺子」用英语怎么说？",
      "options": [
+      "hat",
       "spoon",
-      "chair",
-      "milk",
-      "yellow"
+      "green",
+      "play"
      ],
      "answer": "spoon",
      "hint": ""
@@ -4506,10 +6186,10 @@
      "level": 2,
      "stem": "「杯子」用英语怎么说？",
      "options": [
-      "pen",
-      "door",
-      "cake",
-      "cup"
+      "bed",
+      "teddy",
+      "cup",
+      "Chip"
      ],
      "answer": "cup",
      "hint": ""
@@ -4520,10 +6200,10 @@
      "level": 2,
      "stem": "「面包」用英语怎么说？",
      "options": [
-      "slide",
-      "bed",
+      "door",
+      "window",
       "bread",
-      "shop"
+      "teddy"
      ],
      "answer": "bread",
      "hint": ""
@@ -4534,10 +6214,10 @@
      "level": 2,
      "stem": "「书」用英语怎么说？",
      "options": [
-      "blue",
-      "school",
+      "egg",
       "book",
-      "table"
+      "red",
+      "flower"
      ],
      "answer": "book",
      "hint": ""
@@ -4548,10 +6228,10 @@
      "level": 2,
      "stem": "「钢笔」用英语怎么说？",
      "options": [
-      "pen",
-      "water",
-      "Floppy",
-      "bed"
+      "blue",
+      "spoon",
+      "door",
+      "pen"
      ],
      "answer": "pen",
      "hint": ""
@@ -4562,10 +6242,10 @@
      "level": 2,
      "stem": "「秋千」用英语怎么说？",
      "options": [
-      "green",
-      "pen",
-      "dog",
-      "swing"
+      "yellow",
+      "swing",
+      "red",
+      "bread"
      ],
      "answer": "swing",
      "hint": ""
@@ -4576,10 +6256,10 @@
      "level": 2,
      "stem": "「滑梯」用英语怎么说？",
      "options": [
-      "cup",
-      "slide",
-      "jump",
-      "window"
+      "park",
+      "bird",
+      "pen",
+      "slide"
      ],
      "answer": "slide",
      "hint": ""
@@ -4590,10 +6270,10 @@
      "level": 2,
      "stem": "「青蛙」用英语怎么说？",
      "options": [
-      "sun",
+      "eat",
+      "Chip",
       "frog",
-      "cake",
-      "spoon"
+      "egg"
      ],
      "answer": "frog",
      "hint": ""
@@ -4605,9 +6285,9 @@
      "stem": "「洗澡」用英语怎么说？",
      "options": [
       "bath",
-      "Chip",
-      "sleep",
-      "eat"
+      "table",
+      "car",
+      "bed"
      ],
      "answer": "bath",
      "hint": ""
@@ -4618,10 +6298,10 @@
      "level": 3,
      "stem": "「大的」用英语怎么说？",
      "options": [
-      "box",
-      "big",
-      "eat",
-      "bed"
+      "bath",
+      "come",
+      "milk",
+      "big"
      ],
      "answer": "big",
      "hint": ""
@@ -4632,10 +6312,10 @@
      "level": 3,
      "stem": "「小的」用英语怎么说？",
      "options": [
-      "bread",
-      "cat",
-      "park",
-      "small"
+      "small",
+      "green",
+      "house",
+      "egg"
      ],
      "answer": "small",
      "hint": ""
@@ -4646,10 +6326,10 @@
      "level": 3,
      "stem": "「红色」用英语怎么说？",
      "options": [
-      "park",
-      "bread",
-      "red",
-      "Chip"
+      "Mum",
+      "book",
+      "sleep",
+      "red"
      ],
      "answer": "red",
      "hint": ""
@@ -4660,10 +6340,10 @@
      "level": 3,
      "stem": "「蓝色」用英语怎么说？",
      "options": [
-      "table",
-      "teddy",
+      "bird",
+      "slide",
       "blue",
-      "Dad"
+      "ball"
      ],
      "answer": "blue",
      "hint": ""
@@ -4674,9 +6354,9 @@
      "level": 3,
      "stem": "「绿色」用英语怎么说？",
      "options": [
-      "window",
-      "blue",
-      "bread",
+      "hat",
+      "drink",
+      "fish",
       "green"
      ],
      "answer": "green",
@@ -4688,10 +6368,10 @@
      "level": 3,
      "stem": "「黄色」用英语怎么说？",
      "options": [
-      "cat",
-      "book",
       "yellow",
-      "duck"
+      "chair",
+      "blue",
+      "Dad"
      ],
      "answer": "yellow",
      "hint": ""
@@ -4702,10 +6382,10 @@
      "level": 3,
      "stem": "「看」用英语怎么说？",
      "options": [
-      "bird",
+      "water",
       "look",
-      "red",
-      "milk"
+      "snow",
+      "small"
      ],
      "answer": "look",
      "hint": ""
@@ -4716,10 +6396,10 @@
      "level": 3,
      "stem": "「来」用英语怎么说？",
      "options": [
-      "come",
-      "play",
-      "Chip",
-      "car"
+      "chair",
+      "water",
+      "slide",
+      "come"
      ],
      "answer": "come",
      "hint": ""
@@ -4730,10 +6410,10 @@
      "level": 3,
      "stem": "「看见」用英语怎么说？",
      "options": [
-      "box",
+      "bed",
       "see",
-      "jump",
-      "car"
+      "drink",
+      "bag"
      ],
      "answer": "see",
      "hint": ""
@@ -4744,10 +6424,10 @@
      "level": 3,
      "stem": "「跳」用英语怎么说？",
      "options": [
-      "door",
-      "spoon",
-      "shop",
-      "jump"
+      "jump",
+      "school",
+      "come",
+      "cake"
      ],
      "answer": "jump",
      "hint": ""
@@ -4758,10 +6438,10 @@
      "level": 3,
      "stem": "「玩」用英语怎么说？",
      "options": [
-      "play",
-      "fish",
-      "duck",
-      "book"
+      "yellow",
+      "slide",
+      "Chip",
+      "play"
      ],
      "answer": "play",
      "hint": ""
@@ -4772,10 +6452,10 @@
      "level": 3,
      "stem": "「睡觉」用英语怎么说？",
      "options": [
-      "bag",
-      "cat",
       "sleep",
-      "house"
+      "teddy",
+      "school",
+      "bird"
      ],
      "answer": "sleep",
      "hint": ""
@@ -4786,10 +6466,10 @@
      "level": 3,
      "stem": "「吃」用英语怎么说？",
      "options": [
-      "Mum",
-      "eat",
-      "see",
-      "fish"
+      "pen",
+      "cat",
+      "hat",
+      "eat"
      ],
      "answer": "eat",
      "hint": ""
@@ -4800,10 +6480,10 @@
      "level": 3,
      "stem": "「喝」用英语怎么说？",
      "options": [
+      "bread",
+      "bath",
       "drink",
-      "look",
-      "fish",
-      "bath"
+      "window"
      ],
      "answer": "drink",
      "hint": ""
@@ -4814,10 +6494,10 @@
      "level": 3,
      "stem": "「帮忙」用英语怎么说？",
      "options": [
-      "dog",
-      "duck",
-      "cup",
-      "help"
+      "swing",
+      "help",
+      "park",
+      "window"
      ],
      "answer": "help",
      "hint": ""
@@ -4828,10 +6508,10 @@
      "level": 3,
      "stem": "「跑」用英语怎么说？",
      "options": [
-      "house",
-      "book",
-      "see",
-      "run"
+      "run",
+      "cup",
+      "help",
+      "milk"
      ],
      "answer": "run",
      "hint": ""
@@ -4841,7 +6521,7 @@
      "type": "spell",
      "level": 1,
      "stem": "补全单词：基珀（人名）",
-     "tpl": "Kipp_r",
+     "tpl": "K_pp_r",
      "answer": "Kipper",
      "options": [],
      "hint": "基珀（人名）"
@@ -4871,7 +6551,7 @@
      "type": "spell",
      "level": 1,
      "stem": "补全单词：小狗弗洛皮",
-     "tpl": "Fl_p_y",
+     "tpl": "Fl__py",
      "answer": "Floppy",
      "options": [],
      "hint": "小狗弗洛皮"
@@ -4941,7 +6621,7 @@
      "type": "spell",
      "level": 1,
      "stem": "补全单词：房子",
-     "tpl": "h_u_e",
+     "tpl": "h__se",
      "answer": "house",
      "options": [],
      "hint": "房子"
@@ -4971,7 +6651,7 @@
      "type": "spell",
      "level": 1,
      "stem": "补全单词：水",
-     "tpl": "wat_r",
+     "tpl": "wa__r",
      "answer": "water",
      "options": [],
      "hint": "水"
@@ -5001,7 +6681,7 @@
      "type": "spell",
      "level": 1,
      "stem": "补全单词：泰迪熊",
-     "tpl": "t_d_y",
+     "tpl": "t_ddy",
      "answer": "teddy",
      "options": [],
      "hint": "泰迪熊"
@@ -5141,7 +6821,7 @@
      "type": "spell",
      "level": 2,
      "stem": "补全单词：学校",
-     "tpl": "scho_l",
+     "tpl": "s_ho_l",
      "answer": "school",
      "options": [],
      "hint": "学校"
@@ -5161,7 +6841,7 @@
      "type": "spell",
      "level": 2,
      "stem": "补全单词：花园",
-     "tpl": "gard_n",
+     "tpl": "g_r_en",
      "answer": "garden",
      "options": [],
      "hint": "花园"
@@ -5171,7 +6851,7 @@
      "type": "spell",
      "level": 2,
      "stem": "补全单词：花",
-     "tpl": "flow_r",
+     "tpl": "fl_wer",
      "answer": "flower",
      "options": [],
      "hint": "花"
@@ -5191,7 +6871,7 @@
      "type": "spell",
      "level": 2,
      "stem": "补全单词：椅子",
-     "tpl": "ch__r",
+     "tpl": "ch_ir",
      "answer": "chair",
      "options": [],
      "hint": "椅子"
@@ -5201,7 +6881,7 @@
      "type": "spell",
      "level": 2,
      "stem": "补全单词：桌子",
-     "tpl": "t_ble",
+     "tpl": "t_b_e",
      "answer": "table",
      "options": [],
      "hint": "桌子"
@@ -5341,7 +7021,7 @@
      "type": "spell",
      "level": 3,
      "stem": "补全单词：绿色",
-     "tpl": "g_e_n",
+     "tpl": "gr__n",
      "answer": "green",
      "options": [],
      "hint": "绿色"
@@ -5361,7 +7041,7 @@
      "type": "spell",
      "level": 3,
      "stem": "补全单词：看",
-     "tpl": "lo_k",
+     "tpl": "l_ok",
      "answer": "look",
      "options": [],
      "hint": "看"
@@ -5431,7 +7111,7 @@
      "type": "spell",
      "level": 3,
      "stem": "补全单词：喝",
-     "tpl": "dr__k",
+     "tpl": "dr_nk",
      "answer": "drink",
      "options": [],
      "hint": "喝"

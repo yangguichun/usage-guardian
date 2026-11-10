@@ -140,6 +140,11 @@ HANZI = [
 
 
 def build_chinese():
+    # ★ 每个题库用自己的固定种子，互不影响。
+    # 全局 seed 只种一次的话，前面哪个题库多抽了几个随机数，
+    # 后面题库的选项顺序就整体错位 —— 改数学题会连带把英语题洗一遍，
+    # 而服务端是按题面比对补题的，能不变就不变。
+    random.seed(20261110)
     qs = []
     for zi, py in HANZI:
         opts = pinyin_distractors(py) + [py]
@@ -171,50 +176,92 @@ def build_chinese():
 
 
 # ---------------------------------------------------------------- 数学
+#
+# ★ 这一套**不许用 random**。
+#
+# 两个原因：
+#  1. 随机抽样会撞题：上一版 80 道题里有 5 道题干重复（"18 + 1 = ?" 出现两次），
+#     孩子连着抽到同一道题，家长会以为题库坏了。
+#  2. `random.seed()` 是全局的。这里少抽几个随机数，后面 `build_english()`
+#     拿到的序列就整体错位，英语题库每改一次数学就跟着变一遍 ——
+#     而服务端补题是按题面比对的，题面一变就等于整库换血。
+#
+# 现在的做法：把 20 以内所有合法算式按固定顺序铺开（等差步长抽样），
+# 输出完全确定，重复运行得到同一个文件。
+MATH_TARGET_ADD = 100      # 加法
+MATH_TARGET_SUB = 60       # 减法
+MATH_TARGET_INV = 40       # 逆向填空 a + ( ) = c
+
+
+def _stride_pick(pool, n):
+    """从 pool 里等距取 n 个（确定性，不重复）。"""
+    total = len(pool)
+    if n >= total:
+        return list(pool)
+    # 用整数步长而不是浮点，避免边界上取到同一个下标两次
+    return [pool[i * total // n] for i in range(n)]
+
+
+def _math_options(ans, pos):
+    """4 个选项：1 个正确 + 3 个相近干扰项；正确项位置按 pos 轮换。
+
+    以前正确项是 random.shuffle 出来的，位置随机但其实有偏（最后才会被放进
+    pool[:3] + [ans]），加上固定位置会让孩子养成"总选某个位置"的习惯。
+    """
+    cand = []
+    for d in (1, -1, 2, -2, 3, -3, 10, -10, 5, -5):
+        v = ans + d
+        if 0 <= v <= 20 and v != ans and v not in cand:
+            cand.append(v)
+    out = cand[:3]
+    out.insert(pos % (len(out) + 1), ans)
+    return [str(x) for x in out]
+
+
 def build_math():
     qs = []
+    i = 0
 
-    def add_options(ans, lo=0, hi=20):
-        cand = {ans}
-        for d in (-1, 1, -2, 2, -3, 3, -10, 10):
-            v = ans + d
-            if lo <= v <= hi and v not in cand:
-                cand.add(v)
-        pool = [x for x in cand if x != ans]
-        random.shuffle(pool)
-        opts = pool[:3] + [ans]
-        random.shuffle(opts)
-        return [str(x) for x in opts]
-
-    for _ in range(34):
-        a = random.randint(1, 18)
-        b = random.randint(1, 20 - a)
+    # ---- 加法：a + b = c，a、b ≥ 1，和 ≤ 20 ----
+    add_pool = [(a, s - a) for s in range(2, 21) for a in range(1, s)]
+    for a, b in _stride_pick(add_pool, MATH_TARGET_ADD):
         ans = a + b
         qs.append({
             'subject': 'math', 'type': 'choice', 'level': 1,
-            'stem': f'{a} + {b} = ?', 'options': add_options(ans),
+            'stem': f'{a} + {b} = ?', 'options': _math_options(ans, i),
             'answer': str(ans), 'hint': '',
         })
-    for _ in range(30):
-        a = random.randint(2, 20)
-        b = random.randint(1, a - 1)
+        i += 1
+
+    # ---- 减法：a − b = c，1 ≤ b < a ≤ 20 ----
+    sub_pool = [(a, b) for a in range(2, 21) for b in range(1, a)]
+    for a, b in _stride_pick(sub_pool, MATH_TARGET_SUB):
         ans = a - b
         qs.append({
             'subject': 'math', 'type': 'choice', 'level': 1,
-            'stem': f'{a} − {b} = ?', 'options': add_options(ans),
+            'stem': f'{a} − {b} = ?', 'options': _math_options(ans, i),
             'answer': str(ans), 'hint': '',
         })
-    # 填空题：a + ? = c，比纯计算多一步逆向
-    for _ in range(16):
-        a = random.randint(1, 15)
-        b = random.randint(1, 20 - a)
+        i += 1
+
+    # ---- 逆向填空：a + ( ) = c，比纯计算多一步 ----
+    inv_pool = [(a, b) for a in range(1, 20) for b in range(1, 21 - a)]
+    for a, b in _stride_pick(inv_pool, MATH_TARGET_INV):
         c = a + b
         qs.append({
             'subject': 'math', 'type': 'choice', 'level': 2,
             'stem': f'{a} + （ ）= {c}',
-            'options': add_options(b), 'answer': str(b),
+            'options': _math_options(b, i), 'answer': str(b),
             'hint': f'想一想：{c} 里面去掉 {a} 还剩多少',
         })
+        i += 1
+
+    # 自查：题面必须唯一，选项里必须有正确答案
+    stems = [q['stem'] for q in qs]
+    assert len(stems) == len(set(stems)), '数学题库出现重复题面'
+    for q in qs:
+        assert q['answer'] in q['options'], f"答案不在选项里：{q['stem']}"
+        assert len(q['options']) == 4, f"选项不是 4 个：{q['stem']}"
     return qs
 
 
@@ -278,6 +325,7 @@ def mask_word(w):
 
 
 def build_english():
+    random.seed(20261112)   # 同 build_chinese：本套题库独立、可重复
     qs = []
     glosses = [g for _, g, _ in WORDS]
 

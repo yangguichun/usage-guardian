@@ -148,6 +148,13 @@ pub struct Device {
     /// 家长用密码临时放行的剩余毫秒（0 = 没有临时放行）
     pub day_unlock_left_ms: i64,
     pub rest_count: i64,
+    /// 这一次强制休息**为什么**锁的（"使用时长达到上限"/"被强行结束"/"家长远程锁定"…）
+    ///
+    /// 以前后台只记 "进入强制休息"，家长看到孩子被锁却查不出原因，
+    /// 只能怀疑"计时算错了"。设备算好原因随心跳报上来，事件流直接带上。
+    pub rest_reason: String,
+    /// 这一次强制休息的总时长（毫秒）。和 `rest_minutes` 的差值就是惩罚倍数。
+    pub rest_ms: i64,
     pub use_minutes: i64,
     pub rest_minutes: i64,
     pub reset_gap_seconds: i64,
@@ -172,6 +179,12 @@ pub struct Device {
     pub quiet_left_ms: i64,
     /// 当前生效的那条规则的名字，给后台显示「因「晚上睡觉」停用中」
     pub quiet_label: String,
+    /// 设备本机另外设了几条停用时段（v2.6.1，家长在 App 里自己加的）。
+    ///
+    /// 这些规则**不上报内容**、只报条数：内容留在设备上，服务端不采信也不覆盖。
+    /// 报个数是为了让家长看到"这台机器上还有 2 条本机规则"，
+    /// 否则后台规则列表是空的，家长会以为设置没生效。
+    pub quiet_local_count: i64,
     // ---- 答题解锁（v2.6.0）----
     //
     // 语义：「每用 N 分钟弹一道题，答对才能继续」。和"强制休息"是两个独立维度：
@@ -218,6 +231,8 @@ impl Default for Device {
             day_locked: false,
             day_unlock_left_ms: 0,
             rest_count: 0,
+            rest_reason: String::new(),
+            rest_ms: 0,
             use_minutes: 30,
             rest_minutes: 5,
             reset_gap_seconds: 300,
@@ -232,6 +247,7 @@ impl Default for Device {
             in_quiet: false,
             quiet_left_ms: 0,
             quiet_label: String::new(),
+            quiet_local_count: 0,
             quiz_enabled: false,
             quiz_interval_minutes: 10,
             quiz_penalty_minutes: 2,

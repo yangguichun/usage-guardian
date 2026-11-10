@@ -782,6 +782,22 @@ def main():
             [r["id"] for r in body["rules"]],
         )
 
+        # 本机规则：只收条数，绝不收内容（v2.6.1）
+        hb_local = dict(hb_v24)
+        hb_local.update({
+            "quiet_local_count": 2,
+            "quiet_hours": [{"id": "y", "from": 60, "to": 120, "days": 0}],
+        })
+        req("POST", "/api/device/heartbeat", hb_local, token=dev_token)
+        st, body = req("GET", f"/api/devices/{dev_id}/quiet", token=token)
+        check("本机规则条数入参 200", 200, st)
+        check("本机规则条数已落库", 2, body.get("local_count"))
+        check_that(
+            "本机规则内容不落地",
+            all(r["id"] != "y" for r in body["rules"]),
+            [r["id"] for r in body["rules"]],
+        )
+
         # 别人的设备：配置读取也要 404（不是 403，避免探测设备 id 是否存在）。
         # 这里放在多账号段落里验证 —— 那时才有第二个账号的 token。
 
@@ -885,12 +901,31 @@ def main():
         # ---------- 休息状态变化写事件 ----------
         print("[事件流]")
         hb_rest = dict(hb)
-        hb_rest.update({"resting": True, "rest_left_ms": 300_000})
+        hb_rest.update({
+            "resting": True,
+            "rest_left_ms": 300_000,
+            # v2.6.1：设备要说明"为什么锁、锁多久"
+            "rest_reason": "使用时长达到上限",
+            "rest_ms": 300_000,
+        })
         req("POST", "/api/device/heartbeat", hb_rest, token=dev_token)
         st, body = req("GET", "/api/events", token=token)
         check("事件 200", 200, st)
         kinds = [e["kind"] for e in body["events"]]
         check_that("有 rest_start 事件", "rest_start" in kinds, kinds[:8])
+        # ★ 事件文案里必须带原因：只写"进入强制休息"的话，
+        # 家长看到孩子被锁却查不出是玩满了还是被罚了
+        rest_ev = next((e for e in body["events"] if e["kind"] == "rest_start"), None)
+        check_that(
+            "休息事件带原因",
+            rest_ev is not None and "使用时长达到上限" in rest_ev["message"],
+            rest_ev["message"] if rest_ev else None,
+        )
+        check_that(
+            "休息事件带时长",
+            rest_ev is not None and "5 分钟" in rest_ev["message"],
+            rest_ev["message"] if rest_ev else None,
+        )
         check_that("有配对事件", "pair" in kinds)
 
         # ---------- 事件分页 / 按日期查询（v2.2） ----------
@@ -1063,6 +1098,22 @@ def main():
             all(b["count"] > 0 for b in builtin),
             [(b["name"], b["count"]) for b in builtin],
         )
+        # 数学题库扩到 200 道（v2.6.1）：扩题是"原地补题"，一个新建库直接就是最终量
+        math_banks = [b for b in builtin if b.get("subject") == "math"]
+        check_that("有数学内置题库", len(math_banks) == 1, math_banks)
+        if math_banks:
+            check_that("数学题库 200 道", math_banks[0]["count"] == 200, math_banks[0]["count"])
+            st, qb = req(
+                "GET", f"/api/banks/{math_banks[0]['id']}/questions?limit=500", token=token
+            )
+            check("数学题目列表 200", 200, st)
+            stems = [q["stem"] for q in qb["questions"]]
+            # ★ 题面不许重复：上一版随机抽题撞了 5 对，"18 + 1 = ?" 会连着抽到两次
+            check_that("数学题面无重复", len(stems) == len(set(stems)),
+                       (len(stems), len(set(stems))))
+            # 每道题的答案都必须在选项里，否则孩子永远答不对
+            bad = [q["stem"] for q in qb["questions"] if q["answer"] not in q["options"]]
+            check_that("数学答案都在选项里", not bad, bad[:3])
 
         st, body = req("POST", "/api/banks", {"name": "  ", "subject": "math"}, token=token)
         check("空名建题库 400", 400, st)

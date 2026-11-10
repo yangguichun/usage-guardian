@@ -99,6 +99,10 @@ const DEVICES = [
     // 停用时段：22:00 → 次日 06:00（每天）正在生效，另有一条周末白天规则未启用
     in_quiet: true,
     quiet_next: '每天 22:00–06:00',
+    // 设备本机另设了 1 条（v2.6.1）：后台看不到内容，只显示条数
+    quiet_local_count: 1,
+    // 本次强制休息的原因（v2.6.1）：后台设备卡直接显示，不用家长猜
+    rest_reason: '使用时长达到上限',
     quiet_hours: [
       { id: 'q_night', enabled: true, label: '睡觉', from: 22 * 60, to: 6 * 60, days: 0 },
       { id: 'q_noon', enabled: false, label: '午休', from: 12 * 60 + 30, to: 14 * 60, days: 96 },
@@ -174,6 +178,9 @@ function deviceJson(d, t) {
     used_ms: d.resting ? 30 * 60 * 1000 : 18 * 60 * 1000 + 40000,
     today_used_ms: d.today_used_ms || 72 * 60 * 1000,
     rest_count: 3,
+    // v2.6.1：本次休息的原因与总时长（倍数说明靠这两个值算）
+    rest_reason: d.resting ? (d.rest_reason || '') : '',
+    rest_ms: d.resting ? 15 * 60 * 1000 : 0,
     use_minutes: d.use_minutes,
     rest_minutes: d.rest_minutes,
     // 每日总时长（v2.5.0）：0 = 不限
@@ -196,6 +203,7 @@ function deviceJson(d, t) {
     in_quiet: !!d.in_quiet,
     quiet_left_ms: d.in_quiet ? 92 * 60 * 1000 : 0,
     quiet_label: d.quiet_next || '',
+    quiet_local_count: d.quiet_local_count || 0,
     // ---- 答题解锁（v2.6.0）----
     quiz_enabled: !!d.quiz_enabled,
     quiz_interval_minutes: d.quiz_interval_minutes || 10,

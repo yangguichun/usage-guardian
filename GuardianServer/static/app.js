@@ -394,6 +394,7 @@ function renderDevices(list) {
         ${d.today_boots ? `<span>开机 <b>${d.today_boots}</b> 次</span>` : ''}
         ${!d.in_quiet && quietNextHint(d.quiet_hours) ? `<span>${esc(quietNextHint(d.quiet_hours))}</span>` : ''}
         ${d.resting && d.rest_left_ms ? `<span>剩余 <b>${fmtDur(d.rest_left_ms)}</b></span>` : ''}
+        ${d.resting && d.rest_reason ? `<span>原因 <b>${esc(d.rest_reason)}</b></span>` : ''}
         ${d.in_quiet && d.quiet_left_ms ? `<span>停用到 <b>${fmtDur(d.quiet_left_ms)}</b> 后</span>` : ''}
         ${d.pin_set ? '' : '<span style="color:var(--danger)">未设密码</span>'}
         ${penaltyFactor(d.tamper_strikes) > 1
@@ -1126,9 +1127,14 @@ function renderQuiet(d) {
 
   // ---- 汇总提示 ----
   const on = quietDraft.filter((r) => r.enabled);
-  $('quietHint').textContent = on.length
+  // 设备本机另外设的规则（内容不在服务端，只报条数）。
+  // 不提示的话，家长看到"规则列表是空的"会以为手机上的设置没生效。
+  const localNote = (d.quiet_local_count || 0) > 0
+    ? `　设备本机另有 ${d.quiet_local_count} 条（在 App 设置页里改，这里看不到具体内容）`
+    : '';
+  $('quietHint').textContent = (on.length
     ? `${on.length} 条生效中：` + on.map(quietRuleText).join('；')
-    : (quietDraft.length ? '全部未启用 —— 保存后设备端不会锁屏' : '未设置停用时段');
+    : (quietDraft.length ? '全部未启用 —— 保存后设备端不会锁屏' : '未设置停用时段')) + localNote;
 }
 
 /** 星期位掩码第 k 位（0=周一）是否为开。days=0（没勾）表示每天，全部点亮 */

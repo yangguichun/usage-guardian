@@ -60,6 +60,7 @@
     <string name="kill_reason_heartbeat_gap">守护进程中断了 %1$d 分钟（被清理或强行停止）</string>
     <string name="kill_reason_admin_removed">设备管理器被取消激活</string>
     <string name="kill_reason_force_stop">应用被「强行停止」，系统清空了全部闹钟与任务</string>
+    <string name="kill_reason_force_stop_once">应用被「强行停止」（与划掉任务卡片是同一次，不重复计违规）</string>
     <string name="rest_reason_tamper">被强行结束后触发惩罚休息</string>
     <string name="rest_reason_usage_limit">使用时长达到上限</string>
     <string name="rest_reason_remote">家长在后台远程锁定</string>
@@ -262,6 +263,34 @@
     <string name="quiz_need_letter">请把空缺的字母补齐</string>
     <string name="quiz_no_bank">题库还没下载下来，先用本地算术题顶上\n连上服务端后会自动换成你配的题库</string>
     <string name="quiz_lock_notif">答题解锁中</string>
+
+    <!-- 停用时段（v2.6.1：可以在本机编辑了） -->
+    <string name="label_quiet">停用时段</string>
+    <string name="hint_quiet_local">到点自动锁屏、到点自动放开。\n本机设的规则和后台下发的一起生效（并集），本机删不掉后台的规则。</string>
+    <string name="btn_quiet_add">＋ 添加停用时段</string>
+    <string name="quiet_tag_fmt">［%1$s］%2$s</string>
+    <string name="quiet_server_tip">后台下发，请到后台修改</string>
+    <string name="quiet_same_time">开始和结束不能是同一时刻</string>
+    <string name="btn_delete">删除</string>
+    <string name="quiet_empty">还没设置停用时段</string>
+    <string name="quiet_row_fmt">%1$s　%2$s–%3$s%4$s</string>
+    <string name="quiet_tag_local">本机</string>
+    <string name="quiet_tag_server">后台</string>
+    <string name="quiet_next_fmt">下一段：%1$s 开始</string>
+    <string name="quiet_need_pin">修改停用时段要先设置家长密码</string>
+    <string name="quiet_enter_pin">输入家长密码</string>
+    <string name="quiet_pin_wrong">密码不对</string>
+    <string name="quiet_dlg_title">添加停用时段</string>
+    <string name="quiet_dlg_start">开始</string>
+    <string name="quiet_dlg_end">结束</string>
+    <string name="quiet_dlg_days">生效的星期（都不勾＝每天）</string>
+    <string name="quiet_del_title">删除这条停用时段？</string>
+    <string name="quiet_dup">已经有一条同样的时段了</string>
+    <string name="quiet_full">最多 8 条，先去删掉不用的</string>
+    <string name="quiet_added">已添加，到点会自动锁屏</string>
+    <string name="quiet_deleted">已删除</string>
+    <string name="quiet_locked_now">现在就在停用时段内，改完立刻生效</string>
+    <string name="diag_quiet_fmt">停用时段：后台 %1$d 条 / 本机 %2$d 条</string>
 
     <!-- 上锁遮片：设置内容藏起来时，屏幕上要有一句明确的话，不能是一片空白 -->
     <string name="lock_hint_title">🔒 已上锁</string>

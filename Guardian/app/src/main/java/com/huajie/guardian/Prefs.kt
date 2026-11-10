@@ -600,6 +600,16 @@ class Prefs(context: Context) {
         get() = sp.getString(K_REST_PLAN, "") ?: ""
         set(v) = edit { it.putString(K_REST_PLAN, v) }
 
+    /** 本次强制休息的原因（短文本），随心跳上报，后台设备页直接显示 */
+    var restReason: String
+        get() = sp.getString(K_REST_REASON, "") ?: ""
+        set(v) = edit { it.putString(K_REST_REASON, v) }
+
+    /** 本次强制休息的总时长（毫秒），随心跳上报 */
+    var restMs: Long
+        get() = sp.getLong(K_REST_MS, 0L)
+        set(v) = edit { it.putLong(K_REST_MS, v) }
+
     /**
      * 上一次进程是怎么退出的（系统记录，Android 11 / API 30 起可用）。
      *
@@ -705,10 +715,41 @@ class Prefs(context: Context) {
         get() = sp.getString(K_PENDING_REASON, "") ?: ""
         set(v) = edit { it.putString(K_PENDING_REASON, v) }
 
-    /** 累计第几次"拆防护"（强停 / 取消设备管理员）。用于逐次加重惩罚，家长可清零 */
+    /**
+     * 今天第几次"拆防护"（强停 / 划掉任务卡片）。决定今天这一笔惩罚的倍数。
+     *
+     * ★ 必须**按自然日归零**：以前是永久累计，孩子被记满 3 次之后，
+     * 家长设 5 分钟、实际每次都休 15 分钟，而且再也没有回到 ×1 的机会
+     * （只能靠家长自己去设置页点「违规记录清零」）。线上实测有设备累计到
+     * 9 次，等于所有惩罚永久 ×3 —— 看起来就像"休息时长算错了"。
+     */
     var tamperStrikes: Int
         get() = sp.getInt(K_TAMPER_STRIKES, 0)
         set(v) = edit { it.putInt(K_TAMPER_STRIKES, v) }
+
+    /** `tamperStrikes` 归属的自然日（yyyy-MM-dd），跨天时由服务重置 */
+    var tamperDay: String
+        get() = sp.getString(K_TAMPER_DAY, "") ?: ""
+        set(v) = edit { it.putString(K_TAMPER_DAY, v) }
+
+    /** 历史累计"拆防护"次数（不清零，只用于诊断展示） */
+    var tamperTotal: Int
+        get() = sp.getInt(K_TAMPER_TOTAL, 0)
+        set(v) = edit { it.putInt(K_TAMPER_TOTAL, v) }
+
+    /**
+     * 跨天时把当天的违规计数归零（历史总数保留）。
+     *
+     * @return 是否发生了归零（方便调用方决定要不要刷新界面）
+     */
+    fun rolloverTamperDay(today: String): Boolean {
+        if (tamperDay == today) return false
+        sp.edit()
+            .putString(K_TAMPER_DAY, today)
+            .putInt(K_TAMPER_STRIKES, 0)
+            .commit()
+        return true
+    }
 
     /** 已经核算过的"上次进程退出"时间戳，避免同一条系统记录被反复当成新违规 */
     var lastExitTs: Long
@@ -730,15 +771,47 @@ class Prefs(context: Context) {
     /**
      * 停用时段规则（服务端下发的权威副本，JSON 数组字符串）。
      *
-     * 只由 [Remote] 在收到心跳时覆盖，App 界面**不提供**任何编辑入口 ——
-     * 这条限制如果能在孩子手里的设备上改，就等于没有。
+     * 只由 [Remote] 在收到心跳时覆盖。设备端**不能**把本地改动上报回去
+     * 覆盖它 —— 那样孩子改一下手机就等于绕过了家长的设置。
      */
     var quietRulesRaw: String
         get() = sp.getString(K_QUIET_RULES, "") ?: ""
         set(v) = edit { it.putString(K_QUIET_RULES, v) }
 
+    /**
+     * 家长**在本机**加的停用时段（JSON 数组字符串）。
+     *
+     * 为什么要有一份本地的：没有配远程后台（或后台连不上）时，
+     * 停用时段以前完全没有入口 —— 家长只能在后台设，路远那台平板就一直是空的。
+     *
+     * 和下发规则的关系是**并集**：下发的规则照样生效，本地的删不掉它；
+     * 本地规则只能在设了家长密码的机器上编辑（入口在设置页，走 PIN 校验）。
+     */
+    var localQuietRulesRaw: String
+        get() = sp.getString(K_QUIET_LOCAL, "") ?: ""
+        set(v) = edit { it.putString(K_QUIET_LOCAL, v) }
+
+    fun localQuietRules(): List<Quiet.Rule> = Quiet.fromJson(localQuietRulesRaw)
+
+    fun setLocalQuietRules(rules: List<Quiet.Rule>) {
+        localQuietRulesRaw = Quiet.toJson(rules)
+    }
+
     /** 本地解析出来的规则列表（每次读都重新解析，规则最多几条，开销可忽略） */
     fun quietRules(): List<Quiet.Rule> = Quiet.fromJson(quietRulesRaw)
+
+    /** 实际生效的全部规则：下发的 + 本地的（去重后）。判定逻辑一律用这个。 */
+    fun allQuietRules(): List<Quiet.Rule> {
+        val out = ArrayList<Quiet.Rule>()
+        val seen = HashSet<String>()
+        for (r in quietRules() + localQuietRules()) {
+            // 同一条规则两端都配了很常见（家长在后台设了，又在手机上补一遍），
+            // 按 from/to/days 去重即可，label 不影响判定
+            val key = "${r.from}-${r.to}-${r.days}"
+            if (seen.add(key)) out.add(r)
+        }
+        return out
+    }
 
     /**
      * 接管停用时段时，如果当时设备本来就在"应停用"的区间里，
@@ -850,6 +923,7 @@ class Prefs(context: Context) {
 
         val e = sp.edit()
             .putInt(K_TAMPER_STRIKES, strikes)
+            .putInt(K_TAMPER_TOTAL, tamperTotal + 1)
             .putString(K_TAMPER_TIMES, pushTamperTime(now))
         if (ms > 0L) {
             // 一次没兑现完又来一次：取较大者，不叠加成天文数字
@@ -890,7 +964,6 @@ class Prefs(context: Context) {
             .putString(K_LAST_KILL_REASON, "")
             .commit()
     }
-
     /** 清空本轮计时 */
     fun resetSession() {
         sessionStartWall = 0L
@@ -919,6 +992,8 @@ class Prefs(context: Context) {
         private const val K_USE_MIN = "use_minutes"
         private const val K_REST_MIN = "rest_minutes"
         private const val K_REST_PLAN = "rest_plan_text"
+        private const val K_REST_REASON = "rest_reason_text"
+        private const val K_REST_MS = "rest_total_ms"
         private const val K_LAST_EXIT_TS = "last_exit_ts"
         private const val K_RESET_GAP = "reset_gap_seconds"
         private const val K_PIN = "pin"
@@ -953,11 +1028,15 @@ class Prefs(context: Context) {
         private const val K_PENDING_PENALTY = "pending_penalty_ms"
         private const val K_PENDING_REASON = "pending_penalty_reason"
         private const val K_TAMPER_STRIKES = "tamper_strikes"
+        private const val K_TAMPER_DAY = "tamper_day"
+        private const val K_TAMPER_TOTAL = "tamper_total"
         private const val K_TAMPER_TIMES = "tamper_times"
         private const val K_LAST_START_ERROR = "last_start_error"
 
         // ---- 停用时段（宵禁）----
         private const val K_QUIET_RULES = "quiet_rules_json"
+        /** 设备本地（家长在 App 里自己加的）规则，与下发的规则取并集 */
+        private const val K_QUIET_LOCAL = "quiet_local_json"
         private const val K_QUIET_ENTERED = "quiet_entered_wall"
         private const val K_QUIET_NOTIFIED = "quiet_notified_wall"
         private const val K_QUIET_ALARM_AT = "quiet_alarm_at_wall"

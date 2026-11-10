@@ -412,6 +412,10 @@ object Remote {
                 (p.dayUnlockUntilWall - now).coerceAtLeast(0L)
             )
             .put("rest_count", p.restCount)
+            // 这一次为什么锁、锁多久。后台的 rest_start 事件和遮罩说明都用它 ——
+            // 家长看到"进入强制休息"却不知道为什么，只能猜是计时坏了。
+            .put("rest_reason", if (restLeft > 0L) p.restReason else "")
+            .put("rest_ms", if (restLeft > 0L) p.restMs else 0L)
             // 答题解锁（v2.6.0）：后台据此在设备卡上显示"答题解锁中"，
             // 也顺便让家长看见设备当前的实际参数（可能和网页上配的不一样，
             // 比如题库还没下发、功能只在客户端开过）
@@ -435,6 +439,9 @@ object Remote {
             .put("in_quiet", GuardianService.sInQuiet)
             .put("quiet_left_ms", if (GuardianService.sInQuiet) GuardianService.sQuietLeftMs else 0L)
             .put("quiet_label", if (GuardianService.sInQuiet) GuardianService.sQuietLabel else "")
+            // 本机额外设了几条停用规则：后台规则列表里看不到它们，
+            // 不报个数的话家长会以为"我明明在手机上设了，后台怎么是空的"。
+            .put("quiet_local_count", p.localQuietRules().count { it.enabled })
             .put("audio_suppressed", Silence.isSuppressing)
             .put("pause_media_on_rest", p.pauseMediaOnRest)
             .put("mute_on_rest", p.muteOnRest)

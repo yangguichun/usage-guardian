@@ -28,8 +28,10 @@ import java.util.Locale
  *
  * 4. **`days == 0` 视为每天**。前端"一天都没勾"就是全选，服务端也按这个口径。
  *
- * 5. **规则只认服务端下发的**。本地不做任何"用户可改"的入口，
- *    免得孩子改一下 SharedPreferences 就绕过。心跳每次都会带全量规则下来。
+ * 5. **规则来自两处，取并集**：服务端下发的（权威、心跳每轮带全量）+ 家长在
+ *    本机 App 里自己加的（见 [Prefs.localQuietRulesRaw]，入口有 PIN 校验）。
+ *    本地不能删除下发的规则 —— 否则孩子改一下手机就绕过了。
+ *    设备端也**不把**本地规则上报回去覆盖服务端的，两边各存各的。
  */
 object Quiet {
 
@@ -92,7 +94,7 @@ object Quiet {
      * @return 命中的规则与"距离结束还有多少毫秒"；没命中返回 null
      */
     fun current(ctx: android.content.Context, prefs: Prefs, now: Long): Hit? {
-        val rules = prefs.quietRules()
+        val rules = prefs.allQuietRules()
         if (!prefs.enabled || rules.isEmpty()) return null
         // 家长在遮罩上放了这一轮：到点前一律视为"不在停用区间"。
         // 只对这一**段**有效（skip 值就是这一段的结束时刻），下一段照旧锁。
@@ -139,7 +141,7 @@ object Quiet {
      * 用来排闹钟：光靠主线程每秒 tick，"到点自动锁屏"在进程被冻结时会失效。
      */
     fun nextStartAt(prefs: Prefs, now: Long): Long {
-        val rules = prefs.quietRules().filter { it.enabled }
+        val rules = prefs.allQuietRules().filter { it.enabled }
         if (!prefs.enabled || rules.isEmpty()) return 0L
         val cal = Calendar.getInstance()
         cal.timeInMillis = now

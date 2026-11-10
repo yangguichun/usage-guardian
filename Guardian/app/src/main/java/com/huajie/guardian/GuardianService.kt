@@ -270,12 +270,32 @@ class GuardianService : Service() {
         val lastElapsed = prefs.heartbeatElapsed
         val rebooted = lastElapsed > 0L && nowElapsed < lastElapsed
         val forceStopped = !rebooted && userForceStopped()
+
+        // ★ 同一次"划掉任务卡片"会被记两遍账。
+        //
+        // 划掉时 [onTaskRemoved] 先记一次（那时进程还活着，能确认是划掉）；
+        // 紧接着进程被系统结束，部分 ROM（实测华为/鸿蒙、MIUI）会在
+        // ApplicationExitInfo 里把它报成 REASON_USER_STOPPED，
+        // 于是下一次启动这里又记一次 —— 违规次数凭空翻倍，
+        // 惩罚倍数从 ×1 直接跳到 ×2，家长设 5 分钟、孩子实际休 10 分钟。
+        //
+        // 判据：退出记录的时间离最近一次 onTaskRemoved 很近（5 分钟内），
+        // 就认定是同一件事，只留痕、不再记账。
+        val swipeWall = prefs.lastTaskRemovedWall
+        val sameAsSwipe = forceStopped && swipeWall > 0L &&
+            kotlin.math.abs(System.currentTimeMillis() - swipeWall) < 5 * 60_000L
         if (forceStopped) {
             val now = System.currentTimeMillis()
             prefs.markForceStop(now)
-            prefs.markKill(getString(R.string.kill_reason_force_stop))
-            prefs.noteTamper(now, getString(R.string.kill_reason_force_stop))
-            Log.w(TAG, "检测到应用曾被「强行停止」，累计 ${prefs.forceStopCount} 次")
+            if (sameAsSwipe) {
+                // 已经由 onTaskRemoved 记过账了，这里只补一条诊断
+                prefs.markKill(getString(R.string.kill_reason_force_stop_once))
+                Log.i(TAG, "强停记录与最近一次划掉任务重复，不重复计违规")
+            } else {
+                prefs.markKill(getString(R.string.kill_reason_force_stop))
+                prefs.noteTamper(now, getString(R.string.kill_reason_force_stop))
+                Log.w(TAG, "检测到应用曾被「强行停止」，今日第 ${prefs.tamperStrikes} 次")
+            }
         }
 
         // 进程可能是被系统杀掉后由闹钟拉起来的，先判断这中间是不是"被强行结束"过。
@@ -844,6 +864,10 @@ class GuardianService : Service() {
         } else {
             getString(R.string.rest_plan_plain, reason, ms / 60_000L)
         }
+        // 上报给后台：家长看到"为什么锁"才知道该改哪个参数。
+        // 只存短文本，心跳里原样带上去（见 Remote.heartbeat 的 rest_reason/rest_ms）。
+        prefs.restReason = reason
+        prefs.restMs = ms
 
         prefs.commitRest(now + ms, prefs.restCount + 1, now)
         // 休息期间前台应用不变（遮罩是悬浮窗），系统照样把时间记给微信/抖音。
@@ -1896,6 +1920,11 @@ class GuardianService : Service() {
             prefs.restDay = today
             prefs.restCount = 0
         }
+        // ★ 违规计数同样按天归零。以前是永久累计，孩子被记满 3 次之后
+        // 所有惩罚永久 ×3（家长设 5 分钟、实际休 15 分钟），家长只能自己去
+        // 设置页点「违规记录清零」才能回到 ×1 —— 线上有设备累计到 9 次。
+        // 历史总数另存 tamperTotal，诊断区照旧能看到累计值。
+        prefs.rolloverTamperDay(today)
         // 今日使用累计也要跨天归零，否则后台的"今日时长"会越滚越大
         if (prefs.todayDay != today) {
             prefs.todayDay = today

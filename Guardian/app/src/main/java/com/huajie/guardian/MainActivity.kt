@@ -339,6 +339,14 @@ class MainActivity : AppCompatActivity() {
             initial = prefs.quizPenaltyMinutes
         ) { prefs.quizPenaltyMinutes = it }
 
+        // ---- 停用时段（v2.6.1：可以在本机编辑）----
+        //
+        // 以前只能由服务端下发，没配后台的机器上这个功能等于不存在。
+        // 现在本机也能设，规则和下发的是**并集**：后台的删不掉，
+        // 免得孩子在这台设备上一删就把宵禁废了。
+        renderQuiet()
+        findViewById<Button>(R.id.btnAddQuiet).setOnClickListener { addQuietRule() }
+
         // ---- 家长密码 ----
         findViewById<Button>(R.id.btnPin).setOnClickListener { editPin() }
         findViewById<Button>(R.id.btnClearPin).setOnClickListener { clearPin() }
@@ -867,8 +875,17 @@ class MainActivity : AppCompatActivity() {
             getString(R.string.silence_idle)
         }
 
+        // 停用时段：分管两处统计，家长排查"到底哪条规则在锁我"时要用
+        val quietLine = getString(
+            R.string.diag_quiet_fmt,
+            prefs.quietRules().count { it.enabled },
+            prefs.localQuietRules().count { it.enabled }
+        )
+
         tvDiag.text = buildString {
             append(getString(R.string.diag_overlay_perm, overlayPerm))
+            append('\n')
+            append(quietLine)
             append('\n')
             append(getString(R.string.diag_lock_layer, layer))
             append('\n')
@@ -1183,6 +1200,207 @@ class MainActivity : AppCompatActivity() {
             )
         )
         lockHint = box
+    }
+
+    // ==================================================================
+    // 停用时段（本机编辑，v2.6.1）
+    // ==================================================================
+
+    /**
+     * 重绘停用时段列表。
+     *
+     * 列表里**同时**显示后台下发的和本机加的，并用标签区分 ——
+     * 只显示本机的话，家长会以为"我在手机上加了两条，怎么列表里只有两条"
+     * （后台那几条其实也在生效），只能靠猜。
+     */
+    private fun renderQuiet() {
+        val host = findViewById<LinearLayout>(R.id.quietHost)
+        host.removeAllViews()
+
+        val local = prefs.localQuietRules()
+        val all = prefs.allQuietRules()
+
+        if (all.isEmpty()) {
+            host.addView(
+                TextView(this).apply {
+                    text = getString(R.string.quiet_empty)
+                    textSize = 13f
+                    setTextColor(themeColor(android.R.attr.textColorSecondary))
+                    setPadding(0, dp(4), 0, dp(4))
+                }
+            )
+        }
+
+        for (r in all) {
+            // 本机是否有"等价的一条"：按时间+星期判断，不看 id/label
+            val isLocal = local.any { it.from == r.from && it.to == r.to && it.days == r.days }
+            val row = LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL
+                gravity = Gravity.CENTER_VERTICAL
+                setPadding(0, dp(5), 0, dp(5))
+            }
+            val tv = TextView(this).apply {
+                textSize = 14f
+                setTextColor(themeColor(android.R.attr.textColorPrimary))
+                text = getString(
+                    R.string.quiet_tag_fmt,
+                    getString(if (isLocal) R.string.quiet_tag_local else R.string.quiet_tag_server),
+                    Quiet.describe(r)
+                )
+            }
+            row.addView(
+                tv,
+                LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+            )
+            if (isLocal) {
+                val del = Button(this).apply {
+                    text = getString(R.string.btn_delete)
+                    textSize = 13f
+                    setOnClickListener { confirmDeleteQuiet(r) }
+                }
+                row.addView(del)
+            } else {
+                // 下发的规则在本机只能看不能改：说清楚去哪儿改，
+                // 否则家长会一直找"为什么这条没有删除按钮"
+                val tip = TextView(this).apply {
+                    text = getString(R.string.quiet_server_tip)
+                    textSize = 11f
+                    setTextColor(themeColor(android.R.attr.textColorSecondary))
+                }
+                row.addView(tip)
+            }
+            host.addView(row)
+        }
+
+        // 下一段什么时候开始：只显示倒计时列表的话，家长看不出"今晚到底锁不锁"
+        val next = Quiet.nextStartAt(prefs, System.currentTimeMillis())
+        if (next > 0L) {
+            val fmt = SimpleDateFormat("M月d日 HH:mm", Locale.CHINA)
+            host.addView(
+                TextView(this).apply {
+                    text = getString(R.string.quiet_next_fmt, fmt.format(Date(next)))
+                    textSize = 12f
+                    setTextColor(themeColor(android.R.attr.textColorSecondary))
+                    setPadding(0, dp(4), 0, 0)
+                }
+            )
+        }
+    }
+
+    /** 添加一条本机停用时段。要求先有家长密码，和"惩罚休息""答题解锁"一致。 */
+    private fun addQuietRule() {
+        if (prefs.pin.isEmpty()) {
+            Toast.makeText(this, R.string.quiet_need_pin, Toast.LENGTH_LONG).show()
+            return
+        }
+        if (prefs.localQuietRules().size >= MAX_LOCAL_QUIET) {
+            Toast.makeText(this, R.string.quiet_full, Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val box = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(dp(16), dp(4), dp(16), dp(4))
+        }
+
+        fun caption(res: Int) = TextView(this).apply {
+            setText(res)
+            textSize = 13f
+            setTextColor(themeColor(android.R.attr.textColorSecondary))
+            setPadding(0, dp(8), 0, 0)
+        }
+
+        val start = android.widget.TimePicker(this).apply {
+            setIs24HourView(true)
+            hour = 22
+            minute = 0
+        }
+        val end = android.widget.TimePicker(this).apply {
+            setIs24HourView(true)
+            hour = 7
+            minute = 0
+        }
+
+        box.addView(caption(R.string.quiet_dlg_start))
+        box.addView(start)
+        box.addView(caption(R.string.quiet_dlg_end))
+        box.addView(end)
+        box.addView(caption(R.string.quiet_dlg_days))
+
+        // 星期：7 个勾选框，一个都不勾 = 每天（和服务端 days=0 的口径一致）
+        val names = arrayOf("一", "二", "三", "四", "五", "六", "日")
+        val checks = ArrayList<android.widget.CheckBox>()
+        val dayRow = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
+        for (i in 0..6) {
+            val cb = android.widget.CheckBox(this).apply {
+                text = names[i]
+                textSize = 12f
+                setPadding(0, 0, 0, 0)
+            }
+            checks.add(cb)
+            dayRow.addView(cb, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+        }
+        box.addView(dayRow)
+
+        val dlg = AlertDialog.Builder(this)
+            .setTitle(R.string.quiet_dlg_title)
+            .setView(wrap(box))
+            .setPositiveButton(android.R.string.ok, null)
+            .setNegativeButton(android.R.string.cancel, null)
+            .create()
+        dlg.show()
+        // 覆写确定键：要校验（零长度 / 重复），校验不过就不能关框
+        dlg.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val from = start.hour * 60 + start.minute
+            val to = end.hour * 60 + end.minute
+            if (from == to) {
+                Toast.makeText(this, R.string.quiet_same_time, Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            var days = 0
+            for (i in 0..6) if (checks[i].isChecked) days = days or (1 shl i)
+            val list = prefs.localQuietRules()
+            if (list.any { it.from == from && it.to == to && it.days == days }) {
+                Toast.makeText(this, R.string.quiet_dup, Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            prefs.setLocalQuietRules(
+                list + Quiet.Rule(
+                    id = "loc_${System.currentTimeMillis()}",
+                    enabled = true,
+                    label = "",
+                    from = from,
+                    to = to,
+                    days = days
+                )
+            )
+            dlg.dismiss()
+            renderQuiet()
+            GuardianService.refresh(this)
+            Toast.makeText(this, R.string.quiet_added, Toast.LENGTH_SHORT).show()
+            // 改完正好落在时段里 → 马上就会锁，先说一声，别让家长以为是 App 抽风
+            if (Quiet.current(this, prefs, System.currentTimeMillis()) != null) {
+                Toast.makeText(this, R.string.quiet_locked_now, Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun confirmDeleteQuiet(r: Quiet.Rule) {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.quiet_del_title)
+            .setMessage(Quiet.describe(r))
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                prefs.setLocalQuietRules(
+                    prefs.localQuietRules().filterNot {
+                        it.from == r.from && it.to == r.to && it.days == r.days
+                    }
+                )
+                renderQuiet()
+                GuardianService.refresh(this)
+                Toast.makeText(this, R.string.quiet_deleted, Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
     }
 
     private fun editPin() {
@@ -1591,6 +1809,9 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val REQ_NOTIF = 100
+
+        /** 本机最多几条停用时段。太多条重叠会让"到底哪个在生效"变得无法解释。 */
+        private const val MAX_LOCAL_QUIET = 8
 
         /** 自动重启服务的最大尝试次数 */
         private const val MAX_START_ATTEMPTS = 5

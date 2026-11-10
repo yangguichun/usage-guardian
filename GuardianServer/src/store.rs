@@ -172,6 +172,28 @@ pub struct Device {
     pub quiet_left_ms: i64,
     /// 当前生效的那条规则的名字，给后台显示「因「晚上睡觉」停用中」
     pub quiet_label: String,
+    // ---- 答题解锁（v2.6.0）----
+    //
+    // 语义：「每用 N 分钟弹一道题，答对才能继续」。和"强制休息"是两个独立维度：
+    // 休息是"停下来歇一会儿"，答题是"证明你还在学"。
+    /// 是否启用
+    pub quiz_enabled: bool,
+    /// 每累计使用多少分钟弹一次题
+    pub quiz_interval_minutes: i64,
+    /// 两道题都不会时的罚时（分钟）
+    pub quiz_penalty_minutes: i64,
+    /// 启用的题库 id 列表。
+    ///
+    /// 和停用时段一样**只认服务端下发的**：设备上报的题库选择一律不采信，
+    /// 否则孩子把题库清空就等于关掉了这个功能。
+    pub quiz_banks: Vec<i64>,
+    /// 设备此刻是否被答题锁挡着（用于后台显示与事件流）
+    pub quiz_locked: bool,
+    /// 累计答对 / 答错（或放弃）次数，家长能看出孩子是真不会还是应付
+    pub quiz_right: i64,
+    pub quiz_wrong: i64,
+    /// 最近一次答题的结果说明（"数学·口算 答对"/"语文·拼音 换题后放弃"）
+    pub quiz_last: String,
     pub note: String,
 }
 
@@ -210,6 +232,14 @@ impl Default for Device {
             in_quiet: false,
             quiet_left_ms: 0,
             quiet_label: String::new(),
+            quiz_enabled: false,
+            quiz_interval_minutes: 10,
+            quiz_penalty_minutes: 2,
+            quiz_banks: Vec::new(),
+            quiz_locked: false,
+            quiz_right: 0,
+            quiz_wrong: 0,
+            quiz_last: String::new(),
             note: String::new(),
         }
     }

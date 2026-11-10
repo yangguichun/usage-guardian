@@ -260,6 +260,88 @@ async function waitFor(fn, ms = 4000, step = 50) {
   await sleep(150);
   ok(segCount() === allSegs, '点时间线空白处恢复全部应用');
 
+  console.log('\n[2.9] 答题解锁面板（v2.6.0）');
+  const quizReady = await waitFor(
+    () => d.querySelector('#quizCfg #btnSaveQuiz'), 4000,
+  );
+  ok(quizReady, '答题面板渲染出来了（不是一直停在"加载题库…"）');
+  ok(d.getElementById('qEnabled').checked, '设备 A 的开关是开着的');
+  ok(d.getElementById('qInterval').value === '10',
+    `间隔回显 ${d.getElementById('qInterval').value} 分钟`);
+  ok(d.getElementById('qPenalty').value === '2',
+    `罚时回显 ${d.getElementById('qPenalty').value} 分钟`);
+  const picks = [...d.querySelectorAll('#quizCfg .qBank')];
+  ok(picks.length === 3, `题库勾选项 = 3（实际 ${picks.length}）`);
+  const checkedIds = picks.filter((el) => el.checked).map((el) => Number(el.value));
+  ok(checkedIds.length === 2 && checkedIds.includes(1) && checkedIds.includes(3),
+    `设备已勾选的题库回显正确（${checkedIds.join(',')}）`);
+
+  // 真点一次保存：要发两条指令（config + quiz_banks），漏了任意一条都不生效
+  let quizBodies = [];
+  const realFetchQuiz = w.fetch;
+  w.fetch = (u, opt) => {
+    try {
+      if (opt && opt.body && String(u).includes('/command')) quizBodies.push(JSON.parse(opt.body));
+    } catch (e) { /* 忽略 */ }
+    return realFetchQuiz(u, opt);
+  };
+  d.getElementById('btnSaveQuiz').dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
+  await waitFor(() => quizBodies.length >= 2, 4000);
+  w.fetch = realFetchQuiz;
+  ok(quizBodies.length === 2, `保存发出 2 条指令（实际 ${quizBodies.length}）`);
+  const cfgCmd = quizBodies.find((b) => b.type === 'config');
+  const bankCmd = quizBodies.find((b) => b.type === 'quiz_banks');
+  ok(!!cfgCmd && cfgCmd.params.quiz_enabled === true, 'config 里带 quiz_enabled=true');
+  ok(!!cfgCmd && cfgCmd.params.quiz_interval_minutes === 10, 'config 里带间隔 10');
+  ok(!!cfgCmd && cfgCmd.params.quiz_penalty_minutes === 2, 'config 里带罚时 2');
+  ok(!!bankCmd && Array.isArray(bankCmd.params.ids) && bankCmd.params.ids.length === 2,
+    `quiz_banks 里带 2 个题库 id（${bankCmd && bankCmd.params && bankCmd.params.ids}）`);
+
+  console.log('\n[2.95] 题库弹窗：列表 → 题目 → 新增 / 导入表单');
+  d.getElementById('btnBanks').dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
+  const banksOk = await waitFor(
+    () => d.querySelectorAll('#banksBody .bank-row').length === 3, 5000,
+  );
+  ok(banksOk, `题库列表 3 行（实际 ${d.querySelectorAll('#banksBody .bank-row').length}）`);
+  ok(!d.getElementById('banksModal').classList.contains('hidden'), '题库弹窗打开了');
+  const bankRow0 = d.querySelector('#banksBody .bank-row');
+  ok(/语文/.test(bankRow0.textContent), `第一行是语文题库（${bankRow0.querySelector('.bank-title').textContent.trim()}）`);
+  ok(!!bankRow0.querySelector('[data-open]'), '每行有「查看题目」入口');
+  ok(!!d.getElementById('btnCreateBank'), '有新建题库按钮');
+  ok(!!d.getElementById('nbSubject'), '新建时有科目下拉');
+
+  d.querySelector('#banksBody .bank-row [data-open]').dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
+  const detailOk = await waitFor(
+    () => d.querySelectorAll('#banksBody .q-row').length >= 3, 5000,
+  );
+  ok(detailOk, `进到题目列表，题目行 ${d.querySelectorAll('#banksBody .q-row').length} 条`);
+  ok(/语文/.test(d.getElementById('banksTitle').textContent),
+    `标题换成题库名（${d.getElementById('banksTitle').textContent}）`);
+  ok(!!d.getElementById('qfStem') && !!d.getElementById('qfOptions') && !!d.getElementById('qfAnswer'),
+    '新增题表单齐全（题干 / 选项 / 答案）');
+  ok(!!d.getElementById('qfTpl'), '有补全单词用的模板输入框');
+  ok(!!d.getElementById('qfImport'), '有批量导入文本框');
+  ok(/题干\|选项/.test(d.querySelector('#banksBody .import-help').textContent),
+    '导入说明写了格式，家长不用猜');
+  ok(!!d.querySelector('#banksBody [data-edit]') && !!d.querySelector('#banksBody [data-del]'),
+    '每题都有编辑 / 删除');
+
+  // 点「编辑」应当回填表单，而不是只弹个提示
+  d.querySelector('#banksBody [data-edit]').dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
+  const editOk = await waitFor(() => d.getElementById('qfStem').value.length > 0, 4000);
+  ok(editOk, `点编辑回填了题干（${d.getElementById('qfStem').value}）`);
+  ok(/保存修改/.test(d.getElementById('btnQfSave').textContent), '按钮变成「保存修改」');
+  d.getElementById('btnQfCancel').dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
+  await waitFor(() => /添加/.test(d.getElementById('btnQfSave').textContent), 3000);
+  ok(/添加/.test(d.getElementById('btnQfSave').textContent), '取消后回到新增态');
+
+  d.getElementById('btnBankBack').dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
+  const banksBackOk = await waitFor(
+    () => d.querySelectorAll('#banksBody .bank-row').length === 3, 4000,
+  );
+  ok(banksBackOk, '「返回题库列表」能回去');
+  d.getElementById('banksModal').classList.add('hidden');
+
   console.log('\n[3] 设备页：翻到前一天，时间轴和事件一起换');
   const evBefore = d.getElementById('dpEvents').innerHTML;
   const subBefore = d.getElementById('tlSub').textContent;

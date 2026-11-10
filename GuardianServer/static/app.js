@@ -666,6 +666,8 @@ async function renderDevicePage(quiet) {
   renderDpCommands(data.commands);
   // 停用时段：草稿独立于 dpData，自动刷新不会冲掉正在编辑的内容
   renderQuiet(d);
+  // 答题解锁：题库列表要单独拉一次（缓存 15 秒），所以放在最后异步画
+  renderQuizPanel(d);
 
   // 统计卡 / 应用排行 / 时间轴 / 事件 都由"选中日期"统一驱动
   await loadDayData(quiet);
@@ -1916,6 +1918,344 @@ function initEventsModal() {
   });
 }
 
+/* ---------------- 答题解锁：题库管理 + 设备设置（v2.6.0） ---------------- */
+
+let bankCache = [];        // 题库列表（含科目、题目数）
+let bankSubjects = [];     // 科目字典，由服务端给（中文名不要在前端再抄一份）
+let bankCacheAt = 0;
+let bankView = 0;          // 0 = 题库列表；>0 = 正在看某套题库的题目
+let bankEdit = null;       // 正在编辑的题（null = 新增）
+let quizPainted = false;   // 设备页的答题设置是否已经画过（用于"别打断正在输入"）
+
+/** 题库列表缓存 15 秒：设备页每 10 秒刷一次，不缓存就每次都多一个请求 */
+async function loadBanks(force) {
+  if (!force && bankCache.length && Date.now() - bankCacheAt < 15000) return bankCache;
+  const d = await api('/api/banks');
+  bankCache = d.banks || [];
+  bankSubjects = d.subjects || [];
+  bankCacheAt = Date.now();
+  return bankCache;
+}
+
+/** 家长正在答题设置里输入时不要重画：10 秒一次自动刷新会把输入框冲掉 */
+function quizEditing() {
+  const box = $('quizCfg');
+  const a = document.activeElement;
+  return !!(box && a && box.contains(a) && a.tagName === 'INPUT');
+}
+
+function renderQuizPanel(d) {
+  const box = $('quizCfg');
+  if (!box) return;
+  if (quizPainted && quizEditing()) return;
+  box.innerHTML = '<div class="muted small">加载题库…</div>';
+  loadBanks().then(() => paintQuizPanel(d)).catch(() => paintQuizPanel(d));
+}
+
+function paintQuizPanel(d) {
+  const box = $('quizCfg');
+  if (!box) return;
+  quizPainted = true;
+  const picked = new Set(d.quiz_banks || []);
+  const rows = bankCache.length
+    ? bankCache.map((b) => `
+      <label class="bank-pick">
+        <input type="checkbox" class="qBank" value="${b.id}" ${picked.has(b.id) ? 'checked' : ''}>
+        <span class="bank-name">${esc(b.name)}</span>
+        <em class="muted small">${esc(b.subject_label)} · ${b.count} 题</em>
+      </label>`).join('')
+    : '<div class="muted small">还没有题库，点右上角「管理题库」建一套</div>';
+
+  box.innerHTML = `
+    <div class="field">
+      <div><label>启用答题解锁</label>
+        <div class="hint">用满下面的分钟数就弹一道题，答对才能继续</div></div>
+      <span class="switch"><input type="checkbox" id="qEnabled" ${d.quiz_enabled ? 'checked' : ''}><span></span></span>
+    </div>
+    <div class="cfg-row">
+      <div class="field">
+        <div><label>每隔多少分钟出一道</label></div>
+        <input type="number" id="qInterval" min="1" max="180" value="${d.quiz_interval_minutes || 10}">
+      </div>
+      <div class="field">
+        <div><label>两题都没答对，休息多久</label>
+          <div class="hint">分钟。倒计时结束自动解锁，不用家长在旁边</div></div>
+        <input type="number" id="qPenalty" min="1" max="60" value="${d.quiz_penalty_minutes || 2}">
+      </div>
+    </div>
+    <div class="sect-title">用哪些题库</div>
+    <div class="bank-pick-list">${rows}</div>
+    <div class="quiz-foot">
+      <span class="muted small">保存会下发 2 条指令（配置 + 题库名单），20 秒内生效</span>
+      <button class="btn primary" id="btnSaveQuiz">保存并下发</button>
+    </div>`;
+  $('btnSaveQuiz').addEventListener('click', saveQuiz);
+}
+
+async function saveQuiz() {
+  const d = dpData && dpData.device;
+  if (!d) return;
+  const ids = Array.from(document.querySelectorAll('#quizCfg .qBank:checked'))
+    .map((el) => Number(el.value));
+  const cfg = {
+    type: 'config',
+    params: {
+      quiz_enabled: $('qEnabled').checked,
+      quiz_interval_minutes: Number($('qInterval').value),
+      quiz_penalty_minutes: Number($('qPenalty').value),
+    },
+  };
+  try {
+    await api(`/api/devices/${d.id}/command`, { method: 'POST', body: JSON.stringify(cfg) });
+    await api(`/api/devices/${d.id}/command`, {
+      method: 'POST',
+      body: JSON.stringify({ type: 'quiz_banks', params: { ids } }),
+    });
+    toast('已下发，设备 20 秒内应用');
+    quizPainted = false;
+    renderDevicePage(true);
+  } catch (err) {
+    toast(err.message);
+  }
+}
+
+/* ---- 题库管理弹窗 ---- */
+
+async function openBanks(bankId) {
+  bankView = bankId || 0;
+  bankEdit = null;
+  $('banksModal').classList.remove('hidden');
+  $('banksTitle').textContent = '题库';
+  $('banksSub').textContent = '语文 / 数学 / 英语，题目可以慢慢补';
+  $('banksBody').innerHTML = '<div class="muted small">加载中…</div>';
+  try {
+    await loadBanks(true);
+    await paintBanks();
+  } catch (err) {
+    $('banksBody').innerHTML = `<div class="err">${esc(err.message)}</div>`;
+  }
+}
+
+async function paintBanks() {
+  if (!bankView) return paintBankList();
+  return paintBankDetail();
+}
+
+function paintBankList() {
+  const list = bankCache.map((b) => `
+    <div class="bank-row">
+      <div class="bank-main">
+        <div class="bank-title">${esc(b.name)}
+          <span class="tag">${esc(b.subject_label)}</span>
+          ${b.builtin ? '<span class="tag builtin">内置</span>' : ''}
+        </div>
+        <div class="muted small">${b.count} 题${b.note ? ' · ' + esc(b.note) : ''}</div>
+      </div>
+      <div class="bank-ops">
+        <button class="btn ghost small" data-open="${b.id}">查看题目</button>
+      </div>
+    </div>`).join('') || '<div class="muted small">还没有题库</div>';
+
+  const subjOpts = bankSubjects
+    .map((s) => `<option value="${esc(s.key)}">${esc(s.label)}</option>`).join('');
+
+  $('banksBody').innerHTML = `
+    <div class="bank-list">${list}</div>
+    <div class="sect-title">新建题库</div>
+    <div class="form-grid">
+      <input id="nbName" type="text" placeholder="名称，例如「一年级下册字词」">
+      <select id="nbSubject" class="select">${subjOpts}</select>
+      <input id="nbNote" type="text" placeholder="备注（可空）">
+    </div>
+    <div class="modal-foot">
+      ${me && me.is_admin ? '<button class="btn ghost" id="btnRestoreSeed">恢复内置题库</button>' : ''}
+      <span class="spacer"></span>
+      <button class="btn primary" id="btnCreateBank">创建题库</button>
+    </div>`;
+
+  document.querySelectorAll('[data-open]').forEach((el) =>
+    el.addEventListener('click', () => openBanks(Number(el.dataset.open))));
+
+  $('btnCreateBank').addEventListener('click', async () => {
+    const name = $('nbName').value.trim();
+    if (!name) { toast('请填题库名称'); return; }
+    try {
+      const r = await api('/api/banks', {
+        method: 'POST',
+        body: JSON.stringify({
+          name,
+          subject: $('nbSubject').value,
+          note: $('nbNote').value.trim(),
+        }),
+      });
+      await loadBanks(true);
+      bankView = r.id;
+      bankEdit = null;
+      await paintBanks();
+      toast('已创建');
+    } catch (err) { toast(err.message); }
+  });
+
+  const seedBtn = $('btnRestoreSeed');
+  if (seedBtn) seedBtn.addEventListener('click', async () => {
+    try {
+      const r = await api('/api/banks/seed', { method: 'POST' });
+      await loadBanks(true);
+      await paintBanks();
+      toast(`内置题库已恢复：${r.banks} 套 / ${r.questions} 题`);
+    } catch (err) { toast(err.message); }
+  });
+}
+
+async function paintBankDetail() {
+  const bank = bankCache.find((b) => b.id === bankView);
+  if (!bank) { bankView = 0; return paintBankList(); }
+  $('banksTitle').textContent = bank.name;
+  $('banksSub').textContent = `${bank.subject_label} · ${bank.count} 题${bank.builtin ? ' · 内置题库（所有人都能看到）' : ''}`;
+
+  const data = await api(`/api/banks/${bankView}/questions?limit=100`);
+  const qs = data.questions || [];
+  const rows = qs.map((q) => `
+    <div class="q-row">
+      <div class="q-main">
+        <div class="q-stem">${esc(q.stem)}</div>
+        <div class="muted small">
+          ${q.type === 'spell' ? '补全单词' : '选择题'} · 答案 <b>${esc(q.answer)}</b>
+          ${q.tpl ? ' · 模板 ' + esc(q.tpl) : ''}
+          ${q.options && q.options.length ? ' · 选项 ' + q.options.map(esc).join(' / ') : ''}
+        </div>
+      </div>
+      <div class="q-ops">
+        <button class="btn ghost small" data-edit="${q.id}">编辑</button>
+        <button class="btn ghost small danger-text" data-del="${q.id}">删除</button>
+      </div>
+    </div>`).join('') || '<div class="muted small">这套题库还没有题</div>';
+
+  const subj = bank.subject;
+  $('banksBody').innerHTML = `
+    <div class="modal-back">
+      <button class="btn ghost small" id="btnBankBack">← 返回题库列表</button>
+      ${bank.count > qs.length ? `<span class="muted small">只显示前 ${qs.length} 题，共 ${bank.count} 题</span>` : ''}
+    </div>
+    <div class="q-list">${rows}</div>
+
+    <div class="sect-title">${bankEdit ? '修改这道题' : '新增一道题'}</div>
+    <div class="q-form">
+      <select id="qfType" class="select">
+        <option value="choice">选择题（四选一）</option>
+        <option value="spell">补全单词（填字母）</option>
+      </select>
+      <input id="qfStem" type="text" placeholder="题干，例如「3 + 5 = ?」或「补全单词：小猫」">
+      <input id="qfOptions" type="text" placeholder="选项，用逗号分隔：8,7,9,6（选择题必填）">
+      <input id="qfAnswer" type="text" placeholder="正确答案，例如 8 或 cat">
+      <input id="qfTpl" type="text" placeholder="模板（补全单词用）：c_t，下划线是要填的空">
+      <input id="qfHint" type="text" placeholder="提示（可空）">
+      <select id="qfLevel" class="select">
+        <option value="1">难度 1</option><option value="2">难度 2</option><option value="3">难度 3</option>
+      </select>
+    </div>
+    <div class="modal-foot">
+      ${bankEdit ? '<button class="btn ghost" id="btnQfCancel">取消修改</button>' : ''}
+      <span class="spacer"></span>
+      <button class="btn primary" id="btnQfSave">${bankEdit ? '保存修改' : '添加'}</button>
+    </div>
+
+    <details class="cfg-box" style="margin-top:14px">
+      <summary>批量导入（从 Excel 复制也行）</summary>
+      <div class="import-help muted small">
+        每行一道题，竖线分隔（全角｜和 Tab 也认）：<br>
+        选择题：<code>题干|选项A|选项B|选项C|选项D|正确答案</code><br>
+        补全单词：<code>S|题干|模板(c_t)|完整答案|提示</code><br>
+        也可以整段粘 JSON 数组。<code>#</code> 开头的行会跳过。
+      </div>
+      <textarea id="qfImport" rows="6" placeholder="3 + 5 = ?|8|7|9|6|8"></textarea>
+      <div class="modal-foot">
+        <span class="muted small" id="qfImportMsg"></span>
+        <span class="spacer"></span>
+        <button class="btn primary small" id="btnImport">导入</button>
+      </div>
+    </details>`;
+
+  document.querySelectorAll('[data-open]').forEach((el) =>
+    el.addEventListener('click', () => openBanks(Number(el.dataset.open))));
+  $('btnBankBack').addEventListener('click', () => { bankView = 0; bankEdit = null; paintBanks(); });
+  document.querySelectorAll('[data-edit]').forEach((el) =>
+    el.addEventListener('click', () => {
+      const q = qs.find((x) => x.id === Number(el.dataset.edit));
+      if (q) { bankEdit = q; paintBankDetail(); }
+    }));
+  document.querySelectorAll('[data-del]').forEach((el) =>
+    el.addEventListener('click', async () => {
+      if (!confirm('删除这道题？')) return;
+      try {
+        await api(`/api/banks/${bankView}/questions/${el.dataset.del}/delete`, { method: 'POST' });
+        await loadBanks(true);
+        await paintBankDetail();
+        toast('已删除');
+      } catch (err) { toast(err.message); }
+    }));
+
+  // 编辑态回填
+  if (bankEdit) {
+    $('qfType').value = bankEdit.type || 'choice';
+    $('qfStem').value = bankEdit.stem || '';
+    $('qfOptions').value = (bankEdit.options || []).join(',');
+    $('qfAnswer').value = bankEdit.answer || '';
+    $('qfTpl').value = bankEdit.tpl || '';
+    $('qfHint').value = bankEdit.hint || '';
+    $('qfLevel').value = String(bankEdit.level || 1);
+    $('btnQfCancel').addEventListener('click', () => { bankEdit = null; paintBankDetail(); });
+  }
+
+  $('btnQfSave').addEventListener('click', async () => {
+    const type = $('qfType').value;
+    const body = {
+      type,
+      stem: $('qfStem').value.trim(),
+      options: $('qfOptions').value.split(',').map((s) => s.trim()).filter(Boolean),
+      answer: $('qfAnswer').value.trim(),
+      tpl: type === 'spell' ? $('qfTpl').value.trim() : '',
+      hint: $('qfHint').value.trim(),
+      level: Number($('qfLevel').value),
+    };
+    if (!body.stem) { toast('题干不能为空'); return; }
+    if (!body.answer) { toast('答案不能为空'); return; }
+    try {
+      if (bankEdit) {
+        await api(`/api/banks/${bankView}/questions/${bankEdit.id}`, {
+          method: 'POST', body: JSON.stringify(body),
+        });
+        bankEdit = null;
+      } else {
+        await api(`/api/banks/${bankView}/questions`, {
+          method: 'POST', body: JSON.stringify(body),
+        });
+      }
+      await loadBanks(true);
+      await paintBankDetail();
+      toast('已保存');
+    } catch (err) { toast(err.message); }
+  });
+
+  $('btnImport').addEventListener('click', async () => {
+    const text = $('qfImport').value;
+    if (!text.trim()) { toast('先粘贴内容'); return; }
+    try {
+      const r = await api(`/api/banks/${bankView}/import`, {
+        method: 'POST',
+        body: JSON.stringify({ text, level: Number($('qfLevel').value) }),
+      });
+      const errs = (r.errors || []).slice(0, 5);
+      $('qfImportMsg').innerHTML = r.ok
+        ? `导入 ${r.imported} 题${r.skipped ? `，${r.skipped} 题超出上限未导入` : ''}${errs.length ? '；' + errs.length + ' 行有问题' : ''}`
+        : esc(r.message || '导入失败');
+      await loadBanks(true);
+      await paintBankDetail();
+      if (r.imported) toast(`已导入 ${r.imported} 题`);
+    } catch (err) { toast(err.message); }
+  });
+}
+
 /* ---------------- 弹窗关闭 ---------------- */
 
 document.addEventListener('click', (e) => {
@@ -1931,7 +2271,7 @@ document.addEventListener('click', (e) => {
 document.addEventListener('keydown', (e) => {
   if (e.key !== 'Escape') return;
   // 设备页用「返回」退出，只有弹窗才吃 Esc
-  ['pairModal', 'usersModal', 'accountModal', 'eventsModal'].forEach((id) =>
+  ['pairModal', 'usersModal', 'accountModal', 'eventsModal', 'banksModal'].forEach((id) =>
     $(id).classList.add('hidden'));
 });
 
@@ -1941,6 +2281,10 @@ document.addEventListener('keydown', (e) => {
 // 页面内容是每次渲染重建的，不会跟着重复绑定。
 initDevicePage();
 initEventsModal();
+
+// 题库入口：顶栏（全局）和设备页（就地跳到题库）各一个
+$('btnBanks').addEventListener('click', () => openBanks());
+$('btnQuizBanks').addEventListener('click', () => openBanks());
 
 (async function boot() {
   if (!token) { showLogin(); return; }

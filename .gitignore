@@ -52,3 +52,9 @@ desktop.ini
 *~
 *.orig
 *.rej
+
+# ---- 根目录临时产物（发布走 Release，不进 git）----
+/*.apk
+/*.mp4
+/*.jpg
+/*.png

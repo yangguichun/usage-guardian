@@ -804,3 +804,73 @@ main { padding: 20px 22px 40px; max-width: 1320px; margin: 0 auto; }
   .date-input { min-width: 104px; font-size: 12px; }
   .ev-filters .select { flex: 1 1 100%; }
 }
+
+/* ================= 答题解锁 / 题库（v2.6.0） ================= */
+
+.cfg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.cfg-row .field { align-items: flex-start; }
+.cfg-row .field input[type="number"] { width: 92px; }
+
+.bank-pick-list { display: grid; gap: 6px; margin-top: 6px; }
+.bank-pick {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--panel-2); cursor: pointer;
+}
+.bank-pick:hover { border-color: var(--brand); }
+.bank-pick .bank-name { font-size: 13px; }
+.bank-pick em { margin-left: auto; font-style: normal; }
+
+.quiz-foot, .modal-foot {
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 14px; flex-wrap: wrap;
+}
+.modal-foot { justify-content: flex-end; }
+.modal-foot .spacer { flex: 1; }
+.quiz-foot { justify-content: space-between; }
+
+.bank-list, .q-list { display: grid; gap: 8px; }
+.bank-row, .q-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--panel-2);
+}
+.bank-main, .q-main { flex: 1; min-width: 0; }
+.bank-title { font-size: 13.5px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.q-stem { font-size: 13.5px; word-break: break-word; }
+.bank-ops, .q-ops { display: flex; gap: 6px; flex-shrink: 0; }
+.danger-text { color: var(--danger); }
+
+.tag {
+  font-size: 11px; font-weight: 400; padding: 1px 7px; border-radius: 20px;
+  background: var(--brand-soft); color: var(--brand);
+}
+.tag.builtin { background: var(--ok-soft); color: var(--ok); }
+
+.modal-back { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+
+.q-form { display: grid; gap: 8px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.q-form input, .q-form .select {
+  height: 34px; padding: 0 10px; border: 1px solid var(--line);
+  border-radius: 8px; background: var(--panel); color: var(--text); font-size: 13px;
+}
+.q-form input:focus, .q-form .select:focus { outline: none; border-color: var(--brand); }
+.q-form #qfStem, .q-form #qfOptions { grid-column: 1 / -1; }
+
+.import-help { line-height: 1.7; margin: 8px 0; }
+.import-help code {
+  background: var(--panel-2); border: 1px solid var(--line);
+  padding: 1px 5px; border-radius: 5px; font-size: 11.5px;
+}
+.cfg-box textarea {
+  width: 100%; box-sizing: border-box; padding: 10px; margin-top: 8px;
+  border: 1px solid var(--line); border-radius: 10px; font-size: 12.5px;
+  font-family: ui-monospace, Menlo, Consolas, monospace; resize: vertical;
+  background: var(--panel); color: var(--text);
+}
+.cfg-box textarea:focus { outline: none; border-color: var(--brand); }
+
+@media (max-width: 720px) {
+  .cfg-row, .q-form { grid-template-columns: minmax(0, 1fr); }
+  .q-form #qfStem, .q-form #qfOptions { grid-column: auto; }
+}

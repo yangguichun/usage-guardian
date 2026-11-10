@@ -19,6 +19,7 @@
 
 mod db;
 mod handlers;
+mod quiz;
 mod store;
 mod util;
 
@@ -219,6 +220,13 @@ async fn main() {
         println!("       登录后请立刻在右上角「账号」里改掉这个口令。");
     }
 
+    // 首次启动时导入内置题库（语文拼音 / 数学口算 / 牛津树词汇）。
+    // 幂等：库里已经有一条内置题库就跳过，不会重复导入。
+    if let Some(n) = quiz::ensure_seed(&store.db) {
+        let (b, q) = quiz::stats(&store.db);
+        println!("[题库] 已导入内置题库 {n} 道题（当前共 {b} 套、{q} 道）");
+    }
+
     let state = Arc::new(AppState {
         store: Mutex::new(store),
         data_path: data_path.clone(),
@@ -246,6 +254,21 @@ async fn main() {
         .route("/api/devices/{device_id}/command", post(handlers::push_command))
         .route("/api/devices/{device_id}/delete", post(handlers::delete_device))
         .route("/api/events", get(handlers::list_events))
+        // ---- 答题解锁：题库（v2.6.0）----
+        .route("/api/banks", get(handlers::list_banks).post(handlers::create_bank))
+        .route("/api/banks/seed", post(handlers::restore_seed))
+        .route("/api/banks/{id}", post(handlers::update_bank))
+        .route("/api/banks/{id}/delete", post(handlers::delete_bank))
+        .route(
+            "/api/banks/{id}/questions",
+            get(handlers::list_questions).post(handlers::add_question),
+        )
+        .route("/api/banks/{id}/questions/{qid}", post(handlers::update_question))
+        .route(
+            "/api/banks/{id}/questions/{qid}/delete",
+            post(handlers::delete_question),
+        )
+        .route("/api/banks/{id}/import", post(handlers::import_questions))
         .route("/api/pair-codes", post(handlers::create_pair_code))
         .route("/api/users", get(handlers::list_users))
         .route("/api/users", post(handlers::create_user))
@@ -255,6 +278,7 @@ async fn main() {
         .route("/api/device/heartbeat", post(handlers::device_heartbeat))
         .route("/api/device/usage", post(handlers::device_usage))
         .route("/api/device/result", post(handlers::device_result))
+        .route("/api/device/quiz", post(handlers::device_quiz))
         .with_state(state.clone());
 
     let listener = match tokio::net::TcpListener::bind(&state.cfg.addr).await {

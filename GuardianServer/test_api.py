@@ -1050,6 +1050,156 @@ def main():
         st, body = req("POST", "/api/users/u_admin", {"role": "user"}, token=token)
         check("不能取消自己的管理员 400", 400, st)
 
+        # ---------- 答题解锁：题库与下发（v2.6.0） ----------
+        print("[答题解锁 · 题库]")
+        st, body = req("GET", "/api/banks", token=token)
+        check("题库列表 200", 200, st)
+        check_that("内置题库已自动导入", len(body["banks"]) >= 3, len(body["banks"]))
+        check_that("带科目字典", len(body["subjects"]) >= 3, body["subjects"])
+        builtin = [b for b in body["banks"] if b.get("builtin")]
+        check_that("有内置题库", len(builtin) >= 1, len(builtin))
+        check_that(
+            "内置题库都有题",
+            all(b["count"] > 0 for b in builtin),
+            [(b["name"], b["count"]) for b in builtin],
+        )
+
+        st, body = req("POST", "/api/banks", {"name": "  ", "subject": "math"}, token=token)
+        check("空名建题库 400", 400, st)
+        st, body = req("POST", "/api/banks", {"name": "测试题库", "subject": "xx"}, token=token)
+        check("未知科目 400", 400, st)
+        st, body = req(
+            "POST", "/api/banks",
+            {"name": "测试题库", "subject": "math", "note": "单测用"}, token=token,
+        )
+        check("建题库 200", 200, st)
+        bank_id = body["id"]
+
+        # 答案不在选项里的题必须拒掉：存进去的话设备上永远答不对，
+        # 孩子会被一直卡在这道题上 —— 这是最坏的一种数据错误，比报错难查得多
+        st, body = req(
+            "POST", f"/api/banks/{bank_id}/questions",
+            {"type": "choice", "stem": "1+1=?", "options": ["3", "4", "5", "6"], "answer": "2"},
+            token=token,
+        )
+        check("答案不在选项里 400", 400, st)
+        st, body = req(
+            "POST", f"/api/banks/{bank_id}/questions",
+            {"type": "choice", "stem": "1+1=?", "options": ["2", "3", "4", "5"], "answer": "2"},
+            token=token,
+        )
+        check("加选择题 200", 200, st)
+        qid = body["id"]
+        st, body = req(
+            "POST", f"/api/banks/{bank_id}/questions",
+            {"type": "spell", "stem": "补全单词：猫", "tpl": "c_t", "answer": "cat"}, token=token,
+        )
+        check("加拼写题 200", 200, st)
+        st, body = req(
+            "POST", f"/api/banks/{bank_id}/questions",
+            {"type": "spell", "stem": "没有空位", "tpl": "cat", "answer": "cat"}, token=token,
+        )
+        check("模板没有空位 400", 400, st)
+        st, body = req(
+            "POST", f"/api/banks/{bank_id}/questions",
+            {"type": "spell", "stem": "长度不符", "tpl": "c__t", "answer": "cat"}, token=token,
+        )
+        check("模板与答案长度不符 400", 400, st)
+
+        st, body = req("GET", f"/api/banks/{bank_id}/questions", token=token)
+        check("题目列表 200", 200, st)
+        check("题目数 2", 2, body["total"])
+
+        # 文本导入：三行里有一行是注释，应当只进 2 道
+        imp = "3 + 4 = ?|7|8|6|5|7\nS|补全单词：狗|d_g|dog|小狗\n# 这行是注释\n"
+        st, body = req("POST", f"/api/banks/{bank_id}/import", {"text": imp, "level": 2}, token=token)
+        check("导入 200", 200, st)
+        check("导入 2 题", 2, body["imported"])
+        st, body = req("POST", f"/api/banks/{bank_id}/import", {"text": "乱七八糟没有分隔符"}, token=token)
+        check_that("乱格式导不进去", body.get("imported") == 0, body)
+
+        st, body = req(
+            "POST", f"/api/banks/{bank_id}/questions/{qid}",
+            {"type": "choice", "stem": "2+2=?", "options": ["3", "4", "5", "6"], "answer": "4"},
+            token=token,
+        )
+        check("改题 200", 200, st)
+        st, body = req("POST", f"/api/banks/{bank_id}/questions/{qid}/delete", {}, token=token)
+        check("删题 200", 200, st)
+        st, body = req("GET", f"/api/banks/{bank_id}/questions", token=token)
+        check("删完剩 3 题", 3, body["total"])
+
+        # 老版本 App：必须明确拒绝，不能"静默忽略" —— 家长以为开好了最坏
+        st, body = req(
+            "POST", f"/api/devices/{dev_id}/command",
+            {"type": "quiz_banks", "params": {"ids": [bank_id]}}, token=token,
+        )
+        check("老 App 下发题库 400", 400, st)
+        check_that("提示升级到 2.6.0", "2.6.0" in body.get("detail", ""), body.get("detail"))
+
+        # 配一台支持答题的设备
+        st, body = req("POST", "/api/pair-codes", {}, token=token)
+        code3 = body["code"]
+        st, body = req(
+            "POST", "/api/device/pair",
+            {"code": code3, "name": "答题平板", "app_version": "2.6.0"},
+        )
+        check("答题设备配对 200", 200, st)
+        q_dev = body["device_id"]
+        q_tok = body["token"]
+
+        st, body = req(
+            "POST", f"/api/devices/{q_dev}/command",
+            {"type": "quiz_banks", "params": {"ids": [bank_id]}}, token=token,
+        )
+        check("下发题库 200", 200, st)
+        st, body = req("GET", f"/api/devices/{q_dev}", token=token)
+        check("题库已落库", [bank_id], body["device"]["quiz_banks"])
+
+        st, body = req(
+            "POST", f"/api/devices/{q_dev}/command",
+            {"type": "config", "params": {
+                "quiz_enabled": True, "quiz_interval_minutes": 8, "quiz_penalty_minutes": 3}},
+            token=token,
+        )
+        check("下发答题配置 200", 200, st)
+        st, body = req("GET", f"/api/devices/{q_dev}", token=token)
+        check("间隔已落库", 8, body["device"]["quiz_interval_minutes"])
+        check("罚时已落库", 3, body["device"]["quiz_penalty_minutes"])
+        check("开关已落库", True, body["device"]["quiz_enabled"])
+
+        st, body = req("POST", f"/api/devices/{q_dev}/command", {"type": "config", "params": {"use_minutes": 25}}, token=token)
+        check("没带 quiz_* 的配置不误伤", 200, st)
+
+        # 设备取题（字段名是短键，省流量）
+        st, body = req("POST", "/api/device/quiz", {"limit": 50}, token=q_tok)
+        check("取题 200", 200, st)
+        check_that("取到题目", len(body["questions"]) >= 3, len(body["questions"]))
+        check_that("带题库版本号", len(body["version"]) > 0, body["version"])
+        check("取题带间隔", 8, body["interval_minutes"])
+        check("取题带罚时", 3, body["penalty_minutes"])
+        q0 = body["questions"][0]
+        check_that("下发用短键", {"q", "a", "t", "o"}.issubset(set(q0)), sorted(q0))
+        check_that(
+            "选择题答案一定在选项里",
+            all(
+                qx["a"] in qx["o"] for qx in body["questions"] if qx["t"] == "choice"
+            ),
+            [(qx["q"], qx["a"], qx["o"]) for qx in body["questions"] if qx["t"] == "choice"][:3],
+        )
+
+        st, body = req("POST", "/api/device/heartbeat", {"app_version": "2.6.0"}, token=q_tok)
+        check("答题设备心跳 200", 200, st)
+        check("心跳带题库名单", [bank_id], body["quiz_banks"])
+        check("心跳里答题可用", True, body["quiz_active"])
+        check_that("心跳带题库版本", len(body["quiz_version"]) > 0, body["quiz_version"])
+
+        # 删题库 → 设备上的名单要跟着清，否则设备会拿着一个不存在的 id 去取题
+        st, body = req("POST", f"/api/banks/{bank_id}/delete", {}, token=token)
+        check("删题库 200", 200, st)
+        st, body = req("GET", f"/api/devices/{q_dev}", token=token)
+        check("设备名单已清理", [], body["device"]["quiz_banks"])
+
         # ---------- 重启后数据还在 ----------
         print("[重启持久化]")
         # 用"重启前的实际条数"作基准，别写死数字 ——
@@ -1057,13 +1207,16 @@ def main():
         st, body = req("GET", f"/api/devices/{dev_id}", token=token)
         cmds_before_restart = len(body["commands"])
         check_that("重启前有指令记录", cmds_before_restart > 0, cmds_before_restart)
+        # 设备数也取实际值：这一节前面又配对了一台答题设备，写死 2 会假失败
+        st, body = req("GET", "/api/overview", token=token)
+        devices_before_restart = body["stats"]["devices_total"]
         proc.terminate()
         proc.wait(timeout=10)
         check_that("数据文件已生成", os.path.isfile(DATA))
         proc = start(binary)
         st, body = req("GET", "/api/overview", token=token)
         check("旧 token 仍有效 200", 200, st)
-        check("重启后设备还在", 2, body["stats"]["devices_total"])
+        check("重启后设备还在", devices_before_restart, body["stats"]["devices_total"])
         st, body = req("GET", f"/api/devices/{dev_id}", token=token)
         check("重启后历史仍在", cmds_before_restart, len(body["commands"]))
         st, body = req("GET", "/api/users", token=token)

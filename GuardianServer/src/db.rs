@@ -117,6 +117,45 @@ CREATE TABLE IF NOT EXISTS daystat (
     sys_ms     INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY (device_id, day)
 );
+
+-- 答题解锁（v2.6.0）的题库。
+--
+-- 和 events / usage 那些"流水表"不同，题库是**配置数据**：行数少、改动频繁、
+-- 要能逐行编辑，所以用真正的列而不是塞进 kv 的 JSON —— 家长在网页上改一道题，
+-- 不该导致整个题库重写一遍。
+--
+-- owner_id 为空表示"内置题库"，所有账号可见但只有管理员能改；
+-- 非空表示某个账号自己建的，别人看不见（和设备的越权返回 404 是同一套规矩）。
+CREATE TABLE IF NOT EXISTS quiz_bank (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    owner_id   TEXT NOT NULL DEFAULT '',
+    name       TEXT NOT NULL,
+    subject    TEXT NOT NULL DEFAULT 'mixed',
+    note       TEXT NOT NULL DEFAULT '',
+    enabled    INTEGER NOT NULL DEFAULT 1,
+    is_seed    INTEGER NOT NULL DEFAULT 0,
+    created_at REAL NOT NULL DEFAULT 0,
+    updated_at REAL NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS quiz_question (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    bank_id    INTEGER NOT NULL,
+    subject    TEXT NOT NULL DEFAULT 'mixed',
+    qtype      TEXT NOT NULL DEFAULT 'choice',
+    stem       TEXT NOT NULL,
+    options    TEXT NOT NULL DEFAULT '[]',
+    answer     TEXT NOT NULL DEFAULT '',
+    tpl        TEXT NOT NULL DEFAULT '',
+    hint       TEXT NOT NULL DEFAULT '',
+    level      INTEGER NOT NULL DEFAULT 1,
+    enabled    INTEGER NOT NULL DEFAULT 1,
+    created_at REAL NOT NULL DEFAULT 0,
+    -- 改一道题也要让"题库版本号"变化，设备才知道该重新下载，
+    -- 所以单独记一个 updated_at（created_at 不会随编辑变化）。
+    updated_at REAL NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS ix_qq_bank ON quiz_question(bank_id, id);
 "#;
 
 pub struct Db {
@@ -147,7 +186,9 @@ impl Db {
     }
 
     /// 进程内的连接锁。被 panic 毒化也要能继续用 —— 数据库本身没有坏。
-    fn c(&self) -> std::sync::MutexGuard<'_, Connection> {
+    ///
+    /// `pub(crate)`：题库那套 SQL 放在 `quiz.rs`，它需要直接拿连接。
+    pub(crate) fn c(&self) -> std::sync::MutexGuard<'_, Connection> {
         self.conn.lock().unwrap_or_else(|e| e.into_inner())
     }
 

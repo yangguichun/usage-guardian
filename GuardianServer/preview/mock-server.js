@@ -91,6 +91,11 @@ const DEVICES = [
     screen_on: true,
     note: '周一到周五晚上 9 点后不许用',
     ip: '192.168.1.23',
+    // 答题解锁（v2.6.0）：设备 A 开着，勾了两套题库
+    quiz_enabled: true,
+    quiz_interval_minutes: 10,
+    quiz_penalty_minutes: 2,
+    quiz_banks: [1, 3],
     // 停用时段：22:00 → 次日 06:00（每天）正在生效，另有一条周末白天规则未启用
     in_quiet: true,
     quiet_next: '每天 22:00–06:00',
@@ -144,6 +149,10 @@ const DEVICES = [
     screen_on: true,
     note: '每天 90 分钟',
     ip: '192.168.1.42',
+    quiz_enabled: false,
+    quiz_interval_minutes: 15,
+    quiz_penalty_minutes: 3,
+    quiz_banks: [],
     in_quiet: false,
     quiet_hours: [],
   },
@@ -187,6 +196,14 @@ function deviceJson(d, t) {
     in_quiet: !!d.in_quiet,
     quiet_left_ms: d.in_quiet ? 92 * 60 * 1000 : 0,
     quiet_label: d.quiet_next || '',
+    // ---- 答题解锁（v2.6.0）----
+    quiz_enabled: !!d.quiz_enabled,
+    quiz_interval_minutes: d.quiz_interval_minutes || 10,
+    quiz_penalty_minutes: d.quiz_penalty_minutes || 2,
+    quiz_banks: d.quiz_banks || [],
+    quiz_locked: false,
+    quiz_right: 12,
+    quiz_wrong: 3,
   };
 }
 
@@ -214,8 +231,43 @@ const EVENTS_POOL = [
   { kind: 'pair', msg: '设备配对成功' },
 ];
 
-/** 某设备某天的原始片段（都是 Unix 秒，和数据库存法一致） */
-function dayData(dev, day) {
+/* ---------------- 题库（v2.6.0） ---------------- */
+
+const SUBJECTS = [
+  { key: 'chinese', label: '语文' },
+  { key: 'math', label: '数学' },
+  { key: 'english', label: '英语' },
+  { key: 'mixed', label: '综合' },
+];
+
+const BANKS = [
+  {
+    id: 1, name: '语文 · 拼音认读（一年级）', subject: 'chinese', note: '声母韵母 + 常用字', builtin: true,
+    questions: [
+      { id: 101, bank_id: 1, subject: 'chinese', type: 'choice', stem: '「妈」的拼音是？', options: ['mā', 'má', 'mǎ', 'mà'], answer: 'mā', tpl: '', hint: '', level: 1, enabled: true },
+      { id: 102, bank_id: 1, subject: 'chinese', type: 'choice', stem: '「花」的拼音是？', options: ['huā', 'huá', 'huǎ', 'huà'], answer: 'huā', tpl: '', hint: '', level: 1, enabled: true },
+      { id: 103, bank_id: 1, subject: 'chinese', type: 'choice', stem: '「水」的拼音是？', options: ['shuǐ', 'shuī', 'shuí', 'shuì'], answer: 'shuǐ', tpl: '', hint: '', level: 1, enabled: true },
+    ],
+  },
+  {
+    id: 2, name: '数学 · 20 以内加减', subject: 'math', note: '', builtin: true,
+    questions: [
+      { id: 201, bank_id: 2, subject: 'math', type: 'choice', stem: '3 + 5 = ?', options: ['8', '7', '9', '6'], answer: '8', tpl: '', hint: '', level: 1, enabled: true },
+      { id: 202, bank_id: 2, subject: 'math', type: 'choice', stem: '17 − 9 = ?', options: ['8', '7', '9', '6'], answer: '8', tpl: '', hint: '', level: 2, enabled: true },
+      { id: 203, bank_id: 2, subject: 'math', type: 'choice', stem: '6 + 7 = ?', options: ['13', '12', '14', '11'], answer: '13', tpl: '', hint: '', level: 2, enabled: true },
+    ],
+  },
+  {
+    id: 3, name: '英语 · 牛津树 1-3 级', subject: 'english', note: 'Biff 一家', builtin: true,
+    questions: [
+      { id: 301, bank_id: 3, subject: 'english', type: 'choice', stem: '妈妈（口语）', options: ['Mum', 'Dad', 'Chip', 'Biff'], answer: 'Mum', tpl: '', hint: '', level: 1, enabled: true },
+      { id: 302, bank_id: 3, subject: 'english', type: 'spell', stem: '补全单词：奇普（人名）', options: [], answer: 'Chip', tpl: 'Ch_p', hint: '人名', level: 1, enabled: true },
+      { id: 303, bank_id: 3, subject: 'english', type: 'spell', stem: '补全单词：小狗弗洛皮', options: [], answer: 'Floppy', tpl: 'Fl_p_y', hint: '狗', level: 2, enabled: true },
+    ],
+  },
+];
+
+/** 某设备某天的原始片段（都是 Unix 秒，和数据库存法一致） */function dayData(dev, day) {
   const r = rng(`${dev.id}|${day}`);
   const base = dayStart(day);
   const isToday = day === localDay(now());
@@ -645,6 +697,44 @@ const server = http.createServer((req, res) => {
 
   if (p.startsWith('/api/devices/') && p.endsWith('/command')) {
     return send(res, 200, { ok: true, accepted: 1 });
+  }
+
+  // ---------------- 题库（v2.6.0） ----------------
+  //
+  // 桩服务里也要有真数据，否则设备页的「答题解锁」面板和题库弹窗渲染出来
+  // 是空的，ui-check 的断言看不出问题（空态也是"渲染成功"）。
+  if (p === '/api/banks') {
+    return send(res, 200, {
+      banks: BANKS.map((b) => ({
+        id: b.id, name: b.name, subject: b.subject,
+        subject_label: SUBJECTS.find((s) => s.key === b.subject).label,
+        note: b.note, enabled: true, is_seed: b.builtin, count: b.questions.length,
+        builtin: b.builtin, created_at: t - 6 * 86400, updated_at: t - 3600,
+      })),
+      subjects: SUBJECTS,
+      stats: { banks: BANKS.length, questions: BANKS.reduce((n, b) => n + b.questions.length, 0) },
+    });
+  }
+  if (p === '/api/banks/seed') {
+    return send(res, 200, { ok: true, banks: BANKS.length, questions: 9 });
+  }
+  m = p.match(/^\/api\/banks\/(\d+)\/questions$/);
+  if (m) {
+    const bank = BANKS.find((b) => b.id === Number(m[1]));
+    if (!bank) return send(res, 404, { detail: '题库不存在' });
+    return send(res, 200, {
+      questions: bank.questions,
+      total: bank.questions.length,
+      limit: 100,
+      offset: 0,
+      bank: { id: bank.id, name: bank.name, subject: bank.subject, count: bank.questions.length },
+    });
+  }
+  if (p.match(/^\/api\/banks\/\d+\/(import|delete)$/)) {
+    return send(res, 200, { ok: true, imported: 2, errors: [], total: 10 });
+  }
+  if (p.startsWith('/api/banks')) {
+    return send(res, 200, { ok: true, id: 9 });
   }
 
   if (p.startsWith('/api/')) {

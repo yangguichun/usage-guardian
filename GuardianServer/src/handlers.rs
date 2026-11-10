@@ -20,6 +20,7 @@ use serde_json::{json, Map, Value};
 
 use crate::store::{Device, PairCode, PresenceSeg, Session, Store, UsageSeg, User};
 use crate::store::{QuietRule, DAYS_ALL};
+use crate::quiz::{self, Question};
 use crate::util::{
     clamp, hash_password, json_bool, local_day, now_ts, rand_digits, rand_hex, verify_password,
 };
@@ -92,6 +93,8 @@ pub const ALLOWED_COMMANDS: &[(&str, &str)] = &[
     ("day_limit", "设置每日总时长上限"),
     ("day_unlock", "今日解除（今天不再按额度锁）"),
     ("day_relock", "恢复今日限制"),
+    // 答题解锁（v2.6.0）：题库选择走这里，内容本身由 /api/banks 增删改。
+    ("quiz_banks", "设置答题解锁使用的题库"),
 ];
 
 /// 版本号比较用（"2.3.1" → (2,3,1)）。解析不出来的段当 0，不 panic。
@@ -1223,6 +1226,23 @@ pub async fn push_command(
         Some(Value::Object(m)) => m,
         _ => Map::new(),
     };
+
+    // 答题解锁是 v2.6.0 才有的能力。
+    //
+    // 老 App 收到不认识的指令会回"不支持的指令"，家长至少能看到失败；
+    // 但 `config` 里的 quiz_* 参数老 App 会**静默忽略** —— 家长以为开好了，
+    // 孩子照样刷，这是最坏的一种失败。所以在服务端就按版本拦住。
+    {
+        let ver = store.devices[dev_idx].app_version.clone();
+        let wants_quiz = body.kind == "quiz_banks"
+            || raw.keys().any(|k| k.starts_with("quiz_"));
+        if wants_quiz && !ver.is_empty() && ver_tuple(&ver) < (2, 6, 0) {
+            return Err(ApiError::bad(format!(
+                "这台设备的 App 是 {ver}，不支持「答题解锁」，请先升级到 2.6.0 及以上"
+            )));
+        }
+    }
+
     let params = match body.kind.as_str() {
         "lock" => {
             // ★ 默认值取这台设备自己配置的休息时长，不能写死 5。
@@ -1272,6 +1292,29 @@ pub async fn push_command(
                 store.devices[dev_idx].day_limit_minutes = m;
                 clean.insert("day_limit_minutes".into(), json!(m));
             }
+            // ---- 答题解锁（v2.6.0）----
+            // 开关、间隔、罚时都跟着设备配置一起下发；题库选择走单独的
+            // `quiz_banks` 指令（它是一个 id 列表，混在 config 里不好看清回执）。
+            if raw.contains_key("quiz_enabled") {
+                let on = json_bool(raw.get("quiz_enabled"), false);
+                store.devices[dev_idx].quiz_enabled = on;
+                clean.insert("quiz_enabled".into(), Value::Bool(on));
+            }
+            if raw.contains_key("quiz_interval_minutes") {
+                let m = clamp(raw.get("quiz_interval_minutes"), 1, 180, 10);
+                store.devices[dev_idx].quiz_interval_minutes = m;
+                clean.insert("quiz_interval_minutes".into(), json!(m));
+            }
+            if raw.contains_key("quiz_penalty_minutes") {
+                let m = clamp(raw.get("quiz_penalty_minutes"), 1, 60, 2);
+                store.devices[dev_idx].quiz_penalty_minutes = m;
+                clean.insert("quiz_penalty_minutes".into(), json!(m));
+            }
+            if raw.contains_key("quiz_banks") {
+                let ids = parse_bank_ids(&store, &store.devices[dev_idx].owner_id.clone(), raw.get("quiz_banks"));
+                store.devices[dev_idx].quiz_banks = ids.clone();
+                clean.insert("quiz_banks".into(), json!(ids));
+            }
             if clean.is_empty() {
                 return Err(ApiError::bad("没有可修改的参数"));
             }
@@ -1286,6 +1329,19 @@ pub async fn push_command(
             json!({ "minutes": minutes })
         }
         "day_unlock" | "day_relock" => Value::Object(Map::new()),
+        // ---- 答题解锁：题库选择（v2.6.0）----
+        //
+        // 单独一条指令而不是塞进 config：它是个 id 列表，家长在设备页勾选后
+        // 单独点「应用题库」，回执里也能清楚看到"实际存下了哪几个 id"。
+        "quiz_banks" => {
+            let owner = store.devices[dev_idx].owner_id.clone();
+            // 前端历史上写的是 `ids`，早期草稿写的是 `banks`；两个都认，
+            // 免得因为一个字段名让"勾了题库却没生效"变成难查的问题。
+            let raw_ids = raw.get("banks").or_else(|| raw.get("ids"));
+            let ids = parse_bank_ids(&store, &owner, raw_ids);
+            store.devices[dev_idx].quiz_banks = ids.clone();
+            json!({ "banks": ids })
+        }
         // ---- 停用时段：整体替换规则列表 ----
         //
         // 设计成"整份替换"而不是"逐条增删改"：规则最多四五条，前端本来就是
@@ -1580,6 +1636,417 @@ pub async fn device_quiet(
         "quiet_left_ms": d.quiet_left_ms,
         "quiet_label": d.quiet_label,
     })))
+}
+
+// ======================================================================
+// 答题解锁 · 题库管理（v2.6.0）
+// ======================================================================
+
+/// 题库归属校验。
+///
+/// 内置题库（owner_id 为空）所有账号可见、只有管理员能改；
+/// 别人建的题库一律按"不存在"处理 —— 和设备的越权规矩保持一致。
+fn bank_for(auth: &Auth, b: &quiz::Bank) -> ApiResult<()> {
+    if b.owner_id.is_empty() {
+        if auth.is_admin() {
+            Ok(())
+        } else {
+            Err(ApiError::bad("内置题库只能由管理员修改"))
+        }
+    } else if b.owner_id == auth.id {
+        Ok(())
+    } else {
+        Err(ApiError::not_found("题库不存在"))
+    }
+}
+
+#[derive(Deserialize)]
+pub struct BankBody {
+    pub name: Option<String>,
+    pub subject: Option<String>,
+    pub note: Option<String>,
+    pub enabled: Option<bool>,
+}
+
+/// `GET /api/banks` —— 题库列表（含每套的题目数）
+pub async fn list_banks(
+    State(st): State<Arc<AppState>>,
+    headers: HeaderMap,
+) -> ApiResult<Json<Value>> {
+    let mut store = st.lock();
+    let auth = require_user(&st, &mut store, &headers)?;
+    let scope = if auth.is_admin() { None } else { Some(auth.id.as_str()) };
+    let list: Vec<Value> = quiz::banks(&store.db, scope)
+        .iter()
+        .map(|b| b.json())
+        .collect();
+    let (n_bank, n_q) = quiz::stats(&store.db);
+    Ok(Json(json!({
+        "banks": list,
+        "subjects": quiz::SUBJECTS
+            .iter()
+            .map(|(k, v)| json!({ "key": k, "label": v }))
+            .collect::<Vec<_>>(),
+        "stats": { "banks": n_bank, "questions": n_q },
+    })))
+}
+
+/// `POST /api/banks` —— 新建题库
+pub async fn create_bank(
+    State(st): State<Arc<AppState>>,
+    headers: HeaderMap,
+    Json(body): Json<BankBody>,
+) -> ApiResult<Json<Value>> {
+    let mut store = st.lock();
+    let auth = require_user(&st, &mut store, &headers)?;
+    let name = body.name.as_deref().unwrap_or("").trim().to_string();
+    if name.is_empty() {
+        return Err(ApiError::bad("题库名称不能为空"));
+    }
+    if name.chars().count() > 40 {
+        return Err(ApiError::bad("题库名称太长（最多 40 字）"));
+    }
+    let subject = body.subject.as_deref().unwrap_or("mixed");
+    if !quiz::valid_subject(subject) {
+        return Err(ApiError::bad("不支持的学科"));
+    }
+    let note = body.note.as_deref().unwrap_or("").chars().take(300).collect::<String>();
+    let id = quiz::bank_create(&store.db, &auth.id, &name, subject, &note, false)
+        .ok_or_else(|| ApiError::bad("创建题库失败（数据库写入错误）"))?;
+    store.save();
+    Ok(Json(json!({ "ok": true, "id": id })))
+}
+
+/// `POST /api/banks/{id}` —— 改题库（名称 / 学科 / 说明 / 启停）
+pub async fn update_bank(
+    State(st): State<Arc<AppState>>,
+    UrlPath(id): UrlPath<i64>,
+    headers: HeaderMap,
+    Json(body): Json<BankBody>,
+) -> ApiResult<Json<Value>> {
+    let mut store = st.lock();
+    let auth = require_user(&st, &mut store, &headers)?;
+    let b = quiz::bank_get(&store.db, id).ok_or_else(|| ApiError::not_found("题库不存在"))?;
+    bank_for(&auth, &b)?;
+
+    let name = body
+        .name
+        .as_deref()
+        .map(|s| s.trim().to_string())
+        .filter(|s| !s.is_empty())
+        .unwrap_or(b.name.clone());
+    let subject = body.subject.as_deref().unwrap_or(&b.subject).to_string();
+    if !quiz::valid_subject(&subject) {
+        return Err(ApiError::bad("不支持的学科"));
+    }
+    let note = body.note.clone().unwrap_or(b.note.clone());
+    let enabled = body.enabled.unwrap_or(b.enabled);
+    if !quiz::bank_update(&store.db, id, &name, &subject, &note, enabled) {
+        return Err(ApiError::bad("保存失败"));
+    }
+    store.save();
+    Ok(Json(json!({ "ok": true })))
+}
+
+/// `POST /api/banks/{id}/delete` —— 删题库（题目一起删）
+pub async fn delete_bank(
+    State(st): State<Arc<AppState>>,
+    UrlPath(id): UrlPath<i64>,
+    headers: HeaderMap,
+) -> ApiResult<Json<Value>> {
+    let mut store = st.lock();
+    let auth = require_user(&st, &mut store, &headers)?;
+    let b = quiz::bank_get(&store.db, id).ok_or_else(|| ApiError::not_found("题库不存在"))?;
+    bank_for(&auth, &b)?;
+    quiz::bank_delete(&store.db, id);
+    // 设备里还引用着这套题库的话，把它从启用列表里摘掉，
+    // 否则设备会一直拉到一个空题库、答题锁直接失效
+    for d in store.devices.iter_mut() {
+        d.quiz_banks.retain(|x| *x != id);
+    }
+    store.save();
+    Ok(Json(json!({ "ok": true })))
+}
+
+#[derive(Deserialize)]
+pub struct QuestionBody {
+    #[serde(rename = "type")]
+    pub qtype: Option<String>,
+    pub subject: Option<String>,
+    pub stem: Option<String>,
+    pub options: Option<Vec<String>>,
+    pub answer: Option<String>,
+    pub tpl: Option<String>,
+    pub hint: Option<String>,
+    pub level: Option<i64>,
+    pub enabled: Option<bool>,
+}
+
+/// `GET /api/banks/{id}/questions?q=&limit=&offset=`
+pub async fn list_questions(
+    State(st): State<Arc<AppState>>,
+    UrlPath(id): UrlPath<i64>,
+    Query(q): Query<QuestionsQuery>,
+    headers: HeaderMap,
+) -> ApiResult<Json<Value>> {
+    let mut store = st.lock();
+    let auth = require_user(&st, &mut store, &headers)?;
+    let b = quiz::bank_get(&store.db, id).ok_or_else(|| ApiError::not_found("题库不存在"))?;
+    // 只读：内置题库不限制查看
+    if !b.owner_id.is_empty() && b.owner_id != auth.id {
+        return Err(ApiError::not_found("题库不存在"));
+    }
+    let limit = q.limit.unwrap_or(50).clamp(1, 200);
+    let offset = q.offset.unwrap_or(0).max(0);
+    let list = quiz::questions(&store.db, id, q.q.as_deref().unwrap_or(""), limit, offset);
+    let total = quiz::question_count(&store.db, id);
+    Ok(Json(json!({
+        "questions": list.iter().map(|x| x.json()).collect::<Vec<_>>(),
+        "total": total,
+        "limit": limit,
+        "offset": offset,
+        "bank": b.json(),
+    })))
+}
+
+/// `POST /api/banks/{id}/questions` —— 新增一道题
+pub async fn add_question(
+    State(st): State<Arc<AppState>>,
+    UrlPath(id): UrlPath<i64>,
+    headers: HeaderMap,
+    Json(body): Json<QuestionBody>,
+) -> ApiResult<Json<Value>> {
+    let mut store = st.lock();
+    let auth = require_user(&st, &mut store, &headers)?;
+    let b = quiz::bank_get(&store.db, id).ok_or_else(|| ApiError::not_found("题库不存在"))?;
+    bank_for(&auth, &b)?;
+    if quiz::question_count(&store.db, id) >= quiz::MAX_QUESTIONS_PER_BANK as i64 {
+        return Err(ApiError::bad(format!(
+            "这套题库已经到 {} 题上限",
+            quiz::MAX_QUESTIONS_PER_BANK
+        )));
+    }
+    let q = body_to_question(&body, &b.subject, None);
+    q.validate().map_err(ApiError::bad)?;
+    let qid = quiz::question_add(&store.db, id, &q)
+        .ok_or_else(|| ApiError::bad("写入失败"))?;
+    quiz::bank_touch(&store.db, id);
+    store.save();
+    Ok(Json(json!({ "ok": true, "id": qid })))
+}
+
+/// `POST /api/banks/{id}/questions/{qid}` —— 修改一道题
+pub async fn update_question(
+    State(st): State<Arc<AppState>>,
+    UrlPath((id, qid)): UrlPath<(i64, i64)>,
+    headers: HeaderMap,
+    Json(body): Json<QuestionBody>,
+) -> ApiResult<Json<Value>> {
+    let mut store = st.lock();
+    let auth = require_user(&st, &mut store, &headers)?;
+    let b = quiz::bank_get(&store.db, id).ok_or_else(|| ApiError::not_found("题库不存在"))?;
+    bank_for(&auth, &b)?;
+    let old = quiz::question_get(&store.db, qid)
+        .filter(|q| q.bank_id == id)
+        .ok_or_else(|| ApiError::not_found("题目不存在"))?;
+    let q = body_to_question(&body, &b.subject, Some(old));
+    q.validate().map_err(ApiError::bad)?;
+    if !quiz::question_update(&store.db, qid, &q) {
+        return Err(ApiError::bad("保存失败"));
+    }
+    quiz::bank_touch(&store.db, id);
+    store.save();
+    Ok(Json(json!({ "ok": true })))
+}
+
+/// `POST /api/banks/{id}/questions/{qid}/delete`
+pub async fn delete_question(
+    State(st): State<Arc<AppState>>,
+    UrlPath((id, qid)): UrlPath<(i64, i64)>,
+    headers: HeaderMap,
+) -> ApiResult<Json<Value>> {
+    let mut store = st.lock();
+    let auth = require_user(&st, &mut store, &headers)?;
+    let b = quiz::bank_get(&store.db, id).ok_or_else(|| ApiError::not_found("题库不存在"))?;
+    bank_for(&auth, &b)?;
+    quiz::question_delete(&store.db, qid);
+    quiz::bank_touch(&store.db, id);
+    store.save();
+    Ok(Json(json!({ "ok": true })))
+}
+
+#[derive(Deserialize)]
+pub struct ImportBody {
+    /// 整段文本或 JSON 数组
+    pub text: Option<String>,
+    /// 新导入题目的等级（默认 1）
+    pub level: Option<i64>,
+}
+
+/// `POST /api/banks/{id}/import` —— 批量导入
+///
+/// 逐行解析、逐行报错：一次贴几百行，家长最需要知道的是"哪几行没进去、为什么"，
+/// 而不是一句笼统的"导入成功"。
+pub async fn import_questions(
+    State(st): State<Arc<AppState>>,
+    UrlPath(id): UrlPath<i64>,
+    headers: HeaderMap,
+    Json(body): Json<ImportBody>,
+) -> ApiResult<Json<Value>> {
+    let mut store = st.lock();
+    let auth = require_user(&st, &mut store, &headers)?;
+    let b = quiz::bank_get(&store.db, id).ok_or_else(|| ApiError::not_found("题库不存在"))?;
+    bank_for(&auth, &b)?;
+
+    let text = body.text.unwrap_or_default();
+    if text.trim().is_empty() {
+        return Err(ApiError::bad("没有可导入的内容"));
+    }
+    if text.len() > 2 * 1024 * 1024 {
+        return Err(ApiError::bad("内容太大（超过 2MB），请分批导入"));
+    }
+    let level = body.level.unwrap_or(1).clamp(1, 9);
+    let (items, errs) = quiz::parse_import(&text, &b.subject, level);
+    if items.is_empty() {
+        return Ok(Json(json!({
+            "ok": false,
+            "imported": 0,
+            "errors": errs,
+            "total": quiz::question_count(&store.db, id),
+            "message": "一道题都没能解析出来，请检查格式",
+        })));
+    }
+    let room = (quiz::MAX_QUESTIONS_PER_BANK as i64 - quiz::question_count(&store.db, id)).max(0);
+    let take = (items.len() as i64).min(room) as usize;
+    let n = quiz::bulk_add(&store.db, id, &items[..take]);
+    quiz::bank_touch(&store.db, id);
+    store.save();
+    Ok(Json(json!({
+        "ok": true,
+        "imported": n,
+        "skipped": items.len() - take,
+        "errors": errs,
+        "total": quiz::question_count(&store.db, id),
+    })))
+}
+
+/// `POST /api/banks/seed` —— 重新导入内置题库（管理员，误删后恢复用）
+pub async fn restore_seed(
+    State(st): State<Arc<AppState>>,
+    headers: HeaderMap,
+) -> ApiResult<Json<Value>> {
+    let mut store = st.lock();
+    require_admin(&st, &mut store, &headers)?;
+    match quiz::ensure_seed(&store.db) {
+        Some(n) => {
+            store.save();
+            Ok(Json(json!({ "ok": true, "imported": n })))
+        }
+        None => Ok(Json(json!({ "ok": true, "imported": 0, "message": "内置题库已存在" }))),
+    }
+}
+
+fn body_to_question(body: &QuestionBody, bank_subject: &str, old: Option<Question>) -> Question {
+    let o = old.unwrap_or_else(|| Question {
+        subject: bank_subject.to_string(),
+        qtype: "choice".into(),
+        level: 1,
+        enabled: true,
+        ..Default::default()
+    });
+    Question {
+        id: o.id,
+        bank_id: o.bank_id,
+        subject: body
+            .subject
+            .clone()
+            .filter(|s| quiz::valid_subject(s))
+            .unwrap_or(o.subject),
+        qtype: body.qtype.clone().unwrap_or(o.qtype),
+        stem: body.stem.clone().unwrap_or(o.stem),
+        options: body.options.clone().unwrap_or(o.options),
+        answer: body.answer.clone().unwrap_or(o.answer),
+        tpl: body.tpl.clone().unwrap_or(o.tpl),
+        hint: body.hint.clone().unwrap_or(o.hint).chars().take(200).collect(),
+        level: body.level.unwrap_or(o.level).clamp(1, 9),
+        enabled: body.enabled.unwrap_or(o.enabled),
+    }
+}
+
+/// `POST /api/device/quiz` —— 设备拉取题库
+///
+/// 服务端每次都按"这台设备启用的题库"重新挑一批，顺序也随心跳变化 ——
+/// 设备只要发现 `version` 变了就整批替换，不用自己记"哪些做过"。
+pub async fn device_quiz(
+    State(st): State<Arc<AppState>>,
+    headers: HeaderMap,
+    Json(body): Json<Value>,
+) -> ApiResult<Json<Value>> {
+    let store = st.lock();
+    let idx = require_device(&store, &headers)?;
+    let banks = store.devices[idx].quiz_banks.clone();
+    let limit = body
+        .get("limit")
+        .and_then(|v| v.as_i64())
+        .unwrap_or(200)
+        .clamp(10, quiz::DEVICE_LIMIT_MAX);
+    let version = quiz::version(&store.db, &banks);
+    let qs = quiz::pick_for_banks(&store.db, &banks, limit);
+    let d = &store.devices[idx];
+    Ok(Json(json!({
+        "version": version,
+        "banks": banks,
+        "enabled": d.quiz_enabled,
+        "interval_minutes": d.quiz_interval_minutes,
+        "penalty_minutes": d.quiz_penalty_minutes,
+        "questions": qs.iter().map(|q| q.device_json()).collect::<Vec<_>>(),
+    })))
+}
+
+#[derive(Deserialize)]
+pub struct QuestionsQuery {
+    pub q: Option<String>,
+    pub limit: Option<i64>,
+    pub offset: Option<i64>,
+}
+
+/// 一台设备最多能启用几套题库。
+/// 给到 12 套足够（内置三套 + 家长自己建的几套），再多设备端一屏也选不过来。
+const MAX_QUIZ_BANKS: usize = 12;
+
+/// 把前端传来的题库 id 列表洗干净：只留真实存在、且这台设备的账号能看到的。
+///
+/// 不做这一步的后果很具体：家长删掉一套题库后，设备配置里还留着那个 id，
+/// 设备拉题时只拿到剩下那几套；如果全被删光，答题锁会变成"永远弹不出题"，
+/// 孩子点两下就绕过去了。
+fn parse_bank_ids(store: &Store, owner_id: &str, v: Option<&Value>) -> Vec<i64> {
+    let mut out: Vec<i64> = Vec::new();
+    let arr = match v.and_then(|x| x.as_array()) {
+        Some(a) => a,
+        None => return out,
+    };
+    for it in arr {
+        let id = it
+            .as_i64()
+            .or_else(|| it.as_str().and_then(|s| s.trim().parse::<i64>().ok()));
+        let id = match id {
+            Some(x) => x,
+            None => continue,
+        };
+        if out.contains(&id) {
+            continue;
+        }
+        let ok = quiz::bank_get(&store.db, id)
+            .map(|b| b.owner_id.is_empty() || b.owner_id == owner_id)
+            .unwrap_or(false);
+        if ok {
+            out.push(id);
+        }
+        if out.len() >= MAX_QUIZ_BANKS {
+            break;
+        }
+    }
+    out
 }
 
 /// `GET /api/devices/{id}/events?day=&page=&size=`
@@ -2022,6 +2489,7 @@ pub async fn device_heartbeat(
     let prev_enabled = store.devices[idx].enabled;
     let prev_in_quiet = store.devices[idx].in_quiet;
     let prev_day_locked = store.devices[idx].day_locked;
+    let prev_quiz_locked = store.devices[idx].quiz_locked;
 
     // ---- 更新状态快照 ----
     {
@@ -2065,6 +2533,22 @@ pub async fn device_heartbeat(
         d.quiet_left_ms = clamp(payload.get("quiet_left_ms"), 0, MAX_MS, d.quiet_left_ms);
         if let Some(v) = payload.get("quiet_label").and_then(|v| v.as_str()) {
             d.quiet_label = v.chars().take(40).collect();
+        }
+        // ---- 答题解锁（v2.6.0）：只收状态，不收题库选择 ----
+        //
+        // 开关 / 间隔 / 罚时是"设备上也能改"的普通配置，跟着上报走（和 use_minutes 一样）；
+        // 但 quiz_banks 是名单，**只能由服务端下发** —— 否则孩子把题库清空，
+        // 答题锁就永远弹不出题，等于把这个维度关掉了。
+        d.quiz_enabled = json_bool(payload.get("quiz_enabled"), d.quiz_enabled);
+        d.quiz_interval_minutes =
+            clamp(payload.get("quiz_interval_minutes"), 1, 180, d.quiz_interval_minutes);
+        d.quiz_penalty_minutes =
+            clamp(payload.get("quiz_penalty_minutes"), 1, 60, d.quiz_penalty_minutes);
+        d.quiz_locked = json_bool(payload.get("quiz_locked"), d.quiz_locked);
+        d.quiz_right = clamp(payload.get("quiz_right"), 0, 999999, d.quiz_right);
+        d.quiz_wrong = clamp(payload.get("quiz_wrong"), 0, 999999, d.quiz_wrong);
+        if let Some(v) = payload.get("quiz_last").and_then(|v| v.as_str()) {
+            d.quiz_last = v.chars().take(60).collect();
         }
     }
 
@@ -2114,6 +2598,24 @@ pub async fn device_heartbeat(
     } else if prev_day_locked && !day_locked {
         store.add_event(Some(&did), "day_unlock", format!("{dev_name} 今日额度限制已解除"));
     }
+    // 答题锁进出：家长能从事件流里看出"孩子被拦了几次、有没有做对"，
+    // 这也是唯一能验证"题目确实弹出来了"的间接证据。
+    let quiz_locked = store.devices[idx].quiz_locked;
+    let quiz_last = store.devices[idx].quiz_last.clone();
+    if !prev_quiz_locked && quiz_locked {
+        store.add_event(
+            Some(&did),
+            "quiz_lock",
+            format!("{dev_name} 弹出答题解锁（答对才能继续）"),
+        );
+    } else if prev_quiz_locked && !quiz_locked {
+        let why = if quiz_last.is_empty() {
+            "答题结束".to_string()
+        } else {
+            format!("答题结束（{quiz_last}）")
+        };
+        store.add_event(Some(&did), "quiz_pass", format!("{dev_name} {why}"));
+    }
 
     // ---- 每日统计 ----
     let day = local_day(now, st.cfg.tz_offset_hours);
@@ -2138,6 +2640,14 @@ pub async fn device_heartbeat(
     // 规则里有任何一条处于启用状态，就算"停用功能可用"，设备据此决定要不要装闹钟
     let quiet_active = quiet_rules.iter().any(|r| r.enabled);
 
+    // ---- 答题解锁：题库名单 + 版本号 ----
+    //
+    // 每轮都带下去，设备拿版本号比对：没变就不重下（省流量），
+    // 变了就整批替换。这也是"家长刚加的题，下一次心跳就能用上"的通道。
+    let quiz_banks = store.devices[idx].quiz_banks.clone();
+    let quiz_active = store.devices[idx].quiz_enabled && !quiz_banks.is_empty();
+    let quiz_version = quiz::version(&store.db, &quiz_banks);
+
     let mut out: Vec<Value> = Vec::new();
     for c in store.commands.iter_mut() {
         if out.len() >= 20 {
@@ -2159,6 +2669,9 @@ pub async fn device_heartbeat(
         "commands": out,
         "quiet_hours": quiet_rules,
         "quiet_active": quiet_active,
+        "quiz_banks": quiz_banks,
+        "quiz_active": quiz_active,
+        "quiz_version": quiz_version,
         "heartbeat_seconds": HEARTBEAT_SECONDS,
     })))
 }

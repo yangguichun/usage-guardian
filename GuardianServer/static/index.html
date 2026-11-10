@@ -36,6 +36,7 @@
       <span class="pill" id="onlinePill"><i class="dot"></i><span>—</span></span>
       <span class="pill user-pill" id="userPill" title="当前登录账号"><b id="userName">—</b><span id="userRole"></span></span>
       <button class="btn ghost" id="btnUsers">账号管理</button>
+      <button class="btn ghost" id="btnBanks">题库</button>
       <button class="btn ghost" id="btnPair">添加设备</button>
       <button class="btn ghost" id="btnAccount">我的账号</button>
       <button class="btn ghost" id="btnLogout">退出</button>
@@ -155,6 +156,26 @@
       <div class="quiet-foot">
         <span class="muted small" id="quietHint"></span>
         <button class="btn primary" id="btnQuietSave">保存并下发</button>
+      </div>
+    </section>
+
+    <!-- ===== 答题解锁（v2.6.0）===== -->
+    <section class="panel" id="quizPanel">
+      <div class="panel-head wrap">
+        <div>
+          <h2>答题解锁</h2>
+          <div class="muted small" id="quizSub">
+            每用一段时间弹一道小题，答对才能继续；两题都没答对就休息一会儿
+          </div>
+        </div>
+        <div class="tl-controls">
+          <button class="btn ghost small" id="btnQuizBanks">管理题库</button>
+        </div>
+      </div>
+      <div id="quizCfg"></div>
+      <div class="muted small quiet-tip">
+        题目从服务器下发的题库里随机抽。题库不选就只会用设备本地的算术题，
+        所以想让语文 / 英语也出题，先在上面点「管理题库」建一套并勾选。
       </div>
     </section>
 
@@ -314,6 +335,20 @@
       <div id="evList" class="events tall"></div>
       <div class="pager" id="evPager"></div>
     </div>
+  </div>
+</div>
+
+<!-- ================= 题库（v2.6.0） ================= -->
+<div class="modal hidden" id="banksModal">
+  <div class="modal-card wide">
+    <div class="modal-head">
+      <div>
+        <h3 id="banksTitle">题库</h3>
+        <div class="muted small" id="banksSub">语文 / 数学 / 英语，题目可以慢慢补</div>
+      </div>
+      <button class="icon-btn" data-close="banksModal">✕</button>
+    </div>
+    <div class="modal-body" id="banksBody"></div>
   </div>
 </div>
 

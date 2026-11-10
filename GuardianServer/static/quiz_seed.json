@@ -1,0 +1,5672 @@
+{
+ "version": 1,
+ "banks": [
+  {
+   "name": "语文 · 拼音认读（一年级）",
+   "subject": "chinese",
+   "description": "给汉字选读音、给读音选汉字，覆盖 70 个常用字",
+   "questions": [
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「爸」的正确读音是？",
+     "options": [
+      "bá",
+      "bǎ",
+      "bà",
+      "bā"
+     ],
+     "answer": "bà",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「妈」的正确读音是？",
+     "options": [
+      "mà",
+      "mǎ",
+      "mā",
+      "má"
+     ],
+     "answer": "mā",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「哥」的正确读音是？",
+     "options": [
+      "gè",
+      "gē",
+      "gé",
+      "gě"
+     ],
+     "answer": "gē",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「弟」的正确读音是？",
+     "options": [
+      "dǐ",
+      "dī",
+      "dì",
+      "dí"
+     ],
+     "answer": "dì",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「姐」的正确读音是？",
+     "options": [
+      "jiē",
+      "jiě",
+      "jiè",
+      "jié"
+     ],
+     "answer": "jiě",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「妹」的正确读音是？",
+     "options": [
+      "měi",
+      "mèi",
+      "mēi",
+      "méi"
+     ],
+     "answer": "mèi",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「鱼」的正确读音是？",
+     "options": [
+      "yū",
+      "yú",
+      "yǔ",
+      "yù"
+     ],
+     "answer": "yú",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「鸟」的正确读音是？",
+     "options": [
+      "niāo",
+      "niào",
+      "niǎo",
+      "niáo"
+     ],
+     "answer": "niǎo",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「花」的正确读音是？",
+     "options": [
+      "huà",
+      "huǎ",
+      "huá",
+      "huā"
+     ],
+     "answer": "huā",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「草」的正确读音是？",
+     "options": [
+      "cāo",
+      "cǎo",
+      "cào",
+      "cáo"
+     ],
+     "answer": "cǎo",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「树」的正确读音是？",
+     "options": [
+      "shú",
+      "shū",
+      "shǔ",
+      "shù"
+     ],
+     "answer": "shù",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「水」的正确读音是？",
+     "options": [
+      "shuǐ",
+      "shuì",
+      "shuí",
+      "shuī"
+     ],
+     "answer": "shuǐ",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「火」的正确读音是？",
+     "options": [
+      "huǒ",
+      "huó",
+      "huò",
+      "huō"
+     ],
+     "answer": "huǒ",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「山」的正确读音是？",
+     "options": [
+      "shǎn",
+      "shān",
+      "shán",
+      "shàn"
+     ],
+     "answer": "shān",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「田」的正确读音是？",
+     "options": [
+      "tiǎn",
+      "tiān",
+      "tiàn",
+      "tián"
+     ],
+     "answer": "tián",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「车」的正确读音是？",
+     "options": [
+      "ché",
+      "chè",
+      "chē",
+      "chě"
+     ],
+     "answer": "chē",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「门」的正确读音是？",
+     "options": [
+      "mèn",
+      "měn",
+      "mēn",
+      "mén"
+     ],
+     "answer": "mén",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「手」的正确读音是？",
+     "options": [
+      "shòu",
+      "shōu",
+      "shǒu",
+      "shóu"
+     ],
+     "answer": "shǒu",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「口」的正确读音是？",
+     "options": [
+      "kóu",
+      "kòu",
+      "kōu",
+      "kǒu"
+     ],
+     "answer": "kǒu",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「头」的正确读音是？",
+     "options": [
+      "tòu",
+      "tōu",
+      "tǒu",
+      "tóu"
+     ],
+     "answer": "tóu",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「白」的正确读音是？",
+     "options": [
+      "bāi",
+      "bǎi",
+      "bái",
+      "bài"
+     ],
+     "answer": "bái",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「黑」的正确读音是？",
+     "options": [
+      "héi",
+      "hèi",
+      "hēi",
+      "hěi"
+     ],
+     "answer": "hēi",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「红」的正确读音是？",
+     "options": [
+      "hōng",
+      "hǒng",
+      "hóng",
+      "hòng"
+     ],
+     "answer": "hóng",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「黄」的正确读音是？",
+     "options": [
+      "huàng",
+      "huǎng",
+      "huāng",
+      "huáng"
+     ],
+     "answer": "huáng",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「蓝」的正确读音是？",
+     "options": [
+      "làn",
+      "lán",
+      "lān",
+      "lǎn"
+     ],
+     "answer": "lán",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「绿」的正确读音是？",
+     "options": [
+      "lǘ",
+      "lǖ",
+      "lǜ",
+      "lǚ"
+     ],
+     "answer": "lǜ",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「春」的正确读音是？",
+     "options": [
+      "chùn",
+      "chūn",
+      "chǔn",
+      "chún"
+     ],
+     "answer": "chūn",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「夏」的正确读音是？",
+     "options": [
+      "xiá",
+      "xià",
+      "xiā",
+      "xiǎ"
+     ],
+     "answer": "xià",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「秋」的正确读音是？",
+     "options": [
+      "qiú",
+      "qiù",
+      "qiū",
+      "qiǔ"
+     ],
+     "answer": "qiū",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「冬」的正确读音是？",
+     "options": [
+      "dōng",
+      "dòng",
+      "dóng",
+      "dǒng"
+     ],
+     "answer": "dōng",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「风」的正确读音是？",
+     "options": [
+      "féng",
+      "fèng",
+      "fēng",
+      "fěng"
+     ],
+     "answer": "fēng",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「雨」的正确读音是？",
+     "options": [
+      "yǔ",
+      "yù",
+      "yū",
+      "yú"
+     ],
+     "answer": "yǔ",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「雪」的正确读音是？",
+     "options": [
+      "xuē",
+      "xuě",
+      "xué",
+      "xuè"
+     ],
+     "answer": "xuě",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「云」的正确读音是？",
+     "options": [
+      "yǔn",
+      "yún",
+      "yūn",
+      "yùn"
+     ],
+     "answer": "yún",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「月」的正确读音是？",
+     "options": [
+      "yuè",
+      "yuē",
+      "yuě",
+      "yué"
+     ],
+     "answer": "yuè",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「星」的正确读音是？",
+     "options": [
+      "xìng",
+      "xīng",
+      "xíng",
+      "xǐng"
+     ],
+     "answer": "xīng",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「天」的正确读音是？",
+     "options": [
+      "tiǎn",
+      "tiān",
+      "tián",
+      "tiàn"
+     ],
+     "answer": "tiān",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「地」的正确读音是？",
+     "options": [
+      "dī",
+      "dí",
+      "dì",
+      "dǐ"
+     ],
+     "answer": "dì",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「人」的正确读音是？",
+     "options": [
+      "rèn",
+      "rén",
+      "rěn",
+      "rēn"
+     ],
+     "answer": "rén",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「大」的正确读音是？",
+     "options": [
+      "dà",
+      "dá",
+      "dǎ",
+      "dā"
+     ],
+     "answer": "dà",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「小」的正确读音是？",
+     "options": [
+      "xiào",
+      "xiáo",
+      "xiāo",
+      "xiǎo"
+     ],
+     "answer": "xiǎo",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「多」的正确读音是？",
+     "options": [
+      "duò",
+      "duō",
+      "duó",
+      "duǒ"
+     ],
+     "answer": "duō",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「少」的正确读音是？",
+     "options": [
+      "shāo",
+      "shào",
+      "shǎo",
+      "sháo"
+     ],
+     "answer": "shǎo",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「上」的正确读音是？",
+     "options": [
+      "sháng",
+      "shāng",
+      "shǎng",
+      "shàng"
+     ],
+     "answer": "shàng",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「下」的正确读音是？",
+     "options": [
+      "xiá",
+      "xià",
+      "xiā",
+      "xiǎ"
+     ],
+     "answer": "xià",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「左」的正确读音是？",
+     "options": [
+      "zuō",
+      "zuò",
+      "zuǒ",
+      "zuó"
+     ],
+     "answer": "zuǒ",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「右」的正确读音是？",
+     "options": [
+      "yòu",
+      "yǒu",
+      "yóu",
+      "yōu"
+     ],
+     "answer": "yòu",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「前」的正确读音是？",
+     "options": [
+      "qiàn",
+      "qián",
+      "qiǎn",
+      "qiān"
+     ],
+     "answer": "qián",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「后」的正确读音是？",
+     "options": [
+      "hǒu",
+      "hōu",
+      "hóu",
+      "hòu"
+     ],
+     "answer": "hòu",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「学」的正确读音是？",
+     "options": [
+      "xué",
+      "xuē",
+      "xuè",
+      "xuě"
+     ],
+     "answer": "xué",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「书」的正确读音是？",
+     "options": [
+      "shú",
+      "shū",
+      "shǔ",
+      "shù"
+     ],
+     "answer": "shū",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「笔」的正确读音是？",
+     "options": [
+      "bǐ",
+      "bì",
+      "bí",
+      "bī"
+     ],
+     "answer": "bǐ",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「纸」的正确读音是？",
+     "options": [
+      "zhì",
+      "zhī",
+      "zhǐ",
+      "zhí"
+     ],
+     "answer": "zhǐ",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「灯」的正确读音是？",
+     "options": [
+      "dèng",
+      "déng",
+      "dēng",
+      "děng"
+     ],
+     "answer": "dēng",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「桌」的正确读音是？",
+     "options": [
+      "zhuò",
+      "zhuō",
+      "zhuǒ",
+      "zhuó"
+     ],
+     "answer": "zhuō",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「床」的正确读音是？",
+     "options": [
+      "chuǎng",
+      "chuàng",
+      "chuáng",
+      "chuāng"
+     ],
+     "answer": "chuáng",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「饭」的正确读音是？",
+     "options": [
+      "fàn",
+      "fǎn",
+      "fān",
+      "fán"
+     ],
+     "answer": "fàn",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「菜」的正确读音是？",
+     "options": [
+      "cāi",
+      "cǎi",
+      "cái",
+      "cài"
+     ],
+     "answer": "cài",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「牛」的正确读音是？",
+     "options": [
+      "niū",
+      "niú",
+      "niǔ",
+      "niù"
+     ],
+     "answer": "niú",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「羊」的正确读音是？",
+     "options": [
+      "yǎng",
+      "yáng",
+      "yàng",
+      "yāng"
+     ],
+     "answer": "yáng",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「马」的正确读音是？",
+     "options": [
+      "mǎ",
+      "má",
+      "mā",
+      "mà"
+     ],
+     "answer": "mǎ",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「猫」的正确读音是？",
+     "options": [
+      "máo",
+      "mǎo",
+      "mào",
+      "māo"
+     ],
+     "answer": "māo",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「狗」的正确读音是？",
+     "options": [
+      "góu",
+      "gòu",
+      "gǒu",
+      "gōu"
+     ],
+     "answer": "gǒu",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「鸡」的正确读音是？",
+     "options": [
+      "jí",
+      "jǐ",
+      "jì",
+      "jī"
+     ],
+     "answer": "jī",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「鸭」的正确读音是？",
+     "options": [
+      "yǎ",
+      "yá",
+      "yā",
+      "yà"
+     ],
+     "answer": "yā",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「兔」的正确读音是？",
+     "options": [
+      "tú",
+      "tū",
+      "tù",
+      "tǔ"
+     ],
+     "answer": "tù",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「虎」的正确读音是？",
+     "options": [
+      "hū",
+      "hǔ",
+      "hú",
+      "hù"
+     ],
+     "answer": "hǔ",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「龙」的正确读音是？",
+     "options": [
+      "lóng",
+      "lòng",
+      "lǒng",
+      "lōng"
+     ],
+     "answer": "lóng",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「叶」的正确读音是？",
+     "options": [
+      "yē",
+      "yè",
+      "yě",
+      "yé"
+     ],
+     "answer": "yè",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "「桥」的正确读音是？",
+     "options": [
+      "qiáo",
+      "qiǎo",
+      "qiào",
+      "qiāo"
+     ],
+     "answer": "qiáo",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 bà 的字是？",
+     "options": [
+      "马",
+      "上",
+      "雨",
+      "爸"
+     ],
+     "answer": "爸",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 mā 的字是？",
+     "options": [
+      "云",
+      "牛",
+      "人",
+      "妈"
+     ],
+     "answer": "妈",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 gē 的字是？",
+     "options": [
+      "哥",
+      "小",
+      "纸",
+      "山"
+     ],
+     "answer": "哥",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 dì 的字是？",
+     "options": [
+      "前",
+      "弟",
+      "春",
+      "鸡"
+     ],
+     "answer": "弟",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 jiě 的字是？",
+     "options": [
+      "水",
+      "姐",
+      "夏",
+      "月"
+     ],
+     "answer": "姐",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 mèi 的字是？",
+     "options": [
+      "头",
+      "车",
+      "花",
+      "妹"
+     ],
+     "answer": "妹",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 yú 的字是？",
+     "options": [
+      "多",
+      "头",
+      "鱼",
+      "前"
+     ],
+     "answer": "鱼",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 niǎo 的字是？",
+     "options": [
+      "黄",
+      "叶",
+      "鸟",
+      "人"
+     ],
+     "answer": "鸟",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 huā 的字是？",
+     "options": [
+      "花",
+      "少",
+      "春",
+      "夏"
+     ],
+     "answer": "花",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 cǎo 的字是？",
+     "options": [
+      "大",
+      "草",
+      "手",
+      "马"
+     ],
+     "answer": "草",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 shù 的字是？",
+     "options": [
+      "树",
+      "花",
+      "天",
+      "星"
+     ],
+     "answer": "树",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 shuǐ 的字是？",
+     "options": [
+      "桌",
+      "水",
+      "少",
+      "天"
+     ],
+     "answer": "水",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 huǒ 的字是？",
+     "options": [
+      "桥",
+      "火",
+      "饭",
+      "人"
+     ],
+     "answer": "火",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 shān 的字是？",
+     "options": [
+      "山",
+      "马",
+      "冬",
+      "车"
+     ],
+     "answer": "山",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 tián 的字是？",
+     "options": [
+      "蓝",
+      "前",
+      "星",
+      "田"
+     ],
+     "answer": "田",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 chē 的字是？",
+     "options": [
+      "车",
+      "春",
+      "虎",
+      "山"
+     ],
+     "answer": "车",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 mén 的字是？",
+     "options": [
+      "门",
+      "书",
+      "叶",
+      "车"
+     ],
+     "answer": "门",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 shǒu 的字是？",
+     "options": [
+      "牛",
+      "山",
+      "菜",
+      "手"
+     ],
+     "answer": "手",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 kǒu 的字是？",
+     "options": [
+      "桌",
+      "花",
+      "口",
+      "前"
+     ],
+     "answer": "口",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 tóu 的字是？",
+     "options": [
+      "头",
+      "学",
+      "星",
+      "天"
+     ],
+     "answer": "头",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 bái 的字是？",
+     "options": [
+      "白",
+      "笔",
+      "鸟",
+      "多"
+     ],
+     "answer": "白",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 hēi 的字是？",
+     "options": [
+      "黑",
+      "饭",
+      "人",
+      "雨"
+     ],
+     "answer": "黑",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 hóng 的字是？",
+     "options": [
+      "车",
+      "红",
+      "门",
+      "多"
+     ],
+     "answer": "红",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 huáng 的字是？",
+     "options": [
+      "龙",
+      "秋",
+      "牛",
+      "黄"
+     ],
+     "answer": "黄",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 lán 的字是？",
+     "options": [
+      "蓝",
+      "妈",
+      "多",
+      "夏"
+     ],
+     "answer": "蓝",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 lǜ 的字是？",
+     "options": [
+      "绿",
+      "爸",
+      "猫",
+      "雨"
+     ],
+     "answer": "绿",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 chūn 的字是？",
+     "options": [
+      "春",
+      "上",
+      "云",
+      "妹"
+     ],
+     "answer": "春",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 xià 的字是？",
+     "options": [
+      "大",
+      "笔",
+      "夏",
+      "雨"
+     ],
+     "answer": "夏",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 qiū 的字是？",
+     "options": [
+      "绿",
+      "菜",
+      "笔",
+      "秋"
+     ],
+     "answer": "秋",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 dōng 的字是？",
+     "options": [
+      "大",
+      "鸟",
+      "冬",
+      "鱼"
+     ],
+     "answer": "冬",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 fēng 的字是？",
+     "options": [
+      "白",
+      "风",
+      "鸭",
+      "上"
+     ],
+     "answer": "风",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 yǔ 的字是？",
+     "options": [
+      "雨",
+      "蓝",
+      "前",
+      "头"
+     ],
+     "answer": "雨",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 xuě 的字是？",
+     "options": [
+      "妹",
+      "狗",
+      "雪",
+      "前"
+     ],
+     "answer": "雪",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 yún 的字是？",
+     "options": [
+      "灯",
+      "云",
+      "羊",
+      "龙"
+     ],
+     "answer": "云",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 yuè 的字是？",
+     "options": [
+      "秋",
+      "星",
+      "床",
+      "月"
+     ],
+     "answer": "月",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 xīng 的字是？",
+     "options": [
+      "手",
+      "星",
+      "笔",
+      "鸟"
+     ],
+     "answer": "星",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 tiān 的字是？",
+     "options": [
+      "左",
+      "天",
+      "人",
+      "笔"
+     ],
+     "answer": "天",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 dì 的字是？",
+     "options": [
+      "地",
+      "兔",
+      "狗",
+      "学"
+     ],
+     "answer": "地",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 rén 的字是？",
+     "options": [
+      "草",
+      "人",
+      "妈",
+      "口"
+     ],
+     "answer": "人",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 dà 的字是？",
+     "options": [
+      "多",
+      "鸡",
+      "秋",
+      "大"
+     ],
+     "answer": "大",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 xiǎo 的字是？",
+     "options": [
+      "前",
+      "小",
+      "羊",
+      "地"
+     ],
+     "answer": "小",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 duō 的字是？",
+     "options": [
+      "多",
+      "鸭",
+      "下",
+      "狗"
+     ],
+     "answer": "多",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 shǎo 的字是？",
+     "options": [
+      "马",
+      "桥",
+      "少",
+      "夏"
+     ],
+     "answer": "少",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 shàng 的字是？",
+     "options": [
+      "右",
+      "叶",
+      "爸",
+      "上"
+     ],
+     "answer": "上",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 xià 的字是？",
+     "options": [
+      "雪",
+      "下",
+      "后",
+      "兔"
+     ],
+     "answer": "下",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 zuǒ 的字是？",
+     "options": [
+      "秋",
+      "灯",
+      "左",
+      "上"
+     ],
+     "answer": "左",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 yòu 的字是？",
+     "options": [
+      "书",
+      "纸",
+      "兔",
+      "右"
+     ],
+     "answer": "右",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 qián 的字是？",
+     "options": [
+      "绿",
+      "火",
+      "蓝",
+      "前"
+     ],
+     "answer": "前",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 hòu 的字是？",
+     "options": [
+      "桥",
+      "后",
+      "牛",
+      "马"
+     ],
+     "answer": "后",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 xué 的字是？",
+     "options": [
+      "学",
+      "猫",
+      "后",
+      "车"
+     ],
+     "answer": "学",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 shū 的字是？",
+     "options": [
+      "鸟",
+      "猫",
+      "雨",
+      "书"
+     ],
+     "answer": "书",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 bǐ 的字是？",
+     "options": [
+      "天",
+      "笔",
+      "灯",
+      "羊"
+     ],
+     "answer": "笔",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 zhǐ 的字是？",
+     "options": [
+      "马",
+      "灯",
+      "纸",
+      "菜"
+     ],
+     "answer": "纸",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 dēng 的字是？",
+     "options": [
+      "头",
+      "灯",
+      "山",
+      "妹"
+     ],
+     "answer": "灯",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 zhuō 的字是？",
+     "options": [
+      "桌",
+      "牛",
+      "头",
+      "马"
+     ],
+     "answer": "桌",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 chuáng 的字是？",
+     "options": [
+      "床",
+      "秋",
+      "妈",
+      "蓝"
+     ],
+     "answer": "床",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 fàn 的字是？",
+     "options": [
+      "床",
+      "秋",
+      "饭",
+      "雨"
+     ],
+     "answer": "饭",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 cài 的字是？",
+     "options": [
+      "前",
+      "菜",
+      "龙",
+      "人"
+     ],
+     "answer": "菜",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 niú 的字是？",
+     "options": [
+      "雪",
+      "牛",
+      "星",
+      "多"
+     ],
+     "answer": "牛",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 yáng 的字是？",
+     "options": [
+      "桥",
+      "田",
+      "羊",
+      "笔"
+     ],
+     "answer": "羊",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 mǎ 的字是？",
+     "options": [
+      "桌",
+      "云",
+      "马",
+      "多"
+     ],
+     "answer": "马",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 māo 的字是？",
+     "options": [
+      "水",
+      "鸡",
+      "菜",
+      "猫"
+     ],
+     "answer": "猫",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 gǒu 的字是？",
+     "options": [
+      "花",
+      "狗",
+      "风",
+      "前"
+     ],
+     "answer": "狗",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 jī 的字是？",
+     "options": [
+      "前",
+      "星",
+      "鸡",
+      "兔"
+     ],
+     "answer": "鸡",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 yā 的字是？",
+     "options": [
+      "多",
+      "鸭",
+      "黄",
+      "菜"
+     ],
+     "answer": "鸭",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 tù 的字是？",
+     "options": [
+      "兔",
+      "饭",
+      "鸟",
+      "山"
+     ],
+     "answer": "兔",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 hǔ 的字是？",
+     "options": [
+      "虎",
+      "后",
+      "爸",
+      "秋"
+     ],
+     "answer": "虎",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 lóng 的字是？",
+     "options": [
+      "前",
+      "红",
+      "地",
+      "龙"
+     ],
+     "answer": "龙",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 yè 的字是？",
+     "options": [
+      "纸",
+      "多",
+      "叶",
+      "姐"
+     ],
+     "answer": "叶",
+     "hint": ""
+    },
+    {
+     "subject": "chinese",
+     "type": "choice",
+     "level": 1,
+     "stem": "读音是 qiáo 的字是？",
+     "options": [
+      "右",
+      "雨",
+      "桥",
+      "山"
+     ],
+     "answer": "桥",
+     "hint": ""
+    }
+   ]
+  },
+  {
+   "name": "数学 · 20 以内加减",
+   "subject": "math",
+   "description": "20 以内加法、减法与填空题，含简单逆向思维",
+   "questions": [
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "8 + 3 = ?",
+     "options": [
+      "11",
+      "8",
+      "9",
+      "10"
+     ],
+     "answer": "11",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "2 + 4 = ?",
+     "options": [
+      "6",
+      "5",
+      "3",
+      "8"
+     ],
+     "answer": "6",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "6 + 6 = ?",
+     "options": [
+      "9",
+      "2",
+      "15",
+      "12"
+     ],
+     "answer": "12",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "13 + 4 = ?",
+     "options": [
+      "17",
+      "15",
+      "7",
+      "20"
+     ],
+     "answer": "17",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "11 + 2 = ?",
+     "options": [
+      "13",
+      "12",
+      "15",
+      "14"
+     ],
+     "answer": "13",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "6 + 4 = ?",
+     "options": [
+      "8",
+      "10",
+      "20",
+      "9"
+     ],
+     "answer": "10",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "11 + 1 = ?",
+     "options": [
+      "2",
+      "12",
+      "10",
+      "14"
+     ],
+     "answer": "12",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "6 + 12 = ?",
+     "options": [
+      "18",
+      "19",
+      "16",
+      "17"
+     ],
+     "answer": "18",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "7 + 5 = ?",
+     "options": [
+      "10",
+      "9",
+      "12",
+      "15"
+     ],
+     "answer": "12",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "5 + 13 = ?",
+     "options": [
+      "16",
+      "18",
+      "19",
+      "15"
+     ],
+     "answer": "18",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "11 + 6 = ?",
+     "options": [
+      "16",
+      "14",
+      "17",
+      "19"
+     ],
+     "answer": "17",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "13 + 3 = ?",
+     "options": [
+      "16",
+      "13",
+      "17",
+      "6"
+     ],
+     "answer": "16",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "15 + 4 = ?",
+     "options": [
+      "16",
+      "18",
+      "20",
+      "19"
+     ],
+     "answer": "19",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "16 + 1 = ?",
+     "options": [
+      "15",
+      "19",
+      "16",
+      "17"
+     ],
+     "answer": "17",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "18 + 1 = ?",
+     "options": [
+      "19",
+      "17",
+      "16",
+      "9"
+     ],
+     "answer": "19",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "15 + 3 = ?",
+     "options": [
+      "17",
+      "15",
+      "18",
+      "8"
+     ],
+     "answer": "18",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "14 + 2 = ?",
+     "options": [
+      "18",
+      "19",
+      "16",
+      "13"
+     ],
+     "answer": "16",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "17 + 2 = ?",
+     "options": [
+      "19",
+      "20",
+      "18",
+      "9"
+     ],
+     "answer": "19",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "14 + 2 = ?",
+     "options": [
+      "16",
+      "19",
+      "17",
+      "14"
+     ],
+     "answer": "16",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "10 + 1 = ?",
+     "options": [
+      "9",
+      "11",
+      "14",
+      "1"
+     ],
+     "answer": "11",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "10 + 3 = ?",
+     "options": [
+      "13",
+      "3",
+      "15",
+      "12"
+     ],
+     "answer": "13",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "17 + 1 = ?",
+     "options": [
+      "16",
+      "8",
+      "18",
+      "19"
+     ],
+     "answer": "18",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "12 + 5 = ?",
+     "options": [
+      "17",
+      "19",
+      "20",
+      "15"
+     ],
+     "answer": "17",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "13 + 1 = ?",
+     "options": [
+      "12",
+      "15",
+      "14",
+      "4"
+     ],
+     "answer": "14",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "7 + 11 = ?",
+     "options": [
+      "8",
+      "18",
+      "20",
+      "16"
+     ],
+     "answer": "18",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "11 + 9 = ?",
+     "options": [
+      "17",
+      "18",
+      "19",
+      "20"
+     ],
+     "answer": "20",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "10 + 8 = ?",
+     "options": [
+      "18",
+      "17",
+      "19",
+      "16"
+     ],
+     "answer": "18",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "13 + 7 = ?",
+     "options": [
+      "20",
+      "18",
+      "17",
+      "19"
+     ],
+     "answer": "20",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "11 + 8 = ?",
+     "options": [
+      "19",
+      "17",
+      "18",
+      "20"
+     ],
+     "answer": "19",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "15 + 5 = ?",
+     "options": [
+      "10",
+      "20",
+      "18",
+      "19"
+     ],
+     "answer": "20",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "9 + 4 = ?",
+     "options": [
+      "15",
+      "12",
+      "14",
+      "13"
+     ],
+     "answer": "13",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "18 + 1 = ?",
+     "options": [
+      "16",
+      "19",
+      "9",
+      "17"
+     ],
+     "answer": "19",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "12 + 4 = ?",
+     "options": [
+      "17",
+      "14",
+      "16",
+      "15"
+     ],
+     "answer": "16",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "15 + 2 = ?",
+     "options": [
+      "16",
+      "20",
+      "17",
+      "15"
+     ],
+     "answer": "17",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "3 − 2 = ?",
+     "options": [
+      "1",
+      "0",
+      "2",
+      "4"
+     ],
+     "answer": "1",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "11 − 4 = ?",
+     "options": [
+      "8",
+      "5",
+      "7",
+      "9"
+     ],
+     "answer": "7",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "18 − 5 = ?",
+     "options": [
+      "14",
+      "13",
+      "3",
+      "11"
+     ],
+     "answer": "13",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "20 − 6 = ?",
+     "options": [
+      "14",
+      "11",
+      "16",
+      "15"
+     ],
+     "answer": "14",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "13 − 1 = ?",
+     "options": [
+      "9",
+      "12",
+      "13",
+      "11"
+     ],
+     "answer": "12",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "8 − 1 = ?",
+     "options": [
+      "7",
+      "4",
+      "17",
+      "6"
+     ],
+     "answer": "7",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "9 − 6 = ?",
+     "options": [
+      "6",
+      "0",
+      "3",
+      "4"
+     ],
+     "answer": "3",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "5 − 1 = ?",
+     "options": [
+      "6",
+      "4",
+      "1",
+      "3"
+     ],
+     "answer": "4",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "10 − 5 = ?",
+     "options": [
+      "7",
+      "5",
+      "3",
+      "4"
+     ],
+     "answer": "5",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "15 − 13 = ?",
+     "options": [
+      "12",
+      "0",
+      "2",
+      "3"
+     ],
+     "answer": "2",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "6 − 4 = ?",
+     "options": [
+      "2",
+      "1",
+      "12",
+      "4"
+     ],
+     "answer": "2",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "17 − 9 = ?",
+     "options": [
+      "8",
+      "6",
+      "5",
+      "7"
+     ],
+     "answer": "8",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "18 − 3 = ?",
+     "options": [
+      "5",
+      "15",
+      "17",
+      "14"
+     ],
+     "answer": "15",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "12 − 8 = ?",
+     "options": [
+      "4",
+      "2",
+      "3",
+      "6"
+     ],
+     "answer": "4",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "18 − 10 = ?",
+     "options": [
+      "18",
+      "6",
+      "10",
+      "8"
+     ],
+     "answer": "8",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "6 − 5 = ?",
+     "options": [
+      "2",
+      "1",
+      "4",
+      "3"
+     ],
+     "answer": "1",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "19 − 7 = ?",
+     "options": [
+      "2",
+      "12",
+      "11",
+      "9"
+     ],
+     "answer": "12",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "2 − 1 = ?",
+     "options": [
+      "2",
+      "11",
+      "1",
+      "3"
+     ],
+     "answer": "1",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "6 − 2 = ?",
+     "options": [
+      "4",
+      "5",
+      "14",
+      "7"
+     ],
+     "answer": "4",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "10 − 1 = ?",
+     "options": [
+      "8",
+      "10",
+      "19",
+      "9"
+     ],
+     "answer": "9",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "15 − 10 = ?",
+     "options": [
+      "15",
+      "6",
+      "5",
+      "7"
+     ],
+     "answer": "5",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "2 − 1 = ?",
+     "options": [
+      "11",
+      "1",
+      "3",
+      "4"
+     ],
+     "answer": "1",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "8 − 4 = ?",
+     "options": [
+      "7",
+      "14",
+      "6",
+      "4"
+     ],
+     "answer": "4",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "10 − 9 = ?",
+     "options": [
+      "11",
+      "4",
+      "0",
+      "1"
+     ],
+     "answer": "1",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "10 − 1 = ?",
+     "options": [
+      "6",
+      "10",
+      "12",
+      "9"
+     ],
+     "answer": "9",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "6 − 3 = ?",
+     "options": [
+      "1",
+      "6",
+      "13",
+      "3"
+     ],
+     "answer": "3",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "17 − 15 = ?",
+     "options": [
+      "3",
+      "5",
+      "2",
+      "0"
+     ],
+     "answer": "2",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "16 − 4 = ?",
+     "options": [
+      "12",
+      "11",
+      "13",
+      "14"
+     ],
+     "answer": "12",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "12 − 11 = ?",
+     "options": [
+      "3",
+      "11",
+      "1",
+      "2"
+     ],
+     "answer": "1",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 1,
+     "stem": "10 − 4 = ?",
+     "options": [
+      "7",
+      "6",
+      "9",
+      "8"
+     ],
+     "answer": "6",
+     "hint": ""
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "13 + （ ）= 17",
+     "options": [
+      "6",
+      "3",
+      "1",
+      "4"
+     ],
+     "answer": "4",
+     "hint": "想一想：17 里面去掉 13 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "7 + （ ）= 14",
+     "options": [
+      "9",
+      "7",
+      "5",
+      "10"
+     ],
+     "answer": "7",
+     "hint": "想一想：14 里面去掉 7 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "2 + （ ）= 4",
+     "options": [
+      "0",
+      "2",
+      "5",
+      "1"
+     ],
+     "answer": "2",
+     "hint": "想一想：4 里面去掉 2 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "9 + （ ）= 19",
+     "options": [
+      "7",
+      "10",
+      "11",
+      "12"
+     ],
+     "answer": "10",
+     "hint": "想一想：19 里面去掉 9 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "4 + （ ）= 20",
+     "options": [
+      "15",
+      "19",
+      "17",
+      "16"
+     ],
+     "answer": "16",
+     "hint": "想一想：20 里面去掉 4 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "4 + （ ）= 6",
+     "options": [
+      "2",
+      "1",
+      "5",
+      "3"
+     ],
+     "answer": "2",
+     "hint": "想一想：6 里面去掉 4 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "4 + （ ）= 16",
+     "options": [
+      "10",
+      "12",
+      "11",
+      "14"
+     ],
+     "answer": "12",
+     "hint": "想一想：16 里面去掉 4 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "11 + （ ）= 15",
+     "options": [
+      "6",
+      "5",
+      "14",
+      "4"
+     ],
+     "answer": "4",
+     "hint": "想一想：15 里面去掉 11 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "5 + （ ）= 17",
+     "options": [
+      "9",
+      "2",
+      "12",
+      "13"
+     ],
+     "answer": "12",
+     "hint": "想一想：17 里面去掉 5 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "5 + （ ）= 13",
+     "options": [
+      "6",
+      "8",
+      "11",
+      "5"
+     ],
+     "answer": "8",
+     "hint": "想一想：13 里面去掉 5 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "5 + （ ）= 13",
+     "options": [
+      "7",
+      "6",
+      "8",
+      "18"
+     ],
+     "answer": "8",
+     "hint": "想一想：13 里面去掉 5 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "10 + （ ）= 13",
+     "options": [
+      "6",
+      "3",
+      "4",
+      "1"
+     ],
+     "answer": "3",
+     "hint": "想一想：13 里面去掉 10 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "2 + （ ）= 13",
+     "options": [
+      "10",
+      "11",
+      "14",
+      "12"
+     ],
+     "answer": "11",
+     "hint": "想一想：13 里面去掉 2 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "13 + （ ）= 15",
+     "options": [
+      "5",
+      "4",
+      "1",
+      "2"
+     ],
+     "answer": "2",
+     "hint": "想一想：15 里面去掉 13 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "2 + （ ）= 3",
+     "options": [
+      "2",
+      "1",
+      "0",
+      "4"
+     ],
+     "answer": "1",
+     "hint": "想一想：3 里面去掉 2 还剩多少"
+    },
+    {
+     "subject": "math",
+     "type": "choice",
+     "level": 2,
+     "stem": "14 + （ ）= 16",
+     "options": [
+      "1",
+      "5",
+      "0",
+      "2"
+     ],
+     "answer": "2",
+     "hint": "想一想：16 里面去掉 14 还剩多少"
+    }
+   ]
+  },
+  {
+   "name": "英语 · 牛津树 1-3 级",
+   "subject": "english",
+   "description": "牛津树 1-3 阶高频词：英中互译、补全单词、句子选词",
+   "questions": [
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「Kipper」是什么意思？",
+     "options": [
+      "泰迪熊",
+      "秋千",
+      "基珀（人名）",
+      "蓝色"
+     ],
+     "answer": "基珀（人名）",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「Chip」是什么意思？",
+     "options": [
+      "盒子",
+      "奇普（人名）",
+      "比夫（人名）",
+      "门"
+     ],
+     "answer": "奇普（人名）",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「Biff」是什么意思？",
+     "options": [
+      "公园",
+      "书",
+      "吃",
+      "比夫（人名）"
+     ],
+     "answer": "比夫（人名）",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「Floppy」是什么意思？",
+     "options": [
+      "小狗弗洛皮",
+      "跑",
+      "面包",
+      "跳"
+     ],
+     "answer": "小狗弗洛皮",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「Mum」是什么意思？",
+     "options": [
+      "床",
+      "妈妈",
+      "勺子",
+      "椅子"
+     ],
+     "answer": "妈妈",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「Dad」是什么意思？",
+     "options": [
+      "比夫（人名）",
+      "奇普（人名）",
+      "爸爸",
+      "滑梯"
+     ],
+     "answer": "爸爸",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「dog」是什么意思？",
+     "options": [
+      "公园",
+      "鸟",
+      "狗",
+      "球"
+     ],
+     "answer": "狗",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「cat」是什么意思？",
+     "options": [
+      "球",
+      "大的",
+      "商店",
+      "猫"
+     ],
+     "answer": "猫",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「ball」是什么意思？",
+     "options": [
+      "奇普（人名）",
+      "花",
+      "洗澡",
+      "球"
+     ],
+     "answer": "球",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「tree」是什么意思？",
+     "options": [
+      "黄色",
+      "盒子",
+      "猫",
+      "树"
+     ],
+     "answer": "树",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「house」是什么意思？",
+     "options": [
+      "房子",
+      "奇普（人名）",
+      "书包",
+      "床"
+     ],
+     "answer": "房子",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「car」是什么意思？",
+     "options": [
+      "汽车",
+      "苹果",
+      "杯子",
+      "鸡蛋"
+     ],
+     "answer": "汽车",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「cake」是什么意思？",
+     "options": [
+      "秋千",
+      "比夫（人名）",
+      "书包",
+      "蛋糕"
+     ],
+     "answer": "蛋糕",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「water」是什么意思？",
+     "options": [
+      "水",
+      "黄色",
+      "看见",
+      "房子"
+     ],
+     "answer": "水",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「milk」是什么意思？",
+     "options": [
+      "基珀（人名）",
+      "帽子",
+      "小的",
+      "牛奶"
+     ],
+     "answer": "牛奶",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「apple」是什么意思？",
+     "options": [
+      "帮忙",
+      "小狗弗洛皮",
+      "门",
+      "苹果"
+     ],
+     "answer": "苹果",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「teddy」是什么意思？",
+     "options": [
+      "商店",
+      "泰迪熊",
+      "大的",
+      "小的"
+     ],
+     "answer": "泰迪熊",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「box」是什么意思？",
+     "options": [
+      "太阳",
+      "盒子",
+      "比夫（人名）",
+      "奇普（人名）"
+     ],
+     "answer": "盒子",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「bag」是什么意思？",
+     "options": [
+      "面包",
+      "书包",
+      "绿色",
+      "小的"
+     ],
+     "answer": "书包",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「hat」是什么意思？",
+     "options": [
+      "蛋糕",
+      "水",
+      "桌子",
+      "帽子"
+     ],
+     "answer": "帽子",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「bed」是什么意思？",
+     "options": [
+      "牛奶",
+      "床",
+      "书包",
+      "看见"
+     ],
+     "answer": "床",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「door」是什么意思？",
+     "options": [
+      "门",
+      "黄色",
+      "钢笔",
+      "公园"
+     ],
+     "answer": "门",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「bird」是什么意思？",
+     "options": [
+      "绿色",
+      "看",
+      "鸟",
+      "奇普（人名）"
+     ],
+     "answer": "鸟",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「fish」是什么意思？",
+     "options": [
+      "花",
+      "书包",
+      "盒子",
+      "鱼"
+     ],
+     "answer": "鱼",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「duck」是什么意思？",
+     "options": [
+      "书",
+      "树",
+      "鸭子",
+      "牛奶"
+     ],
+     "answer": "鸭子",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「egg」是什么意思？",
+     "options": [
+      "洗澡",
+      "吃",
+      "鸡蛋",
+      "雪"
+     ],
+     "answer": "鸡蛋",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「sun」是什么意思？",
+     "options": [
+      "奇普（人名）",
+      "泰迪熊",
+      "太阳",
+      "绿色"
+     ],
+     "answer": "太阳",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「rain」是什么意思？",
+     "options": [
+      "雨",
+      "盒子",
+      "雪",
+      "牛奶"
+     ],
+     "answer": "雨",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「snow」是什么意思？",
+     "options": [
+      "汽车",
+      "猫",
+      "玩",
+      "雪"
+     ],
+     "answer": "雪",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「park」是什么意思？",
+     "options": [
+      "公园",
+      "大的",
+      "桌子",
+      "学校"
+     ],
+     "answer": "公园",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「school」是什么意思？",
+     "options": [
+      "学校",
+      "球",
+      "大的",
+      "洗澡"
+     ],
+     "answer": "学校",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「shop」是什么意思？",
+     "options": [
+      "鸭子",
+      "商店",
+      "房子",
+      "勺子"
+     ],
+     "answer": "商店",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「garden」是什么意思？",
+     "options": [
+      "树",
+      "房子",
+      "花园",
+      "球"
+     ],
+     "answer": "花园",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「flower」是什么意思？",
+     "options": [
+      "花",
+      "红色",
+      "青蛙",
+      "窗户"
+     ],
+     "answer": "花",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「window」是什么意思？",
+     "options": [
+      "球",
+      "窗户",
+      "看见",
+      "汽车"
+     ],
+     "answer": "窗户",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「chair」是什么意思？",
+     "options": [
+      "椅子",
+      "爸爸",
+      "房子",
+      "跑"
+     ],
+     "answer": "椅子",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「table」是什么意思？",
+     "options": [
+      "红色",
+      "桌子",
+      "喝",
+      "来"
+     ],
+     "answer": "桌子",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「spoon」是什么意思？",
+     "options": [
+      "玩",
+      "椅子",
+      "勺子",
+      "盒子"
+     ],
+     "answer": "勺子",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「cup」是什么意思？",
+     "options": [
+      "蛋糕",
+      "水",
+      "洗澡",
+      "杯子"
+     ],
+     "answer": "杯子",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「bread」是什么意思？",
+     "options": [
+      "大的",
+      "面包",
+      "蛋糕",
+      "牛奶"
+     ],
+     "answer": "面包",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「book」是什么意思？",
+     "options": [
+      "洗澡",
+      "蓝色",
+      "花",
+      "书"
+     ],
+     "answer": "书",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「pen」是什么意思？",
+     "options": [
+      "房子",
+      "面包",
+      "水",
+      "钢笔"
+     ],
+     "answer": "钢笔",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「swing」是什么意思？",
+     "options": [
+      "小的",
+      "秋千",
+      "花园",
+      "书"
+     ],
+     "answer": "秋千",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「slide」是什么意思？",
+     "options": [
+      "基珀（人名）",
+      "滑梯",
+      "面包",
+      "小狗弗洛皮"
+     ],
+     "answer": "滑梯",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「frog」是什么意思？",
+     "options": [
+      "商店",
+      "青蛙",
+      "书",
+      "花园"
+     ],
+     "answer": "青蛙",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「bath」是什么意思？",
+     "options": [
+      "书包",
+      "洗澡",
+      "雪",
+      "泰迪熊"
+     ],
+     "answer": "洗澡",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「big」是什么意思？",
+     "options": [
+      "狗",
+      "床",
+      "公园",
+      "大的"
+     ],
+     "answer": "大的",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「small」是什么意思？",
+     "options": [
+      "小的",
+      "牛奶",
+      "雪",
+      "蓝色"
+     ],
+     "answer": "小的",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「red」是什么意思？",
+     "options": [
+      "床",
+      "红色",
+      "苹果",
+      "盒子"
+     ],
+     "answer": "红色",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「blue」是什么意思？",
+     "options": [
+      "蓝色",
+      "窗户",
+      "勺子",
+      "小的"
+     ],
+     "answer": "蓝色",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「green」是什么意思？",
+     "options": [
+      "绿色",
+      "水",
+      "滑梯",
+      "窗户"
+     ],
+     "answer": "绿色",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「yellow」是什么意思？",
+     "options": [
+      "钢笔",
+      "商店",
+      "雨",
+      "黄色"
+     ],
+     "answer": "黄色",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「look」是什么意思？",
+     "options": [
+      "看",
+      "床",
+      "基珀（人名）",
+      "商店"
+     ],
+     "answer": "看",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「come」是什么意思？",
+     "options": [
+      "看",
+      "喝",
+      "太阳",
+      "来"
+     ],
+     "answer": "来",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「see」是什么意思？",
+     "options": [
+      "小狗弗洛皮",
+      "看见",
+      "妈妈",
+      "蛋糕"
+     ],
+     "answer": "看见",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「jump」是什么意思？",
+     "options": [
+      "太阳",
+      "猫",
+      "睡觉",
+      "跳"
+     ],
+     "answer": "跳",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「play」是什么意思？",
+     "options": [
+      "玩",
+      "学校",
+      "猫",
+      "盒子"
+     ],
+     "answer": "玩",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「sleep」是什么意思？",
+     "options": [
+      "睡觉",
+      "跑",
+      "鸟",
+      "喝"
+     ],
+     "answer": "睡觉",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「eat」是什么意思？",
+     "options": [
+      "桌子",
+      "狗",
+      "来",
+      "吃"
+     ],
+     "answer": "吃",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「drink」是什么意思？",
+     "options": [
+      "看",
+      "秋千",
+      "喝",
+      "苹果"
+     ],
+     "answer": "喝",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「help」是什么意思？",
+     "options": [
+      "公园",
+      "帮忙",
+      "小的",
+      "房子"
+     ],
+     "answer": "帮忙",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「run」是什么意思？",
+     "options": [
+      "奇普（人名）",
+      "妈妈",
+      "跑",
+      "来"
+     ],
+     "answer": "跑",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「基珀（人名）」用英语怎么说？",
+     "options": [
+      "big",
+      "Kipper",
+      "door",
+      "egg"
+     ],
+     "answer": "Kipper",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「奇普（人名）」用英语怎么说？",
+     "options": [
+      "window",
+      "Chip",
+      "Kipper",
+      "bath"
+     ],
+     "answer": "Chip",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「比夫（人名）」用英语怎么说？",
+     "options": [
+      "green",
+      "Biff",
+      "red",
+      "small"
+     ],
+     "answer": "Biff",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「小狗弗洛皮」用英语怎么说？",
+     "options": [
+      "slide",
+      "Floppy",
+      "run",
+      "snow"
+     ],
+     "answer": "Floppy",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「妈妈」用英语怎么说？",
+     "options": [
+      "swing",
+      "tree",
+      "Mum",
+      "frog"
+     ],
+     "answer": "Mum",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「爸爸」用英语怎么说？",
+     "options": [
+      "apple",
+      "jump",
+      "Dad",
+      "cat"
+     ],
+     "answer": "Dad",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「狗」用英语怎么说？",
+     "options": [
+      "dog",
+      "come",
+      "see",
+      "apple"
+     ],
+     "answer": "dog",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「猫」用英语怎么说？",
+     "options": [
+      "look",
+      "bag",
+      "cat",
+      "frog"
+     ],
+     "answer": "cat",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「球」用英语怎么说？",
+     "options": [
+      "school",
+      "ball",
+      "yellow",
+      "egg"
+     ],
+     "answer": "ball",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「树」用英语怎么说？",
+     "options": [
+      "garden",
+      "Floppy",
+      "Chip",
+      "tree"
+     ],
+     "answer": "tree",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「房子」用英语怎么说？",
+     "options": [
+      "flower",
+      "car",
+      "house",
+      "hat"
+     ],
+     "answer": "house",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「汽车」用英语怎么说？",
+     "options": [
+      "car",
+      "box",
+      "slide",
+      "red"
+     ],
+     "answer": "car",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「蛋糕」用英语怎么说？",
+     "options": [
+      "swing",
+      "car",
+      "cake",
+      "park"
+     ],
+     "answer": "cake",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「水」用英语怎么说？",
+     "options": [
+      "garden",
+      "bed",
+      "water",
+      "book"
+     ],
+     "answer": "water",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「牛奶」用英语怎么说？",
+     "options": [
+      "tree",
+      "rain",
+      "milk",
+      "fish"
+     ],
+     "answer": "milk",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「苹果」用英语怎么说？",
+     "options": [
+      "apple",
+      "slide",
+      "door",
+      "pen"
+     ],
+     "answer": "apple",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「泰迪熊」用英语怎么说？",
+     "options": [
+      "egg",
+      "cat",
+      "teddy",
+      "school"
+     ],
+     "answer": "teddy",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「盒子」用英语怎么说？",
+     "options": [
+      "small",
+      "door",
+      "box",
+      "look"
+     ],
+     "answer": "box",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「书包」用英语怎么说？",
+     "options": [
+      "bag",
+      "jump",
+      "run",
+      "duck"
+     ],
+     "answer": "bag",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「帽子」用英语怎么说？",
+     "options": [
+      "eat",
+      "sun",
+      "hat",
+      "Dad"
+     ],
+     "answer": "hat",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「床」用英语怎么说？",
+     "options": [
+      "rain",
+      "bed",
+      "cup",
+      "fish"
+     ],
+     "answer": "bed",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「门」用英语怎么说？",
+     "options": [
+      "door",
+      "small",
+      "big",
+      "box"
+     ],
+     "answer": "door",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「鸟」用英语怎么说？",
+     "options": [
+      "look",
+      "jump",
+      "Mum",
+      "bird"
+     ],
+     "answer": "bird",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「鱼」用英语怎么说？",
+     "options": [
+      "small",
+      "fish",
+      "egg",
+      "bath"
+     ],
+     "answer": "fish",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「鸭子」用英语怎么说？",
+     "options": [
+      "box",
+      "duck",
+      "Floppy",
+      "flower"
+     ],
+     "answer": "duck",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 1,
+     "stem": "「鸡蛋」用英语怎么说？",
+     "options": [
+      "teddy",
+      "cat",
+      "egg",
+      "sleep"
+     ],
+     "answer": "egg",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「太阳」用英语怎么说？",
+     "options": [
+      "sun",
+      "Chip",
+      "bed",
+      "Floppy"
+     ],
+     "answer": "sun",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「雨」用英语怎么说？",
+     "options": [
+      "bag",
+      "hat",
+      "sun",
+      "rain"
+     ],
+     "answer": "rain",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「雪」用英语怎么说？",
+     "options": [
+      "apple",
+      "snow",
+      "duck",
+      "chair"
+     ],
+     "answer": "snow",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「公园」用英语怎么说？",
+     "options": [
+      "rain",
+      "park",
+      "dog",
+      "Dad"
+     ],
+     "answer": "park",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「学校」用英语怎么说？",
+     "options": [
+      "swing",
+      "school",
+      "Biff",
+      "spoon"
+     ],
+     "answer": "school",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「商店」用英语怎么说？",
+     "options": [
+      "Dad",
+      "chair",
+      "shop",
+      "spoon"
+     ],
+     "answer": "shop",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「花园」用英语怎么说？",
+     "options": [
+      "teddy",
+      "Floppy",
+      "fish",
+      "garden"
+     ],
+     "answer": "garden",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「花」用英语怎么说？",
+     "options": [
+      "flower",
+      "tree",
+      "snow",
+      "Mum"
+     ],
+     "answer": "flower",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「窗户」用英语怎么说？",
+     "options": [
+      "red",
+      "help",
+      "window",
+      "play"
+     ],
+     "answer": "window",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「椅子」用英语怎么说？",
+     "options": [
+      "big",
+      "apple",
+      "cup",
+      "chair"
+     ],
+     "answer": "chair",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「桌子」用英语怎么说？",
+     "options": [
+      "window",
+      "hat",
+      "table",
+      "help"
+     ],
+     "answer": "table",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「勺子」用英语怎么说？",
+     "options": [
+      "spoon",
+      "chair",
+      "milk",
+      "yellow"
+     ],
+     "answer": "spoon",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「杯子」用英语怎么说？",
+     "options": [
+      "pen",
+      "door",
+      "cake",
+      "cup"
+     ],
+     "answer": "cup",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「面包」用英语怎么说？",
+     "options": [
+      "slide",
+      "bed",
+      "bread",
+      "shop"
+     ],
+     "answer": "bread",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「书」用英语怎么说？",
+     "options": [
+      "blue",
+      "school",
+      "book",
+      "table"
+     ],
+     "answer": "book",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「钢笔」用英语怎么说？",
+     "options": [
+      "pen",
+      "water",
+      "Floppy",
+      "bed"
+     ],
+     "answer": "pen",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「秋千」用英语怎么说？",
+     "options": [
+      "green",
+      "pen",
+      "dog",
+      "swing"
+     ],
+     "answer": "swing",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「滑梯」用英语怎么说？",
+     "options": [
+      "cup",
+      "slide",
+      "jump",
+      "window"
+     ],
+     "answer": "slide",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「青蛙」用英语怎么说？",
+     "options": [
+      "sun",
+      "frog",
+      "cake",
+      "spoon"
+     ],
+     "answer": "frog",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 2,
+     "stem": "「洗澡」用英语怎么说？",
+     "options": [
+      "bath",
+      "Chip",
+      "sleep",
+      "eat"
+     ],
+     "answer": "bath",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「大的」用英语怎么说？",
+     "options": [
+      "box",
+      "big",
+      "eat",
+      "bed"
+     ],
+     "answer": "big",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「小的」用英语怎么说？",
+     "options": [
+      "bread",
+      "cat",
+      "park",
+      "small"
+     ],
+     "answer": "small",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「红色」用英语怎么说？",
+     "options": [
+      "park",
+      "bread",
+      "red",
+      "Chip"
+     ],
+     "answer": "red",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「蓝色」用英语怎么说？",
+     "options": [
+      "table",
+      "teddy",
+      "blue",
+      "Dad"
+     ],
+     "answer": "blue",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「绿色」用英语怎么说？",
+     "options": [
+      "window",
+      "blue",
+      "bread",
+      "green"
+     ],
+     "answer": "green",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「黄色」用英语怎么说？",
+     "options": [
+      "cat",
+      "book",
+      "yellow",
+      "duck"
+     ],
+     "answer": "yellow",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「看」用英语怎么说？",
+     "options": [
+      "bird",
+      "look",
+      "red",
+      "milk"
+     ],
+     "answer": "look",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「来」用英语怎么说？",
+     "options": [
+      "come",
+      "play",
+      "Chip",
+      "car"
+     ],
+     "answer": "come",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「看见」用英语怎么说？",
+     "options": [
+      "box",
+      "see",
+      "jump",
+      "car"
+     ],
+     "answer": "see",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「跳」用英语怎么说？",
+     "options": [
+      "door",
+      "spoon",
+      "shop",
+      "jump"
+     ],
+     "answer": "jump",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「玩」用英语怎么说？",
+     "options": [
+      "play",
+      "fish",
+      "duck",
+      "book"
+     ],
+     "answer": "play",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「睡觉」用英语怎么说？",
+     "options": [
+      "bag",
+      "cat",
+      "sleep",
+      "house"
+     ],
+     "answer": "sleep",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「吃」用英语怎么说？",
+     "options": [
+      "Mum",
+      "eat",
+      "see",
+      "fish"
+     ],
+     "answer": "eat",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「喝」用英语怎么说？",
+     "options": [
+      "drink",
+      "look",
+      "fish",
+      "bath"
+     ],
+     "answer": "drink",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「帮忙」用英语怎么说？",
+     "options": [
+      "dog",
+      "duck",
+      "cup",
+      "help"
+     ],
+     "answer": "help",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "「跑」用英语怎么说？",
+     "options": [
+      "house",
+      "book",
+      "see",
+      "run"
+     ],
+     "answer": "run",
+     "hint": ""
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：基珀（人名）",
+     "tpl": "Kipp_r",
+     "answer": "Kipper",
+     "options": [],
+     "hint": "基珀（人名）"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：奇普（人名）",
+     "tpl": "Ch_p",
+     "answer": "Chip",
+     "options": [],
+     "hint": "奇普（人名）"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：比夫（人名）",
+     "tpl": "B_ff",
+     "answer": "Biff",
+     "options": [],
+     "hint": "比夫（人名）"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：小狗弗洛皮",
+     "tpl": "Fl_p_y",
+     "answer": "Floppy",
+     "options": [],
+     "hint": "小狗弗洛皮"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：妈妈",
+     "tpl": "M_m",
+     "answer": "Mum",
+     "options": [],
+     "hint": "妈妈"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：爸爸",
+     "tpl": "D_d",
+     "answer": "Dad",
+     "options": [],
+     "hint": "爸爸"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：狗",
+     "tpl": "d_g",
+     "answer": "dog",
+     "options": [],
+     "hint": "狗"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：猫",
+     "tpl": "c_t",
+     "answer": "cat",
+     "options": [],
+     "hint": "猫"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：球",
+     "tpl": "b_ll",
+     "answer": "ball",
+     "options": [],
+     "hint": "球"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：树",
+     "tpl": "tr_e",
+     "answer": "tree",
+     "options": [],
+     "hint": "树"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：房子",
+     "tpl": "h_u_e",
+     "answer": "house",
+     "options": [],
+     "hint": "房子"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：汽车",
+     "tpl": "c_r",
+     "answer": "car",
+     "options": [],
+     "hint": "汽车"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：蛋糕",
+     "tpl": "c_ke",
+     "answer": "cake",
+     "options": [],
+     "hint": "蛋糕"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：水",
+     "tpl": "wat_r",
+     "answer": "water",
+     "options": [],
+     "hint": "水"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：牛奶",
+     "tpl": "m_lk",
+     "answer": "milk",
+     "options": [],
+     "hint": "牛奶"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：苹果",
+     "tpl": "a_ple",
+     "answer": "apple",
+     "options": [],
+     "hint": "苹果"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：泰迪熊",
+     "tpl": "t_d_y",
+     "answer": "teddy",
+     "options": [],
+     "hint": "泰迪熊"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：盒子",
+     "tpl": "b_x",
+     "answer": "box",
+     "options": [],
+     "hint": "盒子"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：书包",
+     "tpl": "b_g",
+     "answer": "bag",
+     "options": [],
+     "hint": "书包"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：帽子",
+     "tpl": "h_t",
+     "answer": "hat",
+     "options": [],
+     "hint": "帽子"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：床",
+     "tpl": "b_d",
+     "answer": "bed",
+     "options": [],
+     "hint": "床"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：门",
+     "tpl": "d_or",
+     "answer": "door",
+     "options": [],
+     "hint": "门"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：鸟",
+     "tpl": "b_rd",
+     "answer": "bird",
+     "options": [],
+     "hint": "鸟"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：鱼",
+     "tpl": "f_sh",
+     "answer": "fish",
+     "options": [],
+     "hint": "鱼"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：鸭子",
+     "tpl": "d_ck",
+     "answer": "duck",
+     "options": [],
+     "hint": "鸭子"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 1,
+     "stem": "补全单词：鸡蛋",
+     "tpl": "e_g",
+     "answer": "egg",
+     "options": [],
+     "hint": "鸡蛋"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 2,
+     "stem": "补全单词：太阳",
+     "tpl": "s_n",
+     "answer": "sun",
+     "options": [],
+     "hint": "太阳"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 2,
+     "stem": "补全单词：雨",
+     "tpl": "r_in",
+     "answer": "rain",
+     "options": [],
+     "hint": "雨"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 2,
+     "stem": "补全单词：雪",
+     "tpl": "sn_w",
+     "answer": "snow",
+     "options": [],
+     "hint": "雪"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 2,
+     "stem": "补全单词：公园",
+     "tpl": "p_rk",
+     "answer": "park",
+     "options": [],
+     "hint": "公园"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 2,
+     "stem": "补全单词：学校",
+     "tpl": "scho_l",
+     "answer": "school",
+     "options": [],
+     "hint": "学校"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 2,
+     "stem": "补全单词：商店",
+     "tpl": "sh_p",
+     "answer": "shop",
+     "options": [],
+     "hint": "商店"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 2,
+     "stem": "补全单词：花园",
+     "tpl": "gard_n",
+     "answer": "garden",
+     "options": [],
+     "hint": "花园"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 2,
+     "stem": "补全单词：花",
+     "tpl": "flow_r",
+     "answer": "flower",
+     "options": [],
+     "hint": "花"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 2,
+     "stem": "补全单词：窗户",
+     "tpl": "w_ndow",
+     "answer": "window",
+     "options": [],
+     "hint": "窗户"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 2,
+     "stem": "补全单词：椅子",
+     "tpl": "ch__r",
+     "answer": "chair",
+     "options": [],
+     "hint": "椅子"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 2,
+     "stem": "补全单词：桌子",
+     "tpl": "t_ble",
+     "answer": "table",
+     "options": [],
+     "hint": "桌子"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 2,
+     "stem": "补全单词：勺子",
+     "tpl": "sp__n",
+     "answer": "spoon",
+     "options": [],
+     "hint": "勺子"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 2,
+     "stem": "补全单词：杯子",
+     "tpl": "c_p",
+     "answer": "cup",
+     "options": [],
+     "hint": "杯子"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 2,
+     "stem": "补全单词：面包",
+     "tpl": "br__d",
+     "answer": "bread",
+     "options": [],
+     "hint": "面包"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 2,
+     "stem": "补全单词：书",
+     "tpl": "b_ok",
+     "answer": "book",
+     "options": [],
+     "hint": "书"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 2,
+     "stem": "补全单词：钢笔",
+     "tpl": "p_n",
+     "answer": "pen",
+     "options": [],
+     "hint": "钢笔"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 2,
+     "stem": "补全单词：秋千",
+     "tpl": "s__ng",
+     "answer": "swing",
+     "options": [],
+     "hint": "秋千"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 2,
+     "stem": "补全单词：滑梯",
+     "tpl": "sl__e",
+     "answer": "slide",
+     "options": [],
+     "hint": "滑梯"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 2,
+     "stem": "补全单词：青蛙",
+     "tpl": "fr_g",
+     "answer": "frog",
+     "options": [],
+     "hint": "青蛙"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 2,
+     "stem": "补全单词：洗澡",
+     "tpl": "b_th",
+     "answer": "bath",
+     "options": [],
+     "hint": "洗澡"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 3,
+     "stem": "补全单词：大的",
+     "tpl": "b_g",
+     "answer": "big",
+     "options": [],
+     "hint": "大的"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 3,
+     "stem": "补全单词：小的",
+     "tpl": "s__ll",
+     "answer": "small",
+     "options": [],
+     "hint": "小的"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 3,
+     "stem": "补全单词：红色",
+     "tpl": "r_d",
+     "answer": "red",
+     "options": [],
+     "hint": "红色"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 3,
+     "stem": "补全单词：蓝色",
+     "tpl": "bl_e",
+     "answer": "blue",
+     "options": [],
+     "hint": "蓝色"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 3,
+     "stem": "补全单词：绿色",
+     "tpl": "g_e_n",
+     "answer": "green",
+     "options": [],
+     "hint": "绿色"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 3,
+     "stem": "补全单词：黄色",
+     "tpl": "y_ll_w",
+     "answer": "yellow",
+     "options": [],
+     "hint": "黄色"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 3,
+     "stem": "补全单词：看",
+     "tpl": "lo_k",
+     "answer": "look",
+     "options": [],
+     "hint": "看"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 3,
+     "stem": "补全单词：来",
+     "tpl": "c_me",
+     "answer": "come",
+     "options": [],
+     "hint": "来"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 3,
+     "stem": "补全单词：看见",
+     "tpl": "s_e",
+     "answer": "see",
+     "options": [],
+     "hint": "看见"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 3,
+     "stem": "补全单词：跳",
+     "tpl": "j_mp",
+     "answer": "jump",
+     "options": [],
+     "hint": "跳"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 3,
+     "stem": "补全单词：玩",
+     "tpl": "pl_y",
+     "answer": "play",
+     "options": [],
+     "hint": "玩"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 3,
+     "stem": "补全单词：睡觉",
+     "tpl": "sl__p",
+     "answer": "sleep",
+     "options": [],
+     "hint": "睡觉"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 3,
+     "stem": "补全单词：吃",
+     "tpl": "e_t",
+     "answer": "eat",
+     "options": [],
+     "hint": "吃"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 3,
+     "stem": "补全单词：喝",
+     "tpl": "dr__k",
+     "answer": "drink",
+     "options": [],
+     "hint": "喝"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 3,
+     "stem": "补全单词：帮忙",
+     "tpl": "h_lp",
+     "answer": "help",
+     "options": [],
+     "hint": "帮忙"
+    },
+    {
+     "subject": "english",
+     "type": "spell",
+     "level": 3,
+     "stem": "补全单词：跑",
+     "tpl": "r_n",
+     "answer": "run",
+     "options": [],
+     "hint": "跑"
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "___ is my dad.",
+     "options": [
+      "This",
+      "These",
+      "Those",
+      "They"
+     ],
+     "answer": "This",
+     "hint": "这是单数，用 This"
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "Look ___ Kipper.",
+     "options": [
+      "at",
+      "in",
+      "on",
+      "to"
+     ],
+     "answer": "at",
+     "hint": "look at 是固定搭配"
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "The cat is ___ the box.",
+     "options": [
+      "in",
+      "at",
+      "of",
+      "to"
+     ],
+     "answer": "in",
+     "hint": "在盒子里面用 in"
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "Mum ___ a big cake.",
+     "options": [
+      "has",
+      "have",
+      "is",
+      "are"
+     ],
+     "answer": "has",
+     "hint": "Mum 是第三人称单数"
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "I ___ see the dog.",
+     "options": [
+      "can",
+      "is",
+      "are",
+      "am"
+     ],
+     "answer": "can",
+     "hint": "can 后面跟动词原形"
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "The children ___ in the park.",
+     "options": [
+      "are",
+      "is",
+      "am",
+      "be"
+     ],
+     "answer": "are",
+     "hint": "children 是复数"
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "This is ___ apple.",
+     "options": [
+      "an",
+      "a",
+      "the",
+      "two"
+     ],
+     "answer": "an",
+     "hint": "apple 以元音开头，用 an"
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "He is ___ the tree.",
+     "options": [
+      "under",
+      "of",
+      "to",
+      "and"
+     ],
+     "answer": "under",
+     "hint": "在树下用 under"
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "___ the door, please.",
+     "options": [
+      "Open",
+      "Opens",
+      "Opening",
+      "Opened"
+     ],
+     "answer": "Open",
+     "hint": "祈使句用动词原形"
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "The dog ___ big.",
+     "options": [
+      "is",
+      "are",
+      "am",
+      "be"
+     ],
+     "answer": "is",
+     "hint": "The dog 是单数"
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "We go ___ school.",
+     "options": [
+      "to",
+      "at",
+      "in",
+      "of"
+     ],
+     "answer": "to",
+     "hint": "go to + 地点"
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "___ are my books.",
+     "options": [
+      "These",
+      "This",
+      "It",
+      "He"
+     ],
+     "answer": "These",
+     "hint": "books 是复数"
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "Floppy ___ in the garden.",
+     "options": [
+      "runs",
+      "run",
+      "running",
+      "ran"
+     ],
+     "answer": "runs",
+     "hint": "Floppy 是单数"
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "I like ___ in the park.",
+     "options": [
+      "playing",
+      "play to",
+      "plays",
+      "played to"
+     ],
+     "answer": "playing",
+     "hint": "like doing"
+    },
+    {
+     "subject": "english",
+     "type": "choice",
+     "level": 3,
+     "stem": "___ a big red ball!",
+     "options": [
+      "What",
+      "How",
+      "Who",
+      "Where"
+     ],
+     "answer": "What",
+     "hint": "感叹句 What a ..."
+    }
+   ]
+  }
+ ]
+}

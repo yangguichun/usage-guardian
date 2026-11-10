@@ -2,7 +2,7 @@
 
 > 一个爸爸给孩子平板写的防沉迷系统。**到点就锁，锁了就出不去，锁不住就记账。**
 
-![版本](https://img.shields.io/badge/version-2.6.0-blue)
+![版本](https://img.shields.io/badge/version-2.6.1-blue)
 ![平台](https://img.shields.io/badge/Android-8.0%2B%20(API%2026)-green)
 ![服务端](https://img.shields.io/badge/server-Rust%20%2F%20axum-orange)
 ![许可](https://img.shields.io/badge/license-MIT-lightgrey)
@@ -47,8 +47,11 @@
   支持选择题与「补全单词」（自绘 26 键字母盘，不依赖输入法）；没配服务端时用本地生成的 20 以内加减法兜底。
 - **休息时安静**：申请音频焦点让正在播放的视频暂停；可选通知使用权下发暂停。
 - **家长密码**：设置页、跳过休息、提前结束停用都要过密码；密码门禁绑在主界面生命周期里。
-- **停用时段（宵禁）**：每天固定钟点锁屏，支持跨夜（如 22:00–06:00）与按星期生效；规则只认服务端下发，本机没有编辑入口。
+- **停用时段（宵禁）**：每天固定钟点锁屏，支持跨夜（如 22:00–06:00）与按星期生效。
+  **v2.6.1 起本机也能编辑**（需家长密码）：本机规则与云端下发的是**并集**，本机删不掉云端那条，所以没配后台的机器也能用宵禁。
 - **防绕过**：前台常驻服务 + 开机自启 + 每 15 秒系统闹钟自检 + 设备管理员；被强行停止后记录惩罚欠账（1 次 ×1、2 次 ×2、3 次起 ×3）。
+  **v2.6.1 起违规次数按自然日归零**，不会再永久停留在 ×3；同一次"划掉任务卡片"也只记一次账（以前系统会把它同时报成"强行停止"，一次变两次）。
+- **锁得明明白白（v2.6.1）**：每次锁屏都带上原因（用满时长 / 违规惩罚 / 家长远程 / 停用时段）和本次时长；倍数放大时明写"是设置值的 N 倍"，后台事件流与设备卡都能直接看到。
 - **幂等计时**：使用时长从系统使用事件「整天重扫」得到，不依赖进程存活；OPPO 速冻、Doze、杀后台都不会让时间凭空消失或翻倍。
 - **扣掉被锁的时间**：遮罩是悬浮窗，系统仍把时间记给微信/抖音，所以要把「被锁着干等」的区间从使用时长里扣掉。
 
@@ -117,7 +120,7 @@
 
 ### 1. 装 App
 
-从 [Releases](https://github.com/yangguichun/usage-guardian/releases) 下载 `Guardian-v2.6.0-release.apk`，安装到平板。
+从 [Releases](https://github.com/yangguichun/usage-guardian/releases) 下载 `Guardian-v2.6.1-release.apk`，安装到平板。
 首次打开按要求授予：**使用情况访问、悬浮窗、通知、自启动、电池优化白名单**，并激活设备管理员。
 
 在设置页填服务端地址完成配对；**不配对时一个请求都不会发出**。
@@ -126,7 +129,7 @@
 
 ```bash
 # 有现成二进制（推荐）
-tar xzf guardian-server-2.6.0-linux-x86_64.tar.gz
+tar xzf guardian-server-2.6.1-linux-x86_64.tar.gz
 cd guardian-server
 GUARDIAN_ADMIN_PASSWORD='换成你自己的强口令' ./run.sh
 
@@ -194,7 +197,7 @@ screenshots/         演示截图
 
 ## 版本
 
-当前 **v2.6.0**（App versionCode 24 / 服务端 2.6.0）。变更记录见 [Releases](https://github.com/yangguichun/usage-guardian/releases)。
+当前 **v2.6.1**（App versionCode 25 / 服务端 2.6.1）。变更记录见 [Releases](https://github.com/yangguichun/usage-guardian/releases)。
 
 ## 许可
 

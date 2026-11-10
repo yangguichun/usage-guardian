@@ -143,6 +143,7 @@ Rust + axum，SQLite（`rusqlite` + `bundled`），单文件 `data/guardian.db`�
 
 | 版本 | 关键变化 |
 | --- | --- |
+| v2.6.1 | 客户端可本机编辑停用时段（`localQuietRules`，与下发规则取并集，心跳只报 `quiet_local_count` 不报内容）；违规次数按自然日归零 + 划卡片/强停去重；心跳新增 `rest_reason` / `rest_ms`，`rest_start` 事件带原因与倍数；内置题库改为**原地补题**（按 `name+subject` 找库、按 `stem` 补题，不动 bank id）+ `dedupe_seed` 清重复题面；数学内置题 80 → 200 |
 | v2.6.0 | 答题解锁（`quiz_*` 配置 + `quiz_banks` 指令 + `POST /api/device/quiz` 取题，要求 `app_version >= 2.6.0`）；题库 REST（`/api/banks`，含批量导入）与后台题库管理页 |
 | v2.5.2 | 每日额度剩余时间改「N 小时 M 分」+ 44sp（原 76sp 秒表格式在窄屏折行） |
 | v2.5.1 | 每日额度遮罩补显式家长解锁入口（`syncParentEntry`），未设密码也给出说明 |
